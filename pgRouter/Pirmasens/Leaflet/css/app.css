@@ -1,0 +1,21 @@
+html, body, #container {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  padding-top: 50px;
+}
+
+/*this is important to give the map a height*/
+#map {
+  width: auto;
+  height: 100%;
+}.numbered-marker {
+  background-color: #ff0000;
+  color: #ffffff;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 30px;
+}

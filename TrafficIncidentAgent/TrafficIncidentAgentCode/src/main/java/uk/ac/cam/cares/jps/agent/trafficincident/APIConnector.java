@@ -51,7 +51,7 @@ public class APIConnector {
                 throw new IOException("traffic incident api url not specified.");
             }
 
-            if (prop.containsKey("trafficincident.accountKey")) {
+            if (prop.containsKey("trafficincident.accountKey") && !prop.getProperty("trafficincident.accountKey").equals("")) {
                 this.accountKey = prop.getProperty("trafficincident.accountKey");
             } else {
                 throw new IOException("traffic incident api account key not specified");

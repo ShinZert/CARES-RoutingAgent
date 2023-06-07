@@ -141,7 +141,7 @@ public class APIAgentLauncher extends JPSAgent {
             readings = connector.getReadings();
         } catch(Exception e) {
             LOGGER.error(GET_READINGS_ERROR_MSG);
-            throw new JPSRuntimeException(GET_READINGS_ERROR_MSG);
+            throw new JPSRuntimeException(e.getMessage());
         }
         
         LOGGER.info(String.format("Retrieved readings for %d incidents", readings.length()));

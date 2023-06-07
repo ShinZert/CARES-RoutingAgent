@@ -1,0 +1,215 @@
+{
+    "name": "King's Lynn",
+    "groups": [
+        {
+            "name": "Flood",
+            "stack": "http://localhost:8081",
+            "sources": [
+                {
+                    "id": "flood_active",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aflood_polygon_single&outputFormat=application%2Fjson"
+                }
+            ], 
+            "layers": [
+                {
+                    "id": "flood",
+                    "name": "Active flood",
+                    "source": "flood_active",
+                    "type": "fill",
+                    "order": 10,
+                    "layout": {
+                        "visibility": "visible"
+                    },
+                    "paint": {
+                        "fill-color": "#0000FF",
+                        "fill-opacity": 0.4
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Isochrone",
+            "stack": "http://localhost:8081",
+            "sources": [
+                {
+                    "id": "isochrone_1",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_results&outputFormat=application%2Fjson&CQL_FILTER=minute='1'"
+                },
+                {
+                    "id": "isochrone_2",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_results&outputFormat=application%2Fjson&CQL_FILTER=minute='2'"
+                },
+                {
+                    "id": "isochrone_3",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_results&outputFormat=application%2Fjson&CQL_FILTER=minute='3'"
+                },
+                {
+                    "id": "isochrone_4",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_results&outputFormat=application%2Fjson&CQL_FILTER=minute='4'"
+                },
+                {
+                    "id": "isochrone_5",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_results&outputFormat=application%2Fjson&CQL_FILTER=minute='5'"
+                }
+                
+            ], 
+            "layers": [
+                {
+                    "id": "isochrone_1_layer",
+                    "name": "2 minutes",
+                    "source": "isochrone_1",
+                    "type": "fill",
+                    "order": 50,
+                    "layout": {
+                        "visibility": "visible"
+                    },
+                    "paint": {
+                        "fill-color": "#c90a0a",             
+                        "fill-outline-color": "#000000",
+                        "fill-opacity": 0.20
+                    }
+                },
+                {
+                    "id": "isochrone_2_layer",
+                    "name": "4 minutes",
+                    "source": "isochrone_2",
+                    "type": "fill",
+                    "order": 40,
+                    "layout": {
+                        "visibility": "visible"
+                    },
+                    "paint": {
+                        "fill-color": "#ff8800",             
+                        "fill-outline-color": "#000000",
+                        "fill-opacity": 0.20
+                    }
+                },
+                {
+                    "id": "isochrone_3_layer",
+                    "name": "6 minutes",
+                    "source": "isochrone_3",
+                    "type": "fill",
+                    "order": 40,
+                    "layout": {
+                        "visibility": "visible"
+                    },
+                    "paint": {
+                        "fill-color": "#ebc244",             
+                        "fill-outline-color": "#000000",
+                        "fill-opacity": 0.20
+                    }
+                },                
+                {
+                    "id": "isochrone_4_layer",
+                    "name": "8 minutes",
+                    "source": "isochrone_4",
+                    "type": "fill",
+                    "order": 40,
+                    "layout": {
+                        "visibility": "visible"
+                    },
+                    "paint": {
+                        "fill-color": "#add8e6",             
+                        "fill-outline-color": "#000000",
+                        "fill-opacity": 0.20
+                    }
+                },
+                {
+                    "id": "isochrone_5_layer",
+                    "name": "10 minutes",
+                    "source": "isochrone_5",
+                    "type": "fill",
+                    "order": 40,
+                    "layout": {
+                        "visibility": "visible"
+                    },
+                    "paint": {
+                        "fill-color": "#808080",             
+                        "fill-outline-color": "#000000",
+                        "fill-opacity": 0.20
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Travelling Salesman Problem",
+            "stack": "http://localhost:8081",
+            "sources": [
+                {
+                    "id": "tsp",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Atsp&outputFormat=application%2Fjson"
+                },
+                {
+                    "id": "tspNodes",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Atsp_nodes_kingslynn&maxFeatures=50&outputFormat=application%2Fjson"
+                }
+            ], 
+            "layers": [
+                {
+                    "id": "tsp_layer",
+                    "name": "Route for tsp",
+                    "source": "tsp",
+                    "type": "line",
+                    "order": 50,
+                    "layout": {
+                        "visibility": "visible"
+                    },
+                    "paint": {
+                        "line-color": "#FF0000",
+                        "line-width": 3
+                    }
+                },
+                {
+                    "id": "tspNodeLayer",
+                    "name": "3 Richest House in King's Lynn",
+                    "source": "tspNodes",
+                    "type": "symbol",
+                    "order": 50,
+                    "layout": {
+                        "icon-image": "marker",
+                        "icon-size": 0.035,
+                        "text-field": ["get", "seq"], 
+                        "text-size": 20,
+                        "text-anchor": "center"
+
+                    },
+                    "paint":{
+                        "text-color":"#808080"
+                    }
+                }
+            ]
+        }
+    ]
+}

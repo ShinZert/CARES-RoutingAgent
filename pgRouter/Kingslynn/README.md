@@ -2,12 +2,12 @@
 
 
 
-osm2pgrouting --f kingslynncropped.osm --conf mapconfig.xml --dbname kingslynn --username postgres --password postgres --clean
+osm2pgrouting --f kingslynnbig.osm --conf mapconfig.xml --dbname kingslynn --username postgres --password postgres --clean
 
-//Import Raster - DEM
+# Import Raster - DEM
 raster2pgsql -c -C -e -s 4326 -f rast -F -I -M -t 100x100 kingslynnbig.tif public.kingslynn_dem | psql -U postgres -h 172.23.128.1 -d kingslynn
 
-//Import Raster  - FLOOD (NEVER MERGE TIF TILES TOGETHER)
+# Import Raster  - FLOOD (NEVER MERGE TIF TILES TOGETHER)
 raster2pgsql -c -C -e -s OSGB36 -f rast -F -I -M -t 100x100 h_79200_*.tif public.flood_raster | psql -U postgres -h 172.23.128.1 -d kingslynn
 
 INSERT INTO flood_polygon (geom)
@@ -49,22 +49,23 @@ WHERE ST_SRID(geom) = 27700;
 
 SELECT
  min(r.seq) AS seq,
- e.gid AS gid,
- e.name,
+ e.id AS id,
  sum(e.cost) AS cost,
  ST_Collect(e.the_geom) AS geom 
- FROM pgr_dijkstra('SELECT gid as id, source, target, cost, reverse_cost FROM ways',%source%,%target%,false) AS r,ways AS e 
- WHERE r.edge=e.gid GROUP BY e.gid
+ FROM pgr_dijkstra('SELECT id as id, source, target, cost_flood as cost, reverse_cost_flood as reverse_cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 120, 121, 122, 123, 124, 125)',%source%,%target%,false) AS r,ways AS e 
+ WHERE r.edge=e.id GROUP BY e.id
 
 
-//CREATE ELEVATION IN THE NODES
+
+
+# CREATE ELEVATION IN THE NODES
 ALTER TABLE ways_vertices_pgr ADD COLUMN elevation double precision;
 UPDATE ways_vertices_pgr
 SET elevation = ST_Value(kingslynn_dem.rast, 1,  ways_vertices_pgr.the_geom)
 FROM kingslynn_dem
 WHERE ST_Intersects(kingslynn_dem.rast, ways_vertices_pgr.the_geom);
 
-//CREATE THE SLOPE - ADD ELEVATION TO THE SOURCE AND TARGET NODES IN WAYS table 
+# CREATE THE SLOPE - ADD ELEVATION TO THE SOURCE AND TARGET NODES IN WAYS table 
 
 ALTER TABLE ways ADD COLUMN source_elevation double precision;
 ALTER TABLE ways ADD COLUMN target_elevation double precision;
@@ -78,9 +79,8 @@ AND w.target = v2.id;
 
 ALTER TABLE ways RENAME COLUMN gid TO id;
 
-//Query the route
-
-//CHANGE "GID" to "ID"
+# Query the route
+# CHANGE "GID" to "ID"
 SELECT  source_elevation, target_elevation, ST_Length(ST_Transform(the_geom,32632)), the_geom
 
 FROM pgr_dijkstra(
@@ -107,32 +107,18 @@ FROM pgr_dijkstra(
 ) AS route
 JOIN ways AS r ON route.edge = r.id;
 
-
-
-
-//FIND OUT THE SLOPE
+# FIND OUT THE SLOPE
 ALTER TABLE ways ADD COLUMN slope FLOAT;
 
 UPDATE ways SET slope = ((target_elevation - source_elevation) / source_elevation) * 100;
 
 
-
-
-
-
-
-
-
-
-
-
-
-//INSERT FLOOD Geometry
+# INSERT FLOOD Geometry
 INSERT INTO flood (geom)
 VALUES (ST_SetSRID(ST_GeomFromGeoJSON('{"type":"MultiPolygon","coordinates":[[[[0.38849,52.72679],[0.37556,52.72566],[0.37567,52.73139],[0.39342,52.74511],[0.39459,52.74743],[0.3959,52.74727],[0.39753,52.74638],[0.39857,52.74611],[0.40014,52.7455],[0.39949,52.74452],[0.40102,52.74285],[0.40071,52.74191],[0.39981,52.74111],[0.39959,52.7388],[0.39948,52.73823],[0.39927,52.73733],[0.40005,52.73597],[0.40055,52.73458],[0.39968,52.7337],[0.39956,52.73326],[0.39897,52.7329],[0.39827,52.73172],[0.3925,52.7324],[0.38849,52.72679]]],[[[0.38938,52.77214],[0.38992,52.76984],[0.39269,52.77026],[0.39565,52.76729],[0.39486,52.76635],[0.40055,52.76481],[0.40066,52.76376],[0.39951,52.76238],[0.39881,52.76165],[0.39702,52.75982],[0.39611,52.75878],[0.39663,52.75838],[0.39613,52.75716],[0.39494,52.75695],[0.39493,52.75668],[0.39522,52.75467],[0.39563,52.75343],[0.39561,52.75282],[0.39547,52.75221],[0.39533,52.75196],[0.3963,52.75177],[0.39633,52.75107],[0.3966,52.75056],[0.39684,52.7502],[0.39616,52.75001],[0.39633,52.74925],[0.39678,52.74873],[0.39675,52.74828],[0.39611,52.74783],[0.39575,52.74761],[0.39485,52.74781],[0.39364,52.75091],[0.39215,52.75377],[0.39157,52.75544],[0.39163,52.75676],[0.38645,52.7658],[0.38334,52.77144],[0.38406,52.7716],[0.38938,52.77214]]]]}'), 4326));
 
 
-//Duplicate the column
+# Duplicate the column
 ALTER TABLE ways ADD COLUMN cost_flood FLOAT,
                    ADD COLUMN reverse_cost_flood FLOAT;
 
@@ -140,29 +126,17 @@ UPDATE ways
 SET cost_flood = cost ,
     reverse_cost_flood = reverse_cost
 
-
-
-//CHANGE THE VALUE
-
-
-
+# CHANGE THE VALUE
 UPDATE ways
-SET cost_flood = -cost_flood ,
-    reverse_cost_flood = -reverse_cost_flood
+SET cost_flood = -abs(cost_flood) ,
+    reverse_cost_flood = -abs(reverse_cost_flood)
 WHERE EXISTS (
     SELECT 1
     FROM flood_polygon_single
     WHERE ST_Intersects(ways.the_geom, flood_polygon_single.geom)
-) AND cost_flood >= 0 AND reverse_cost_flood >= 0;
+) 
 
-
-
-
-
-
-
-
-//pgr_djikstra Query
+# pgr_djikstra Query
 SELECT  source_elevation, target_elevation, ST_Length(ST_Transform(the_geom,32632)), the_geom
 FROM 
 
@@ -194,3 +168,261 @@ JOIN ways AS r ON route.edge = r.id;
 
 
 
+# ISOCHRONE
+# Duplicate the column
+ALTER TABLE ways ADD COLUMN cost_s_flood FLOAT,
+                   ADD COLUMN reverse_cost_s_flood FLOAT;
+
+UPDATE ways
+SET cost_s_flood = cost_s ,
+    reverse_cost_s_flood = reverse_cost_s
+
+# CHANGE THE VALUE
+UPDATE ways
+SET cost_s_flood = -abs(cost_s_flood) ,
+    reverse_cost_s_flood = -abs(reverse_cost_s_flood)
+WHERE EXISTS (
+    SELECT 1
+    FROM flood_polygon_single
+    WHERE ST_Intersects(ways.the_geom, flood_polygon_single.geom)
+) 
+
+# Isochrone 
+SELECT
+    id,
+    the_geom
+FROM
+    pgr_drivingDistance(
+        'SELECT id, source, target, cost_s_flood as cost FROM ways', -- Replace with your table name and cost column
+        3720, -- Specify the source vertex ID here
+        300, -- Specify the time/distance limit (in seconds or units) here
+        false -- Set to 'true' for directed graph, 'false' for undirected
+    ) AS dd
+JOIN
+    ways_vertices_pgr AS v ON dd.node = v.id
+
+# CREATE POLYGON ISOCHRONE IN QGis 
+-- Create a table to store the isochrone polygons
+CREATE TABLE isochrone_results (
+    minute integer,
+    isochrone_polygon geometry(Polygon)
+);
+
+# CREATE SFCGAL Extension
+CREATE EXTENSION postgis_sfcgal;
+
+# NOTE NODE SELECTED MUST BE ROUTABLE 
+# Different shape
+Convex Hull, Concave Hull, Optimal Alpha, Alpha Polygon
+
+## NOTE THIS IS CONVEX HULL POLYGON 
+-- Loop through each minute up to 10 minutes
+DO $$
+DECLARE
+    minute_limit integer;
+BEGIN
+    FOR minute_limit IN 1..5 LOOP
+        -- Execute the isochrone query for the current minute limit and store the results in the isochrone_results table
+        EXECUTE '
+            INSERT INTO isochrone_results (minute, isochrone_polygon)
+            SELECT
+                ' || minute_limit || ' AS minute,
+                ST_ConvexHull(ST_Collect(the_geom)) AS isochrone_polygon
+            FROM
+                (
+                    SELECT
+                        id,
+                        the_geom
+                    FROM
+                        pgr_drivingDistance(
+                            ''SELECT id, source, target, cost_s_flood as cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 120, 121, 122, 123, 124, 125)'', -- Replace with your table name and cost column
+                            7536, -- Specify the source vertex ID here
+                            ' || (minute_limit * 120) || ', -- Specify the time/distance limit (in seconds) here
+                            false
+                        ) AS dd
+                    JOIN
+                        ways_vertices_pgr AS v ON dd.node = v.id
+                ) AS subquery';
+    END LOOP;
+END $$;
+
+-- Select all the isochrone polygons from the isochrone_results table
+SELECT * FROM isochrone_results;
+
+## CONCAVE
+DO $$
+DECLARE
+    minute_limit integer;
+BEGIN
+    FOR minute_limit IN 1..5 LOOP
+        -- Execute the isochrone query for the current minute limit and store the results in the isochrone_results table
+        EXECUTE '
+            INSERT INTO isochrone_results (minute, isochrone_polygon)
+            SELECT
+                ' || minute_limit || ' AS minute,
+                ST_ConcaveHull(ST_Collect(the_geom),0.5) AS isochrone_polygon
+            FROM
+                (
+                    SELECT
+                        id,
+                        the_geom
+                    FROM
+                        pgr_drivingDistance(
+                            ''SELECT id, source, target, cost_s_flood as cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 120, 121, 122, 123, 124, 125)'', -- Replace with your table name and cost column
+                            7536, -- Specify the source vertex ID here
+                            ' || (minute_limit * 120) || ', -- Specify the time/distance limit (in seconds) here
+                            false
+                        ) AS dd
+                    JOIN
+                        ways_vertices_pgr AS v ON dd.node = v.id
+                ) AS subquery';
+    END LOOP;
+END $$;
+
+-- Select all the isochrone polygons from the isochrone_results table
+SELECT * FROM isochrone_results;
+
+
+
+## NOTE THIS IS OptimalAlphaShape POLYGON
+
+-- Create a table to store the isochrone polygons
+CREATE TABLE isochrone_results (
+    minute integer,
+    isochrone_polygon geometry(Polygon)
+);
+
+TRUNCATE TABLE isochrone_results;
+DO $$
+DECLARE
+    minute_limit integer;
+BEGIN
+    FOR minute_limit IN 1..5 LOOP
+        -- Execute the isochrone query for the current minute limit and store the results in the isochrone_results table
+        EXECUTE '
+            INSERT INTO isochrone_results (minute, isochrone_polygon)
+            SELECT
+                ' || minute_limit || ' AS minute,
+                ST_OptimalAlphaShape(ST_Collect(the_geom)) AS isochrone_polygon
+            FROM
+                (
+                    SELECT
+                        id,
+                        the_geom
+                    FROM
+                        pgr_drivingDistance(
+                            ''SELECT id, source, target, cost_s_flood as cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 120, 121, 122, 123, 124, 125)'', -- Replace with your table name and cost column
+                            7536, -- Specify the source vertex ID here
+                            ' || (minute_limit * 120) || ', -- Specify the time/distance limit (in seconds) here
+                            false
+                        ) AS dd
+                    JOIN
+                        ways_vertices_pgr AS v ON dd.node = v.id
+                ) AS subquery';
+    END LOOP;
+END $$;
+
+
+## Isochrone with roadnetwork instead
+DO $$
+DECLARE
+    minute_limit integer;
+BEGIN
+    FOR minute_limit IN 1..5 LOOP
+        -- Execute the isochrone query for the current minute limit and store the results in the isochrone_results table
+        EXECUTE '
+            INSERT INTO isochrone_results_nw (minute, isochrone_polygon)
+            SELECT
+                ' || minute_limit || ' AS minute,
+                ST_ConcaveHull(ST_Collect(way), 0.85) AS isochrone_polygon
+            FROM
+                ways
+            WHERE
+                ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 120, 121, 122, 123, 124, 125) -- Replace with your desired road tags
+                AND ways.cost_s_flood <= ' || (minute_limit * 120) || '; -- Specify the time/distance limit (in seconds) here';
+    END LOOP;
+END $$;
+
+
+## TRIP CENTRALITY
+CREATE TABLE trips_centrality AS (
+SELECT
+  b.id,
+  b.the_geom AS geom,
+  count(b.the_geom) AS count
+FROM
+	ways AS t,
+  pgr_dijkstra(
+      'SELECT
+          g.id AS id,
+          g.source,
+          g.target,
+          g.cost_s AS cost
+          FROM ways AS g WHERE
+                g.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 120, 121, 122, 123, 124, 125)', 
+          7536, t.target,
+          directed := FALSE) AS j
+JOIN ways AS b 
+  ON j.edge = b.id 
+GROUP BY b.id, b.the_geom
+);
+
+## RETURN CRITICAL ROAD TO FIX - BASED ON RESULTS WITH THE SHORTEST NUMBER OF PATH TO INCREASE ACCESIBILITY PATH
+SELECT tc.*
+FROM trips_centrality tc
+INNER JOIN ways w ON tc.id = w.id
+WHERE w.cost_s_flood < 0 AND w.cost_s_flood < 0
+ORDER BY tc.count DESC;
+
+# DUPLICATE NEW COLUMN 
+ALTER TABLE ways
+ADD COLUMN cost_s_flood_fixed numeric,
+ADD COLUMN reverse_cost_s_flood_fixed numeric;
+
+UPDATE ways
+SET cost_s_flood_fixed = cost_s_flood,
+    reverse_cost_s_flood_fixed = reverse_cost_s_flood;
+
+# CHANGE THE VALUE OF THE FIRST 3 TOP CRITICAL BRIDGE
+UPDATE ways
+SET cost_s_flood_fixed = abs(cost_s_flood_fixed),
+    reverse_cost_s_flood_fixed = abs(reverse_cost_s_flood_fixed)
+WHERE id IN (
+    SELECT tc.id
+    FROM trips_centrality tc
+    INNER JOIN ways w ON tc.id = w.id
+    WHERE w.cost_s_flood < 0 AND w.cost_s_flood < 0
+    ORDER BY tc.count DESC
+    LIMIT 4
+);
+
+
+## NOTE THIS IS OptimalAlphaShape POLYGON WITH FIXED ROAD
+DO $$
+DECLARE
+    minute_limit integer;
+BEGIN
+    FOR minute_limit IN 1..5 LOOP
+        -- Execute the isochrone query for the current minute limit and store the results in the isochrone_results table
+        EXECUTE '
+            INSERT INTO isochrone_results (minute, isochrone_polygon)
+            SELECT
+                ' || minute_limit || ' AS minute,
+                ST_OptimalAlphaShape(ST_Collect(the_geom)) AS isochrone_polygon
+            FROM
+                (
+                    SELECT
+                        id,
+                        the_geom
+                    FROM
+                        pgr_drivingDistance(
+                            ''SELECT id, source, target, cost_s_flood_fixed as cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 120, 121, 122, 123, 124, 125)'', -- Replace with your table name and cost column
+                            7536, -- Specify the source vertex ID here
+                            ' || (minute_limit * 120) || ', -- Specify the time/distance limit (in seconds) here
+                            false
+                        ) AS dd
+                    JOIN
+                        ways_vertices_pgr AS v ON dd.node = v.id
+                ) AS subquery';
+    END LOOP;
+END $$;

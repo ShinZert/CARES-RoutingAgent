@@ -15,7 +15,7 @@ SELECT
  e.name,
  sum(e.cost) AS cost,
  ST_Collect(e.the_geom) AS geom 
- FROM pgr_dijkstra('SELECT gid as id, source, target, cost, reverse_cost FROM ways',%source%,%target%,false) AS r,ways AS e 
+ FROM pgr_dijkstra('SELECT gid as id, source, target, cost, reverse_cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 120, 121, 122, 123, 124, 125)',%source%,%target%,false) AS r,ways AS e 
  WHERE r.edge=e.gid GROUP BY e.gid
 
 
@@ -166,7 +166,7 @@ END;
 CREATE TABLE tsp AS SELECT *
 FROM pgr_TSP(
   $$SELECT * FROM pgr_dijkstraCostMatrix(
-    'SELECT id, source, target, cost, reverse_cost FROM ways',
+    'SELECT id, source, target, cost, reverse_cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 120, 121, 122, 123, 124, 125)',
     (SELECT array_agg(id)
     FROM ways_vertices_pgr
     WHERE id IN (SELECT closest_node FROM pothole)),
@@ -189,7 +189,7 @@ JOIN (
     FROM tsp
 ) n2 ON n1.seq + 1 = n2.seq
 JOIN pgr_dijkstra(
-    'SELECT id, source, target, cost, reverse_cost FROM ways',
+    'SELECT id, source, target, cost, reverse_cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 120, 121, 122, 123, 124, 125)',
     n1.node,
     n2.node
 ) AS di ON true

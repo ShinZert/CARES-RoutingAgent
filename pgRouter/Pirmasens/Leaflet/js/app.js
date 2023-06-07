@@ -134,7 +134,7 @@ function getTSPNode() {
                     // Create a numbered marker icon
                     var customIcon = L.divIcon({
                         className: 'numbered-marker',
-                        html: '<div>' + feature.properties.seq + '</div>',
+                        html: '<div>' + (feature.properties.seq-1) + '</div>',
                         iconSize: [30, 30],
                     });
 
@@ -163,10 +163,11 @@ function getTSP() {
 }
 
 
-getTSP();
+
 getVertex(sourceMarker.getLatLng());
 getVertex(targetMarker.getLatLng());
 getRoute();
+getTSP();
 getTSPNode();
 getPoint();
 

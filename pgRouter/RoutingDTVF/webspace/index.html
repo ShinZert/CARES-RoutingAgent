@@ -159,7 +159,7 @@
             // Only start the map after data definitions have been read.
             var dataPromise = manager.loadDefinitions();
             dataPromise.then(() => start());
-
+            dataPromise.then(() => getRouteStart())
 
 
             /**
@@ -173,13 +173,12 @@
                 // Set the default content in the "General" tab of the side panel
                 manager.getPanelHandler().setTitle("<h1>King's Lynn Flood Router</h1>");
                 manager.getPanelHandler().setContent(`
-                    <p>This example visualisation has been put together to demonstrate the intended use of the centralised Digital Twin Visualisation Framework (DTVF).
-                    This framework has been designed to make it easier for users not experienced with Typescript (or the mapping libraries) to quickly & easily put 
-                    together a new Digital Twin visualisation. It is intended for developers to use this example visualisation to gain an understanding of the DTVF 
-                    before attempting to create their own visualisation; to do that, this example can be copied and used as a starting point.</p>
-                    <p>Note that this example has no version number as it is not intended for release; instead it should be updated to reflect version 3.3.5 of
-                    the framework itself hosted on a remote CMCL server not the files within the repository.</p>
-                    <p>For more information, please see the associated README file within the TWA repository or contact the CMCL technical team.</p>
+                <p>This visualisation of King's Lynn, UK, is based on data instantiated in the World Avatar. <br><br>
+                    It combines flood data, elevation raster data, isochrone map from hospital, street network data, building data. 
+                    <br><br>
+
+                    Use the layer controls to show/hide various layers. 
+                  </p>
                 `);
                 
                 // Use the local.js file to build the legend
@@ -204,12 +203,18 @@
                         manager.plotData();
                     });
                 });
+                
+            }
 
+
+            function getRouteStart(){
+                
                 //Routing functions
                 var myLayer = null;
                 var selectedPoint = null;
                 var source = null;
                 var target = null;
+
 
                 // draggable marker for starting point
                 var sourceMarker = new mapboxgl.Marker({
@@ -237,43 +242,38 @@
                     getRoute();
                 });
 
-                getVertex(sourceMarker.getLngLat());
-                getVertex(targetMarker.getLngLat());
-                getRoute();
 
                 // function to get nearest vertex to the passed point
-                function getVertex(selectedPoint,callback) {
+                function getVertex(selectedPoint) {
                     var url = `http://127.0.0.1:8081/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:nearest_vertex&outputformat=application/json&viewparams=lon:${selectedPoint.lng};lat:${selectedPoint.lat};`;
 
-                    fetch(url)
-                        .then(response => response.json())
-                        .then(data => {
+                    $.ajax({
+                        url: url,
+                        async: false,
+                        success: function(data) {
                             loadVertex(
                                 data,
                                 selectedPoint.toString() === sourceMarker.getLngLat().toString()
                             );
-                        });
-                        callback;
+                        }
+                    });
                 }
 
                 // function to update the source and target nodes as returned from geoserver for later querying
-                function loadVertex(response, isSource,callback) {
+                function loadVertex(response, isSource) {
                     var features = response.features;
                     if (isSource) {
                         source = features[0].properties.id;
                     } else {
                         target = features[0].properties.id;
                     }
-                    
-                    callback;
                 }
-
 
                 // // function to get the shortest path from the give source and target nodes
                 function getRoute() {
-                    removeLayer();
-                    var url = `http://127.0.0.1:8081/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:shortest_paths&outputformat=application/json&viewparams=source:${source};target:${target};`;
 
+                    var url = `http://127.0.0.1:8081/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:shortest_paths&outputformat=application/json&viewparams=source:${source};target:${target};`;
+                    removeLayer();
                     // Retrieve the GeoJSON data from the URL
                     fetch(url)
                     .then(response => response.json())
@@ -298,7 +298,7 @@
                     }); 
                 }
 
-                // Function to remove the layer
+                // function to remove the layer
                 function removeLayer() {
                     if (myLayer) {
                         MapHandler.MAP.removeLayer('my-layer');
@@ -307,7 +307,10 @@
                     }
                 }
 
-                manager.plotData();
+                //To get initial route
+                getVertex(sourceMarker.getLngLat());
+                getVertex(targetMarker.getLngLat());
+                getRoute();
             }
         </script>
     </body>

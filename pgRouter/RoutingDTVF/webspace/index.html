@@ -160,7 +160,7 @@
             var dataPromise = manager.loadDefinitions();
             dataPromise.then(() => start());
             dataPromise.then(() => getRouteStart())
-
+            dataPromise.then(() => addHospital())
 
             /**
              * Starts the visualisation setup process.
@@ -204,6 +204,21 @@
                     });
                 });
                 
+            }
+
+            function addHospital(){
+
+                var markerCoordinates = [0.44596810988223834, 52.75684401611818];
+
+                    // Create a new marker instance
+                    var marker = new mapboxgl.Marker({
+                        color: 'red',
+                        draggable: false
+                    })
+                        .setLngLat(markerCoordinates)
+                        .addTo(MapHandler.MAP);
+                    
+
             }
 
 
@@ -291,8 +306,8 @@
                         source: 'my-data',
                         paint: {
                             'line-color': '#000000',
-                            'line-opacity': 0.8,
-                            'line-width': 2
+                            'line-opacity': 1,
+                            'line-width': 3
                         }
                         });
                     }); 

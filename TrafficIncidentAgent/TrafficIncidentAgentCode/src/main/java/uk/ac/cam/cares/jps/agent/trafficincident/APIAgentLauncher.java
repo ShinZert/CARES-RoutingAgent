@@ -29,8 +29,8 @@ import org.json.JSONObject;
 public class APIAgentLauncher extends JPSAgent {
     private final Logger LOGGER = LogManager.getLogger(APIAgentLauncher.class);
 
-    public static final String Key_APIProp = "apiProperties";
-    public static final String Key_ClientProp = "clientProperties";
+    public static final String API_VALUES = "TRAFFICINCIDENT_API_PROPERTIES";
+    public static final String CLIENT_VALUES = "TRAFFICINCIDENT_CLIENT_PROPERTIES";
 
     public static final String ARGUMENT_MISMATCH_MSG = "Argument mistmatch";
     public static final String AGENT_ERROR_MSG = "Th road obstruction API input agent could not be constructed.";
@@ -61,12 +61,10 @@ public class APIAgentLauncher extends JPSAgent {
     @Override
     public JSONObject processRequestParameters(JSONObject requestParams, HttpServletRequest request) {
         JSONObject jsonMessage = new JSONObject();
-        System.out.print(requestParams.getString(Key_ClientProp));
-        System.out.print(requestParams.getString(Key_APIProp));
-        if(validateInput(requestParams)) {   
+        if(validateConfig()) {   
             LOGGER.info("Passing Request to API Connector and Postgres Client");
-            String clientProperties = System.getenv(requestParams.getString(Key_ClientProp));
-            String apiProperties = System.getenv(requestParams.getString(Key_APIProp));
+            String clientProperties = System.getenv(CLIENT_VALUES);
+            String apiProperties = System.getenv(API_VALUES);
             
             String[] args = new String []{apiProperties, clientProperties};
             jsonMessage = initializeAgent(args);
@@ -81,22 +79,8 @@ public class APIAgentLauncher extends JPSAgent {
         return requestParams;
     }
 
-    public boolean validateInput(JSONObject requestParams) {
-        boolean validate = true;
-        if (!requestParams.isEmpty()) {
-            validate = requestParams.has(Key_ClientProp) && requestParams.has(Key_APIProp);
-            System.out.print("Hello");
-            if (validate) {
-                String clientProperties = requestParams.getString(Key_ClientProp);
-                String apiproperties = requestParams.getString(Key_APIProp);
-
-                if ((System.getenv(clientProperties)==null) || (System.getenv(apiproperties)==null)) {
-                    validate=false;
-                }
-            }
-        }
-
-        return validate;
+    public boolean validateConfig() {
+        return (System.getenv(CLIENT_VALUES)!=null) && (System.getenv(API_VALUES)!=null);
     }
 
     public JSONObject initializeAgent(String[] args) {

@@ -1,33 +1,29 @@
 {
-    "intro": "This list contains links to a number of resources designed to act as supplemental documentation for this visualisation.",
+    "intro": "The list below provides an overview of uses resources and their respective links for further information:<BR>",
     "links": [
         {
-            "text": "List of Cambridge colleges",
-            "url": "https://en.wikipedia.org/wiki/Colleges_of_the_University_of_Cambridge"
+            "text": "Ordnance Survey OpenMap - Local",
+            "url": "https://osdatahub.os.uk/downloads/open/OpenMapLocal"
         },
         {
-            "text": "University of Cambridge",
-            "url": "https://en.wikipedia.org/wiki/University_of_Cambridge"
+            "text": "Digimap",
+            "url": "https://digimap.edina.ac.uk/os"
         },
         {
-            "text": "Cambridge",
-            "url": "https://en.wikipedia.org/wiki/Cambridge"
+            "text": "His Majesty's Land Registry Open Data",
+            "url": "https://landregistry.data.gov.uk/"
         },
         {
-            "text": "Visit Cambridge",
-            "url": "https://www.visitcambridge.org/"
+            "text": "Environment Agency Real Time flood-monitoring API",
+            "url": "https://environment.data.gov.uk/flood-monitoring/doc/reference"
+        },        
+        {
+            "text": "MetOffice DataPoint API",
+            "url": "https://www.metoffice.gov.uk/services/data/datapoint/api-reference"
         },
         {
-            "text": "Cambridgeshire County Council",
-            "url": "https://www.cambridgeshire.gov.uk/"
-        },
-        {
-            "text": "Singapore",
-            "url": "https://en.wikipedia.org/wiki/Singapore"
-        },
-        {
-            "text": "Mass Rapid Transit (Singapore)",
-            "url": "https://en.wikipedia.org/wiki/Mass_Rapid_Transit_(Singapore)"
+            "text": "UK-AIR Sensor Observation Service",
+            "url": "https://uk-air.defra.gov.uk/data/about_sos"
         }
     ]
 }

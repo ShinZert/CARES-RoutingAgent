@@ -73,7 +73,7 @@ public class APIAgentLauncher extends JPSAgent {
             requestParams = jsonMessage;
 
         } else {
-            jsonMessage.put("Result","Request Parameters not defined correctly");
+            jsonMessage.put("Result","api or client configuration is missig.");
             requestParams = jsonMessage;
         }
         return requestParams;

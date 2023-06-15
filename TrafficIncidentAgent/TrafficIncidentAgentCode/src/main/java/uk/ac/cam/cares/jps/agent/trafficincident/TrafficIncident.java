@@ -24,7 +24,12 @@ public class TrafficIncident {
 
     @Override
     public String toString() {
-        return String.format("%s at latitude %f, longitude %f starting from %d", this.incidentType, this.latitude, this.longitude, this.startTime);
+        if (this.endTime == null) {
+            return String.format("%s at latitude %f, longitude %f starting from %d", this.incidentType, this.latitude, this.longitude, this.startTime);
+        } else {
+            return String.format("%s at latitude %f, longitude %f starting from %d to %d", this.incidentType, this.latitude, this.longitude, this.startTime, this.endTime);
+        }
+        
     }
 
     @Override

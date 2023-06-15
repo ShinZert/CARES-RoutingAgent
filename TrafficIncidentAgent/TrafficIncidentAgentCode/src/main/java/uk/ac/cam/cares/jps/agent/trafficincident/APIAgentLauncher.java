@@ -24,6 +24,7 @@ import org.jooq.Table;
 import org.jooq.impl.DSL;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.postgis.Point;
 
 @WebServlet(urlPatterns = {"/retrieve"})
 public class APIAgentLauncher extends JPSAgent {
@@ -33,7 +34,7 @@ public class APIAgentLauncher extends JPSAgent {
     public static final String CLIENT_VALUES = "TRAFFICINCIDENT_CLIENT_PROPERTIES";
 
     public static final String ARGUMENT_MISMATCH_MSG = "Argument mistmatch";
-    public static final String AGENT_ERROR_MSG = "Th road obstruction API input agent could not be constructed.";
+    public static final String AGENT_ERROR_MSG = "The road obstruction API input agent could not be constructed.";
     public static final String GET_READINGS_ERROR_MSG = "Error when getting reading.";
     public static final String CONNECTOR_ERROR_MSG = "Error when working with APIConnector.";
     public static final String POSTGRES_INITIALIZATION_ERROR_MSG = "Error when initializing the Postgres";
@@ -52,7 +53,7 @@ public class APIAgentLauncher extends JPSAgent {
     private static final SQLDialect dialect = SQLDialect.POSTGRES;
     private static final Field<Long> timestampColumn = DSL.field(DSL.name("timestamp"), Long.class);
     private static final Field<String> typeColumn = DSL.field(DSL.name("Type"), String.class);
-    // TODO: convert to geo location instead of latitude, longitude pair
+    // TODO: convert to geo location instead of latitude, longitude pair -> execute sql query
     private static final Field<Double> latitudeColumn = DSL.field(DSL.name("Latitude"), double.class);
     private static final Field<Double> longitudeColumn = DSL.field(DSL.name("Longitude"), double.class);
     private static final Field<String> messageColumn = DSL.field(DSL.name("Message"), String.class);

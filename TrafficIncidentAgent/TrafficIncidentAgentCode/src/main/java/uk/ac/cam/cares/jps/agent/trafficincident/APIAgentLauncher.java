@@ -58,7 +58,7 @@ public class APIAgentLauncher extends JPSAgent {
     private static final Field<Double> longitudeColumn = DSL.field(DSL.name("Longitude"), double.class);
     private static final Field<String> messageColumn = DSL.field(DSL.name("Message"), String.class);
 
-    // eg (sent in Postman) http://localhost:1016/traffic-incident-agent/retrieve?apiProperties=TRAFFICINCIDENT_API_PROPERTIES&clientProperties=TRAFFICINCIDENT_CLIENT_PROPERTIES
+    // eg (sent in Postman) http://localhost:1016/traffic-incident-agent/retrieve
     @Override
     public JSONObject processRequestParameters(JSONObject requestParams, HttpServletRequest request) {
         JSONObject jsonMessage = new JSONObject();

@@ -161,7 +161,7 @@ public class APIAgentLauncher extends JPSAgent {
             // database needs to be created in PgAdmin beforehand
             this.insertValuesIntoPostgres(curr);
         }
-        LOGGER.info("BIG HI");
+        LOGGER.info("Checking whether any traffic incident has ended ...");
         for (TrafficIncident ti : this.pastTrafficIncidentSet) {
             if (!this.ongoingTrafficIncidentSet.contains(ti)) {
                 // TODO: decide when we mark the end time of the event
@@ -170,6 +170,7 @@ public class APIAgentLauncher extends JPSAgent {
                 // TODO: find past records and update the end time
             }
         }
+        LOGGER.info("Above is/are ended traffic incidents.")
         this.pastTrafficIncidentSet = this.ongoingTrafficIncidentSet;
         return jsonMessage;
     }

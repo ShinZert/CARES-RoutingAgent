@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.text.SimpleDateFormat;
+import java.time.*;
 import java.util.*;
 
 import javax.servlet.annotation.WebServlet;
@@ -39,13 +40,16 @@ public class APIAgentLauncher extends JPSAgent {
     public static final String CONNECTOR_ERROR_MSG = "Error when working with APIConnector.";
     public static final String POSTGRES_INITIALIZATION_ERROR_MSG = "Error when initializing the Postgres";
 
+    public static final ZoneOffset offset= ZoneOffset.UTC;
+    long timestamp = System.currentTimeMillis();
+    private HashSet<TrafficIncident> pastTrafficIncidentSet = new HashSet<>();
+    private HashSet<TrafficIncident> ongoingTrafficIncidentSet = new HashSet<>();
+
+    // Postgres related
     private String rdbURL = null; 
 	private String rdbUser = null;
 	private String rdbPassword = null;
     private Connection conn = null;
-    long timestamp = System.currentTimeMillis();
-    private HashSet<TrafficIncident> pastTrafficIncidentSet = new HashSet<>();
-    private HashSet<TrafficIncident> ongoingTrafficIncidentSet = new HashSet<>();
     private DSLContext context;
     private static final SQLDialect dialect = SQLDialect.POSTGRES;
     private static final Field<Long> timestampColumn = DSL.field(DSL.name("timestamp"), Long.class);
@@ -147,7 +151,7 @@ public class APIAgentLauncher extends JPSAgent {
         connect();
 
         JSONArray jsArr = readings.getJSONArray("value");
-        this.ongoingTrafficIncidentSet.clear();
+        this.ongoingTrafficIncidentSet = new HashSet<>();
         LOGGER.info("Adding new traffic incidents to Postgres:");
         for(int i=0; i<jsArr.length(); i++) {
             JSONObject currentEntry = jsArr.getJSONObject(i);
@@ -156,6 +160,7 @@ public class APIAgentLauncher extends JPSAgent {
             Double longitude = (Double) currentEntry.get("Longitude");
             String incidentType = (String) currentEntry.get("Type");
             String message = (String) currentEntry.get("Message");
+            timestamp = APIAgentLauncher.parseMessageStringToTimestamp(message);
             TrafficIncident curr = new TrafficIncident(incidentType, latitude, 
                 longitude, message, timestamp);
             this.ongoingTrafficIncidentSet.add(curr);
@@ -229,5 +234,19 @@ public class APIAgentLauncher extends JPSAgent {
             trafficIncident.latitude, trafficIncident.longitude, trafficIncident.message);
 
         insertValueStep.execute();
+    }
+
+    private static long parseMessageStringToTimestamp(String message) {
+        // eg: (15/6)14:25 Roadworks on ECP (towards City) after Fort Rd Exit. Avoid lane 1.
+        int year = Year.now().getValue();
+        String dateTimeRawString = message.trim().split(" ")[0];
+        String dateRawString = dateTimeRawString.split("\\)")[0];
+        String timeRawString = dateTimeRawString.split("\\)")[1];
+        int month = Integer.parseInt(dateRawString.split("/")[1]);
+        int day = Integer.parseInt(dateRawString.split("/")[0].substring(1));
+        int hour = Integer.parseInt(timeRawString.split(":")[0]);
+        int minute = Integer.parseInt(timeRawString.split(":")[1]);
+        OffsetDateTime result = OffsetDateTime.of(year, month, day, hour, minute, 0, 0, APIAgentLauncher.offset);
+        return result.toInstant().getEpochSecond();
     }
 }

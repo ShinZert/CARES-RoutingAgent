@@ -50,6 +50,6 @@ public class TrafficIncident {
 
     @Override
     public int hashCode() {
-        return this.toString().hashCode();
+        return String.format("%s at latitude %f, longitude %f starting from %d", this.incidentType, this.latitude, this.longitude, this.startTime).hashCode();
     }
 }

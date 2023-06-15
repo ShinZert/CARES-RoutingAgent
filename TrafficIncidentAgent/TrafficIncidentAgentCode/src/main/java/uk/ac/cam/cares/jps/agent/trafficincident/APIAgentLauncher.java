@@ -112,7 +112,7 @@ public class APIAgentLauncher extends JPSAgent {
             throw new JPSRuntimeException(e.getMessage());
         }
         
-        LOGGER.info(String.format("Retrieved readings for %d incidents", readings.length()));
+        LOGGER.info(String.format("Retrieved %d incident readings", readings.getJSONArray("value").length()));
         jsonMessage.accumulate("Result","Retrieved "+readings.getJSONArray("value").length()+" incident readings");
 
 
@@ -158,8 +158,11 @@ public class APIAgentLauncher extends JPSAgent {
             TrafficIncident curr = new TrafficIncident(incidentType, latitude, 
                 longitude, message, timestamp);
             this.ongoingTrafficIncidentSet.add(curr);
-            // database needs to be created in PgAdmin beforehand
-            this.insertValuesIntoPostgres(curr);
+            // only update when the traffic incident not present
+            if (!this.pastTrafficIncidentSet.contains(curr)) {
+                // database needs to be created in PgAdmin beforehand
+                this.insertValuesIntoPostgres(curr);
+            }
         }
         LOGGER.info("Checking whether any traffic incident has ended ...");
         for (TrafficIncident ti : this.pastTrafficIncidentSet) {
@@ -167,10 +170,10 @@ public class APIAgentLauncher extends JPSAgent {
                 // TODO: decide when we mark the end time of the event
                 ti.setEndTime(this.timestamp);
                 LOGGER.info(ti);
-                // TODO: find past records and update the end time
+                // TODO: find past records from Postgres and update its end time
             }
         }
-        LOGGER.info("Above is/are ended traffic incidents.")
+        LOGGER.info("Above is/are ended traffic incidents.");
         this.pastTrafficIncidentSet = this.ongoingTrafficIncidentSet;
         return jsonMessage;
     }

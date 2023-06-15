@@ -1,6 +1,5 @@
 package uk.ac.cam.cares.jps.agent.trafficincident;
 
-
 public class TrafficIncident {
     public String incidentType;
     public double latitude;
@@ -16,6 +15,7 @@ public class TrafficIncident {
         this.longitude = longitude;
         this.message = message;
         this.startTime = startTime;
+        this.endTime = 0;
     }
 
     public void setEndTime(long endTime) {
@@ -24,7 +24,7 @@ public class TrafficIncident {
 
     @Override
     public String toString() {
-        if (this.endTime == null) {
+        if (this.endTime == 0) {
             return String.format("%s at latitude %f, longitude %f starting from %d", this.incidentType, this.latitude, this.longitude, this.startTime);
         } else {
             return String.format("%s at latitude %f, longitude %f starting from %d to %d", this.incidentType, this.latitude, this.longitude, this.startTime, this.endTime);

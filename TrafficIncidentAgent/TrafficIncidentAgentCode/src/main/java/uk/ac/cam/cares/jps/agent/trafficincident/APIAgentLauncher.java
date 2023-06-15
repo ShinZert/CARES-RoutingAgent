@@ -43,12 +43,9 @@ public class APIAgentLauncher extends JPSAgent {
 	private String rdbUser = null;
 	private String rdbPassword = null;
     private Connection conn = null;
-    // TODO: convert to enum
     long timestamp = System.currentTimeMillis();
-    String[] typeArray;
-    Double[] latitudeArray;
-    Double[] longitudeArray;
-    String[] messageArray;
+    private HashSet<TrafficIncident> pastTrafficIncidentSet = new HashSet<>();
+    private HashSet<TrafficIncident> ongoingTrafficIncidentSet = new HashSet<>();
     private DSLContext context;
     private static final SQLDialect dialect = SQLDialect.POSTGRES;
     private static final Field<Long> timestampColumn = DSL.field(DSL.name("timestamp"), Long.class);
@@ -107,6 +104,8 @@ public class APIAgentLauncher extends JPSAgent {
 
         JSONObject readings;
         try {
+            // timestamp records current time to get data from API
+            this.timestamp = System.currentTimeMillis();
             readings = connector.getReadings();
         } catch(Exception e) {
             LOGGER.error(GET_READINGS_ERROR_MSG);
@@ -148,6 +147,7 @@ public class APIAgentLauncher extends JPSAgent {
         connect();
 
         JSONArray jsArr = readings.getJSONArray("value");
+        this.ongoingTrafficIncidentSet.clear();
         for(int i=0; i<jsArr.length(); i++) {
             JSONObject currentEntry = jsArr.getJSONObject(i);
 
@@ -155,11 +155,23 @@ public class APIAgentLauncher extends JPSAgent {
             Double longitude = (Double) currentEntry.get("Longitude");
             String incidentType = (String) currentEntry.get("Type");
             String message = (String) currentEntry.get("Message");
-            // database needs to be created beforehand
-            this.insertValuesIntoPostgres(this.timestamp, incidentType, latitude, longitude, message);
+            TrafficIncident curr = new TrafficIncident(incidentType, latitude, 
+                longitude, message, timestamp);
+            this.ongoingTrafficIncidentSet.add(curr);
+            // database needs to be created in PgAdmin beforehand
+            this.insertValuesIntoPostgres(curr);
         }
-
-       return jsonMessage;
+        LOGGER.info("BIG HI");
+        for (TrafficIncident ti : this.pastTrafficIncidentSet) {
+            if (!this.ongoingTrafficIncidentSet.contains(ti)) {
+                // TODO: decide when we mark the end time of the event
+                ti.setEndTime(this.timestamp);
+                LOGGER.info(ti);
+                // TODO: find past records and update the end time
+            }
+        }
+        this.pastTrafficIncidentSet = this.ongoingTrafficIncidentSet;
+        return jsonMessage;
     }
 
     private void setRdbURL(String rdbURL) {
@@ -202,10 +214,11 @@ public class APIAgentLauncher extends JPSAgent {
 		}
 	}
 
-    protected void insertValuesIntoPostgres(Object timestamp, String type, Double latitude, Double longitude, String message) {
+    protected void insertValuesIntoPostgres(TrafficIncident trafficIncident) {
         Table<?> table = DSL.table(DSL.name("TrafficIncident"));
         InsertValuesStepN<?> insertValueStep = (InsertValuesStepN<?>) context.insertInto(table, timestampColumn, typeColumn, latitudeColumn, longitudeColumn, messageColumn);
-        insertValueStep = insertValueStep.values(timestamp, type, latitude, longitude, message);
+        insertValueStep = insertValueStep.values(trafficIncident.startTime, trafficIncident.incidentType, 
+            trafficIncident.latitude, trafficIncident.longitude, trafficIncident.message);
 
         insertValueStep.execute();
     }

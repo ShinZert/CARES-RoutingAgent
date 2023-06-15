@@ -148,6 +148,7 @@ public class APIAgentLauncher extends JPSAgent {
 
         JSONArray jsArr = readings.getJSONArray("value");
         this.ongoingTrafficIncidentSet.clear();
+        LOGGER.info("Adding new traffic incidents to Postgres:");
         for(int i=0; i<jsArr.length(); i++) {
             JSONObject currentEntry = jsArr.getJSONObject(i);
 
@@ -162,8 +163,11 @@ public class APIAgentLauncher extends JPSAgent {
             if (!this.pastTrafficIncidentSet.contains(curr)) {
                 // database needs to be created in PgAdmin beforehand
                 this.insertValuesIntoPostgres(curr);
+                LOGGER.info(curr);
             }
         }
+        LOGGER.info("Above is/are newly occurred traffic incidents.");
+
         LOGGER.info("Checking whether any traffic incident has ended ...");
         for (TrafficIncident ti : this.pastTrafficIncidentSet) {
             if (!this.ongoingTrafficIncidentSet.contains(ti)) {

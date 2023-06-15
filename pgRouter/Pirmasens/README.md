@@ -69,23 +69,23 @@ INSERT INTO pointsOfInterest (geom) VALUES ('POINT(7.607634045161916 49.19422629
 
 
 # FIND CLOSEST EDGE
-ALTER TABLE / ADD COLUMN closest_edge INTEGER;
+ALTER TABLE pothole ADD COLUMN closest_edge INTEGER;
 
 
-UPDATE / SET closest_edge = (
+UPDATE pothole SET closest_edge = (
   SELECT edge_id FROM pgr_findCloseEdges(
     $$SELECT id, the_geom as geom FROM public.ways$$,
-    (SELECT /.geom),
+    (SELECT pothole.geom),
     0.5, partial => false)
   LIMIT 1
 );
 
 # CHANGE THE VALUE
 UPDATE ways
-SET cost_/ = -ABS(cost_/),
-    reverse_cost_/ = -ABS(reverse_cost_/)
+SET cost_pothole = -ABS(cost_pothole),
+    reverse_cost_pothole = -ABS(reverse_cost_pothole)
 WHERE id IN (
-  SELECT closest_edge FROM /
+  SELECT closest_edge FROM pothole
   WHERE closest_edge IS NOT NULL
 )
 

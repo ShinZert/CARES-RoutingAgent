@@ -52,7 +52,7 @@ SELECT
  e.id AS id,
  sum(e.cost) AS cost,
  ST_Collect(e.the_geom) AS geom 
- FROM pgr_dijkstra('SELECT id as id, source, target, cost_flood as cost, reverse_cost_flood as reverse_cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 120, 121, 122, 123, 124, 125)',%source%,%target%,false) AS r,ways AS e 
+ FROM pgr_dijkstra('SELECT id as id, source, target, cost_flood as cost, reverse_cost_flood as reverse_cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 115, 116, 121, 123, 124, 125, 401)',%source%,%target%,false) AS r,ways AS e 
  WHERE r.edge=e.id GROUP BY e.id
 
 
@@ -235,7 +235,7 @@ BEGIN
                         the_geom
                     FROM
                         pgr_drivingDistance(
-                            ''SELECT id, source, target, cost_s_flood as cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 120, 121, 122, 123, 124, 125)'', -- Replace with your table name and cost column
+                            ''SELECT id, source, target, cost_s_flood as cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 115, 116, 121, 123, 124, 125, 401)'', -- Replace with your table name and cost column
                             7536, -- Specify the source vertex ID here
                             ' || (minute_limit * 120) || ', -- Specify the time/distance limit (in seconds) here
                             false
@@ -268,7 +268,7 @@ BEGIN
                         the_geom
                     FROM
                         pgr_drivingDistance(
-                            ''SELECT id, source, target, cost_s_flood as cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 120, 121, 122, 123, 124, 125)'', -- Replace with your table name and cost column
+                            ''SELECT id, source, target, cost_s_flood as cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 115, 116, 121, 123, 124, 125, 401)'', -- Replace with your table name and cost column
                             7536, -- Specify the source vertex ID here
                             ' || (minute_limit * 120) || ', -- Specify the time/distance limit (in seconds) here
                             false
@@ -302,7 +302,7 @@ BEGIN
         EXECUTE '
             INSERT INTO isochrone_results (minute, isochrone_polygon)
             SELECT
-                ' || minute_limit || ' AS minute,
+                ' || minute_limit * 2 || ' AS minute,
                 ST_OptimalAlphaShape(ST_Collect(the_geom)) AS isochrone_polygon
             FROM
                 (
@@ -311,7 +311,7 @@ BEGIN
                         the_geom
                     FROM
                         pgr_drivingDistance(
-                            ''SELECT id, source, target, cost_s_flood as cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 120, 121, 122, 123, 124, 125)'', -- Replace with your table name and cost column
+                            ''SELECT id, source, target, cost_s_flood as cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 115, 116, 121, 123, 124, 125, 401)'', -- Replace with your table name and cost column
                             7536, -- Specify the source vertex ID here
                             ' || (minute_limit * 120) || ', -- Specify the time/distance limit (in seconds) here
                             false
@@ -338,7 +338,7 @@ BEGIN
             FROM
                 ways
             WHERE
-                ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 120, 121, 122, 123, 124, 125) -- Replace with your desired road tags
+                ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 115, 116, 121, 123, 124, 125, 401) -- Replace with your desired road tags
                 AND ways.cost_s_flood <= ' || (minute_limit * 120) || '; -- Specify the time/distance limit (in seconds) here';
     END LOOP;
 END $$;
@@ -359,7 +359,7 @@ FROM
           g.target,
           g.cost_s AS cost
           FROM ways AS g WHERE
-                g.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 120, 121, 122, 123, 124, 125)', 
+                g.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 115, 116, 121, 123, 124, 125, 401)', 
           7536, t.target,
           directed := FALSE) AS j
 JOIN ways AS b 
@@ -416,7 +416,7 @@ BEGIN
                         the_geom
                     FROM
                         pgr_drivingDistance(
-                            ''SELECT id, source, target, cost_s_flood_fixed as cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 120, 121, 122, 123, 124, 125)'', -- Replace with your table name and cost column
+                            ''SELECT id, source, target, cost_s_flood_fixed as cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 115, 116, 121, 123, 124, 125, 401)'', -- Replace with your table name and cost column
                             7536, -- Specify the source vertex ID here
                             ' || (minute_limit * 120) || ', -- Specify the time/distance limit (in seconds) here
                             false
@@ -426,3 +426,199 @@ BEGIN
                 ) AS subquery';
     END LOOP;
 END $$;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Sample Query
+CREATE TABLE building_properties (
+  id SERIAL PRIMARY KEY,
+  building_IRI VARCHAR(255),
+  propertyType VARCHAR(255),
+  value INT,
+  area DECIMAL(10, 2),
+  geom GEOMETRY(Point, 4326)
+);
+
+INSERT INTO building_properties (building_IRI, propertyType, value, area, geom)
+VALUES (
+  'https://www.theworldavatar.com/kg/ontobuiltenv/Building_3700ce3b-ce64-48c4-9299-8b1b7434fa3b',
+  'https://www.theworldavatar.com/kg/ontobuiltenv/MultiResidential_3bf425d3-23d0-4c2b-bba1-e7731439a923',
+  4143000,
+  471.53,
+  ST_SetSRID(ST_MakePoint( 0.3947932037886142,52.75482278377076), 4326)
+);
+
+INSERT INTO building_properties (building_IRI, propertyType, value, area, geom)
+VALUES (
+  'https://www.theworldavatar.com/kg/ontobuiltenv/Building_8b32980e-c96f-42f1-a8a0-e1d27f96235e',
+  'https://www.theworldavatar.com/kg/ontobuiltenv/MultiResidential_4f05693f-655e-4cfb-a8b7-c1c7b37e4d21',
+  3336000,
+  981.0,
+  ST_SetSRID(ST_MakePoint( 0.38297175627405344,52.74186217408458), 4326)
+);
+
+INSERT INTO building_properties (building_IRI, propertyType, value, area, geom)
+VALUES (
+  'https://www.theworldavatar.com/kg/ontobuiltenv/Building_c3f28506-4dbf-4bd1-9d96-f55387f35ddb',
+  'https://www.theworldavatar.com/kg/ontobuiltenv/MultiResidential_865a7f0d-f8df-44f1-84f1-8d987d2e9113',
+  2851000,
+  547.0,
+  ST_SetSRID(ST_MakePoint( 0.43617714686580783,52.79243541416795), 4326)
+);
+
+INSERT INTO building_properties (building_IRI, propertyType, value, area, geom)
+VALUES (
+  'https://www.theworldavatar.com/kg/ontobuiltenv/Building_a15d1582-c216-4e77-a0fc-0227126b1e95',
+  'https://www.theworldavatar.com/kg/ontobuiltenv/SingleResidential_9746e338-ff11-4209-81cc-fcc50f45804a',
+  2638000,
+  410.0,
+  ST_SetSRID(ST_MakePoint( 0.3639685124294437,52.75416651734307), 4326)
+);
+
+INSERT INTO building_properties (building_IRI, propertyType, value, area, geom)
+VALUES (
+  'https://www.theworldavatar.com/kg/ontobuiltenv/Building_37166f06-6333-4693-a596-265630624b32',
+  'https://www.theworldavatar.com/kg/ontobuiltenv/MultiResidential_20ca3fe0-c6e4-4c93-b42a-20dc12f4a862',
+  2597000,
+  880.0,
+  ST_SetSRID(ST_MakePoint( 0.4020831131566202,52.765336446212174), 4326)
+);
+
+
+
+
+
+
+## SAMPLE QUERY TO INSERT
+INSERT INTO building_properties (id,building_IRI, propertyType, value, geom)
+VALUES (
+    '1',
+    '<https://www.theworldavatar.com/kg/ontobuiltenv/Building_a15d1582-c216-4e77-a0fc-0227126b1e95>',
+    '<https://www.theworldavatar.com/kg/ontobuiltenv/SingleResidential>',
+    2638000,
+    ST_SetSRID(ST_MakePoint( 0.3639685124294437, 52.75416651734307), 4326)
+);
+
+INSERT INTO building_properties (id,building_IRI, propertyType, value, geom)
+VALUES (
+    '2',
+    '<https://www.theworldavatar.com/kg/ontobuiltenv/Building_8d0e581b-7d12-48c4-99a3-3d7c451392d1>',
+    '<https://www.theworldavatar.com/kg/ontobuiltenv/SingleResidential>',
+    1996000,
+    ST_SetSRID(ST_MakePoint(0.4310341724847265, 52.77611280632098), 4326)
+);
+
+INSERT INTO building_properties (id,building_IRI, propertyType, value, geom)
+VALUES (
+    '3',
+    '<https://www.theworldavatar.com/kg/ontobuiltenv/Building_e5b7a4c0-d6d3-43be-ab20-93bdb49d6ac0>',
+    '<https://www.theworldavatar.com/kg/ontobuiltenv/SingleResidential>',
+    1950000,
+    ST_SetSRID(ST_MakePoint(0.450150,52.786824), 4326)
+);
+
+
+## TSP with KingsLynn
+## Add source and target to building
+-- Alter the "building_properties" table to add the "source" and "target" columns
+ALTER TABLE building_properties
+ADD COLUMN source BIGINT,
+ADD COLUMN target BIGINT;
+
+# FIND CLOSEST EDGE
+ALTER TABLE building_properties ADD COLUMN closest_edge INTEGER;
+
+
+UPDATE building_properties SET closest_edge = (
+  SELECT edge_id FROM pgr_findCloseEdges(
+    $$SELECT id, the_geom as geom FROM public.ways$$,
+    (SELECT building_properties.geom),
+    0.5, partial => false)
+  LIMIT 1
+);
+
+
+
+-- Update the "source" and "target" columns based on the matching "closest_edge" with "id" in the "ways" table
+UPDATE building_properties
+SET source = ways.source, target = ways.target
+FROM ways
+WHERE building_properties.closest_edge = ways.id;
+
+ALTER TABLE building_properties
+ADD COLUMN closest_node INT;
+
+ALTER TABLE building_properties ADD COLUMN source_distance numeric;
+UPDATE building_properties AS p
+SET source_distance = (
+    SELECT ST_DISTANCE(p.geom, w.the_geom)
+    FROM ways_vertices_pgr AS w
+    WHERE p.source = w.id
+);
+
+ALTER TABLE building_properties ADD COLUMN target_distance numeric;
+UPDATE building_properties AS p
+SET target_distance = (
+    SELECT ST_DISTANCE(p.geom, w.the_geom)
+    FROM ways_vertices_pgr AS w
+    WHERE p.target = w.id
+);
+
+UPDATE building_properties
+SET closest_node = CASE
+    WHEN source_distance < target_distance THEN source
+    ELSE target
+END;
+
+
+CREATE TABLE tsp AS SELECT *
+FROM pgr_TSP(
+  $$SELECT * FROM pgr_dijkstraCostMatrix(
+    'SELECT id, source, target, cost_s as cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 115, 116, 121, 123, 124, 125, 401)',
+    (SELECT array_agg(id)
+    FROM ways_vertices_pgr
+    WHERE id IN (SELECT closest_node FROM building_properties)),
+    false)$$, (SELECT MIN(closest_node) FROM building_properties), (SELECT MAX(closest_node) FROM building_properties));
+
+
+
+SELECT ways.the_geom
+FROM (
+    SELECT ROW_NUMBER() OVER() as seq, tsp.node
+    FROM tsp
+) n1
+JOIN (
+    SELECT ROW_NUMBER() OVER() as seq, tsp.node
+    FROM tsp
+) n2 ON n1.seq + 1 = n2.seq
+JOIN pgr_dijkstra(
+    'SELECT id, source, target, cost, reverse_cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 115, 116, 121, 123, 124, 125, 401)',
+    n1.node,
+    n2.node
+) AS di ON true
+JOIN ways ON di.edge = ways.id
+ORDER BY n1.seq

@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.*;
@@ -40,6 +41,7 @@ public class APIAgentLauncher extends JPSAgent {
     public static final String GET_READINGS_ERROR_MSG = "Error when getting reading.";
     public static final String CONNECTOR_ERROR_MSG = "Error when working with APIConnector.";
     public static final String POSTGRES_INITIALIZATION_ERROR_MSG = "Error when initializing the Postgres";
+    public static final String SQL_UPDATE_ERROR_MSG = "Fail to update the record";
 
     public static final ZoneOffset offset= ZoneOffset.UTC;
     long timestamp = System.currentTimeMillis();
@@ -174,14 +176,14 @@ public class APIAgentLauncher extends JPSAgent {
             }
         }
         LOGGER.info("Above is/are newly occurred traffic incidents.");
-
+        
         LOGGER.info("Checking whether any traffic incident has ended ...");
         for (TrafficIncident ti : this.pastTrafficIncidentSet) {
             if (!this.ongoingTrafficIncidentSet.contains(ti)) {
                 // TODO: decide when we mark the end time of the event
                 ti.setEndTime(this.timestamp);
-                LOGGER.info(ti);
-                // TODO: find past records from Postgres and update its end time
+                LOGGER.info("Updating endtime for " + ti.toString());
+                this.updateTrafficIncidentEndTime(ti);
             }
         }
         LOGGER.info("Above is/are ended traffic incidents.");
@@ -250,5 +252,24 @@ public class APIAgentLauncher extends JPSAgent {
         int minute = Integer.parseInt(timeRawString.split(":")[1]);
         OffsetDateTime result = OffsetDateTime.of(year, month, day, hour, minute, 0, 0, APIAgentLauncher.offset);
         return result.toInstant().getEpochSecond();
+    }
+
+    private void updateTrafficIncidentEndTime(TrafficIncident trafficIncident) {
+        String sql = "UPDATE \"TrafficIncident\" SET \"endTime\" = ? WHERE \"Type\" = ? and \"startTime\" = ? and \"Latitude\" = ? and \"Longitude\" = ?";
+        try {
+            PreparedStatement statement = this.conn.prepareStatement(sql);
+            statement.setLong(1, trafficIncident.endTime);
+            statement.setString(2, trafficIncident.incidentType);
+            statement.setLong(3, trafficIncident.startTime);
+            statement.setDouble(4, trafficIncident.latitude);
+            statement.setDouble(5, trafficIncident.longitude);
+
+            int rowAffected = statement.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error(SQL_UPDATE_ERROR_MSG, e);
+            throw new JPSRuntimeException(e.getMessage());
+        }
+        
+        // LOGGER.info("Update end time for " + trafficIncident.toString())
     }
 }

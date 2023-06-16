@@ -4,51 +4,50 @@ This visualization serves as a proof of concept for routing under flood, isochro
 
 The instantiated data is visualised using the Digital Twin Visualisation Framework ([DTVF]) version `3.3.4`. The configuration file structure (i.e. `data.json`) is based on the [example Mapbox visualisation].
 
-<img src="readme-example.JPG" alt="Mapbox visualisation" width="100%"/>
+<img src="floodrouter.JPG" alt="Mapbox visualisation" width="100%"/>
 
 
 ## Important Pre-requisites
-1) OSM data
-Specify bounding box 
-https://extract.bbbike.org/
+### Raw OSM data
+1) [BBBike.org](https://extract.bbbike.org/) allows you to extract selected region. 
+2) [Geofabrik](https://download.geofabrik.de/) allows you to download OSM data via region/country 
+
+Note: 
+Downloading cropped map from BBBike.org is currently the best option. If OSM map data is downloaded from Geofabrik and subsequently cropped by using tool such as osmium or osmium will result in leaving out certain nodes, subsequently when imported via osm2pgrouting will lead to invisible/non-existent road.
 
 
-osm2pgrouting
-https://github.com/pgRouting/osm2pgrouting
+### Preparing data in Postgis 
+1) Run basic extension [osm2pgrouting] library (https://github.com/pgRouting/osm2pgrouting)
+
+Note: 
+
+or 
+
+2) Run [pgr_createTopology](https://docs.pgrouting.org/3.1/en/pgr_createTopology.html)
 
 
-Or it can be downloaded here
-https://download.geofabrik.de/
-
-Important note, it is better to 
-
-2) Postgis
-https://postgis.net/docs/using_raster_dataman.html
-
-Make sure postgis_raster and pgr_routing is enabled. 
-
-3) Geoserver
+### Preparing PostGIS environment
+1) [postgis_raster](https://postgis.net/docs/RT_FAQ.html): `CREATE Extension Postgis_raster;` This is for the raster data. 
+2) [pgrouting](https://pgrouting.org/index.html): `CREATE EXTENSION pgrouting;` This is to run pg_Routing commands.
 
 
-### OSM Data
+### Importing Raster data
+[Raster2pgsql](https://postgis.net/docs/using_raster_dataman.html)
 
-### pgRouting
+Note: Specify the right SRID
 
 
-## Building the Image
-The `docker` folder contains the required files to build a Docker Image for the example visualisation. This uses the `dtvf-base-image` image as a base then adds the contents of the `webspace` directory to a volume mounted at `/var/www/html` within the container.
+## Creating the Visualisation
+### Prerequisite
+A valid Mapbox API token must be provided in your `index.html` file.
 
-- A valid Mapbox API token must be provided in your `index.html` file.
-- A connection to the internet is required to contact remote resources and use the mapping libraries.
+```
+# To build the Image:
+docker-compose -f ./docker/docker-compose.yml build --force-rm
 
-Once the requirements have been addressed, the image can be built using the below methods. If changing the visualisation, you'll need to rebuild and rerun the Docker image after and adjustments, or setup a Docker bind mount so that local changes are reflected within the container.
-
-- To build the Image:
-  - `docker-compose -f ./docker/docker-compose.yml build --force-rm`
-
-- To generate a Container (i.e. run the Image):
-  - `docker-compose -f ./docker/docker-compose.yml up -d --force-recreate`
-
+# To generate a Container (i.e. run the Image):
+docker-compose -f ./docker/docker-compose.yml up -d --force-recreate
+```
 
 <!-- Links -->
 [DTVF]: https://github.com/cambridge-cares/TheWorldAvatar/wiki/Digital-Twin-Visualisations

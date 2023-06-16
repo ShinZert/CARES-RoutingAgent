@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.*;
@@ -52,7 +53,8 @@ public class APIAgentLauncher extends JPSAgent {
     private Connection conn = null;
     private DSLContext context;
     private static final SQLDialect dialect = SQLDialect.POSTGRES;
-    private static final Field<Long> timestampColumn = DSL.field(DSL.name("timestamp"), Long.class);
+    private static final Field<Long> startTimeColumn = DSL.field(DSL.name("startTime"), Long.class);
+    private static final Field<Long> endTimeColumn = DSL.field(DSL.name("endTime"), Long.class);
     private static final Field<String> typeColumn = DSL.field(DSL.name("Type"), String.class);
     // TODO: convert to geo location instead of latitude, longitude pair -> execute sql query
     private static final Field<Double> latitudeColumn = DSL.field(DSL.name("Latitude"), double.class);
@@ -229,8 +231,8 @@ public class APIAgentLauncher extends JPSAgent {
 
     protected void insertValuesIntoPostgres(TrafficIncident trafficIncident) {
         Table<?> table = DSL.table(DSL.name("TrafficIncident"));
-        InsertValuesStepN<?> insertValueStep = (InsertValuesStepN<?>) context.insertInto(table, timestampColumn, typeColumn, latitudeColumn, longitudeColumn, messageColumn);
-        insertValueStep = insertValueStep.values(trafficIncident.startTime, trafficIncident.incidentType, 
+        InsertValuesStepN<?> insertValueStep = (InsertValuesStepN<?>) context.insertInto(table, startTimeColumn, endTimeColumn, typeColumn, latitudeColumn, longitudeColumn, messageColumn);
+        insertValueStep = insertValueStep.values(trafficIncident.startTime, trafficIncident.endTime, trafficIncident.incidentType, 
             trafficIncident.latitude, trafficIncident.longitude, trafficIncident.message);
 
         insertValueStep.execute();

@@ -58,7 +58,6 @@ public class APIAgentLauncher extends JPSAgent {
     private static final Field<Long> startTimeColumn = DSL.field(DSL.name("startTime"), Long.class);
     private static final Field<Long> endTimeColumn = DSL.field(DSL.name("endTime"), Long.class);
     private static final Field<String> typeColumn = DSL.field(DSL.name("Type"), String.class);
-    // TODO: convert to geo location instead of latitude, longitude pair -> execute sql query
     private static final Field<Double> latitudeColumn = DSL.field(DSL.name("Latitude"), double.class);
     private static final Field<Double> longitudeColumn = DSL.field(DSL.name("Longitude"), double.class);
     private static final Field<String> messageColumn = DSL.field(DSL.name("Message"), String.class);
@@ -175,6 +174,7 @@ public class APIAgentLauncher extends JPSAgent {
                 LOGGER.info(curr);
             }
         }
+        this.convertLongLatPairToGeom();
         LOGGER.info("Above is/are newly occurred traffic incidents.");
         
         LOGGER.info("Checking whether any traffic incident has ended ...");
@@ -271,5 +271,22 @@ public class APIAgentLauncher extends JPSAgent {
         }
         
         // LOGGER.info("Update end time for " + trafficIncident.toString())
+    }
+
+    /**
+     * Adds location field for all records in TrafficIncident table without location based on longitude latitude column
+     */
+    private void convertLongLatPairToGeom() {
+        // WSG4326 coordinates used in this case
+        // SQL command below needs to run before calling this function
+        // ALTER TABLE TrafficIncident ADD COLUMN location GEOMETRY(point, 4326);
+        String sql = "UPDATE \"TrafficIncident\" SET \"location\" = ST_SETSRID(ST_MakePoint(\"TrafficIncident\".\"Longitude\", \"TrafficIncident\".\"Latitude\"), 4326) WHERE \"location\" IS NULL";
+        try {
+            PreparedStatement statement = this.conn.prepareStatement(sql);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error(SQL_UPDATE_ERROR_MSG, e);
+            throw new JPSRuntimeException(e.getMessage());
+        }
     }
 }

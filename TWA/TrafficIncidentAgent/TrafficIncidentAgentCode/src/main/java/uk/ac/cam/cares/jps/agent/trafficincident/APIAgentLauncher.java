@@ -68,11 +68,9 @@ public class APIAgentLauncher extends JPSAgent {
         JSONObject jsonMessage = new JSONObject();
         if(validateConfig()) {   
             LOGGER.info("Passing Request to API Connector and Postgres Client");
-            String clientProperties = System.getenv(CLIENT_VALUES);
             String apiProperties = System.getenv(API_VALUES);
             
-            String[] args = new String []{apiProperties, clientProperties};
-            jsonMessage = initializeAgent(args);
+            jsonMessage = initializeAgent(apiProperties);
             jsonMessage.accumulate("Result","values has been extracted");
 
             requestParams = jsonMessage;
@@ -85,22 +83,16 @@ public class APIAgentLauncher extends JPSAgent {
     }
 
     public boolean validateConfig() {
-        return (System.getenv(CLIENT_VALUES)!=null) && (System.getenv(API_VALUES)!=null);
+        return System.getenv(API_VALUES)!=null;
     }
 
-    public JSONObject initializeAgent(String[] args) {
-        if (args.length!=2) {
-            LOGGER.error(ARGUMENT_MISMATCH_MSG);
-            throw new JPSRuntimeException(ARGUMENT_MISMATCH_MSG);
-        }
-
-        LOGGER.debug("Launcher called with the following files: " + String.join(" ",args));       
+    public JSONObject initializeAgent(String apiProperties) {     
         JSONObject jsonMessage = new JSONObject();
 
         // retrieve readings from data API and connector
         APIConnector connector;
         try {
-            connector = new APIConnector(args[0]);
+            connector = new APIConnector(apiProperties);
         } catch(IOException e) {
             LOGGER.error(CONNECTOR_ERROR_MSG,e);
             throw new JPSRuntimeException(CONNECTOR_ERROR_MSG,e);
@@ -121,19 +113,6 @@ public class APIAgentLauncher extends JPSAgent {
         
         LOGGER.info(String.format("Retrieved %d incident readings", readings.getJSONArray("value").length()));
         jsonMessage.accumulate("Result","Retrieved "+readings.getJSONArray("value").length()+" incident readings");
-
-
-        // initialize Postgres connection
-        InputStream input;
-        Properties prop;
-        try {
-            input = new FileInputStream(args[1]);
-            prop = new Properties();
-            prop.load(input);
-        } catch (IOException e) {
-            LOGGER.error(POSTGRES_INITIALIZATION_ERROR_MSG);
-            throw new JPSRuntimeException(POSTGRES_INITIALIZATION_ERROR_MSG);
-        }
 
         // Get the property values and assign
         setRdbParameters();

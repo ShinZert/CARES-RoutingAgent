@@ -25,12 +25,10 @@ FROM tomcat:9.0 as agent
 # TODO: check whether needs to ADD https://jdbc.postgresql.org/download/postgresql-42.5.4.jar ./resources/
 WORKDIR /app
 # Copy in the properties file
-COPY ./config/client.properties /root/client.properties
 COPY ./config/api.properties /root/api.properties
 
 # Set the required environment variable
 ENV TRAFFICINCIDENT_API_PROPERTIES="/root/api.properties"
-ENV TRAFFICINCIDENT_CLIENT_PROPERTIES="/root/client.properties"
 
 # #==================================================================================================
 # Copy the compiled jar from the builder

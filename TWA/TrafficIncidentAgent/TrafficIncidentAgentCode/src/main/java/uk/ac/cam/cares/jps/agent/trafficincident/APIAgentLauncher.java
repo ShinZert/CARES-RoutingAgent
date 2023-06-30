@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -45,8 +46,8 @@ public class APIAgentLauncher extends JPSAgent {
 
     public static final ZoneOffset offset= ZoneOffset.UTC;
     long timestamp = System.currentTimeMillis();
-    private HashSet<TrafficIncident> pastTrafficIncidentSet = new HashSet<>();
     private HashSet<TrafficIncident> ongoingTrafficIncidentSet = new HashSet<>();
+    private HashSet<TrafficIncident> newTrafficIncidentSet = new HashSet<>();
 
     // Postgres related
     private String rdbUrl = null; 
@@ -107,7 +108,7 @@ public class APIAgentLauncher extends JPSAgent {
             LOGGER.error(GET_READINGS_ERROR_MSG);
             throw new JPSRuntimeException(e.getMessage());
         }
-        
+
         LOGGER.info(String.format("Retrieved %d incident readings", readings.getJSONArray("value").length()));
         jsonMessage.accumulate("Result","Retrieved "+readings.getJSONArray("value").length()+" incident readings");
 
@@ -115,8 +116,10 @@ public class APIAgentLauncher extends JPSAgent {
         setRdbParameters();
         connect();
 
+        this.ongoingTrafficIncidentSet = retrieveOngoingIncidents();
+        
         JSONArray jsArr = readings.getJSONArray("value");
-        this.ongoingTrafficIncidentSet = new HashSet<>();
+        this.newTrafficIncidentSet = new HashSet<>();
         LOGGER.info("Adding new traffic incidents to Postgres:");
         for(int i=0; i<jsArr.length(); i++) {
             JSONObject currentEntry = jsArr.getJSONObject(i);
@@ -128,9 +131,9 @@ public class APIAgentLauncher extends JPSAgent {
             timestamp = APIAgentLauncher.parseMessageStringToTimestamp(message);
             TrafficIncident curr = new TrafficIncident(incidentType, latitude, 
                 longitude, message, timestamp, true);
-            this.ongoingTrafficIncidentSet.add(curr);
+            this.newTrafficIncidentSet.add(curr);
             // only update when the traffic incident not present
-            if (!this.pastTrafficIncidentSet.contains(curr)) {
+            if (!this.ongoingTrafficIncidentSet.contains(curr)) {
                 // database needs to be created in PgAdmin beforehand
                 this.insertValuesIntoPostgres(curr);
                 LOGGER.info(curr);
@@ -140,16 +143,16 @@ public class APIAgentLauncher extends JPSAgent {
         LOGGER.info("Above is/are newly occurred traffic incidents.");
         
         LOGGER.info("Checking whether any traffic incident has ended ...");
-        for (TrafficIncident ti : this.pastTrafficIncidentSet) {
-            if (!this.ongoingTrafficIncidentSet.contains(ti)) {
+        for (TrafficIncident ti : this.ongoingTrafficIncidentSet) {
+            if (!this.newTrafficIncidentSet.contains(ti)) {
                 // TODO: decide when we mark the end time of the event
                 ti.setEndTime(this.timestamp);
+                ti.setStatus(false);
                 LOGGER.info("Updating endtime for " + ti.toString());
-                this.updateTrafficIncidentEndTime(ti);
+                this.updateTrafficIncidentEndTimeStatusPostgres(ti);
             }
         }
         LOGGER.info("Above is/are ended traffic incidents.");
-        this.pastTrafficIncidentSet = this.ongoingTrafficIncidentSet;
         return jsonMessage;
     }
 
@@ -188,6 +191,32 @@ public class APIAgentLauncher extends JPSAgent {
 		}
 	}
 
+    public HashSet<TrafficIncident> retrieveOngoingIncidents() {
+        String sql = "SELECT * FROM \"TrafficIncident\" WHERE \"Status\" = \'TRUE\'";
+        HashSet<TrafficIncident> ongoingTrafficIncidentSet = new HashSet<>();
+        ResultSet rs;
+        try {
+            PreparedStatement statement = this.conn.prepareStatement(sql);
+            rs = statement.executeQuery();
+            while (rs.next()) {
+                String type = rs.getString("Type");
+                Long startTime = rs.getLong("startTime");
+                Long endTime = rs.getLong("endTime");
+                Double latitude = rs.getDouble("Latitude");
+                Double longitude = rs.getDouble("Longitude");
+                String message = rs.getString("Message");
+                Boolean status = rs.getBoolean("Status");
+                TrafficIncident curr = new TrafficIncident(type, latitude, longitude, message, startTime, status);
+                ongoingTrafficIncidentSet.add(curr);
+            }
+        } catch (SQLException e) {
+            LOGGER.error(SQL_UPDATE_ERROR_MSG, e);
+            throw new JPSRuntimeException(e.getMessage());
+        }
+        
+        return ongoingTrafficIncidentSet;
+    }
+
     protected void insertValuesIntoPostgres(TrafficIncident trafficIncident) {
         Table<?> table = DSL.table(DSL.name("TrafficIncident"));
         InsertValuesStepN<?> insertValueStep = (InsertValuesStepN<?>) context.insertInto(table, startTimeColumn, endTimeColumn, typeColumn, latitudeColumn, longitudeColumn, messageColumn, statusColumn);
@@ -211,8 +240,8 @@ public class APIAgentLauncher extends JPSAgent {
         return result.toInstant().getEpochSecond();
     }
 
-    private void updateTrafficIncidentEndTime(TrafficIncident trafficIncident) {
-        String sql = "UPDATE \"TrafficIncident\" SET \"endTime\" = ? AND \"status\" = ? WHERE \"Type\" = ? and \"startTime\" = ? and \"Latitude\" = ? and \"Longitude\" = ?";
+    private void updateTrafficIncidentEndTimeStatusPostgres(TrafficIncident trafficIncident) {
+        String sql = "UPDATE \"TrafficIncident\" SET \"endTime\" = ?, \"Status\" = ? WHERE \"Type\" = ? and \"startTime\" = ? and \"Latitude\" = ? and \"Longitude\" = ?";
         try {
             PreparedStatement statement = this.conn.prepareStatement(sql);
             statement.setLong(1, trafficIncident.endTime);

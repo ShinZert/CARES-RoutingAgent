@@ -1,33 +1,39 @@
 package uk.ac.cam.cares.jps.agent.trafficincident;
 
 public class TrafficIncident {
+    public long startTime;
+    public long endTime;
     public String incidentType;
     public double latitude;
     public double longitude;
     // message field can be updated during different call, depending on specific scenario
     public String message;
-    public long startTime;
-    public long endTime;
+    public boolean status; // true : incident is ongoing
 
-    public TrafficIncident(String incidentType, double latitude, double longitude, String message, long startTime) {
+    public TrafficIncident(String incidentType, double latitude, double longitude, String message, long startTime, boolean status) {
+        this.startTime = startTime;
+        this.endTime = 0;
         this.incidentType = incidentType;
         this.latitude = latitude;
         this.longitude = longitude;
         this.message = message;
-        this.startTime = startTime;
-        this.endTime = 0;
+        this.status = status;
     }
 
     public void setEndTime(long endTime) {
         this.endTime = endTime;
     }
 
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         if (this.endTime == 0) {
-            return String.format("%s at latitude %f, longitude %f starting from %d", this.incidentType, this.latitude, this.longitude, this.startTime);
+            return String.format("%s %s at latitude %f, longitude %f starting from %d", (this.status ? "Ongoing" : "Ended"), this.incidentType, this.latitude, this.longitude, this.startTime);
         } else {
-            return String.format("%s at latitude %f, longitude %f starting from %d to %d", this.incidentType, this.latitude, this.longitude, this.startTime, this.endTime);
+            return String.format("%s %s at latitude %f, longitude %f starting from %d to %d", (this.status ? "Ongoing" : "Ended"), this.incidentType, this.latitude, this.longitude, this.startTime, this.endTime);
         }
         
     }

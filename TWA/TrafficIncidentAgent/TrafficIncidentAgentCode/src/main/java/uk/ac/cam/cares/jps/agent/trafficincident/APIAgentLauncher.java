@@ -61,12 +61,13 @@ public class APIAgentLauncher extends JPSAgent {
     private static final Field<Double> latitudeColumn = DSL.field(DSL.name("Latitude"), double.class);
     private static final Field<Double> longitudeColumn = DSL.field(DSL.name("Longitude"), double.class);
     private static final Field<String> messageColumn = DSL.field(DSL.name("Message"), String.class);
+    private static final Field<Boolean> statusColumn = DSL.field(DSL.name("Status"), Boolean.class);
 
-    // eg (sent in Postman) http://localhost:1016/traffic-incident-agent/retrieve
+    // eg (sent in Postman) POST http://localhost:1016/traffic-incident-agent/retrieve
     @Override
     public JSONObject processRequestParameters(JSONObject requestParams, HttpServletRequest request) {
         JSONObject jsonMessage = new JSONObject();
-        if(validateConfig()) {   
+        if(System.getenv(API_VALUES)!=null) {   
             LOGGER.info("Passing Request to API Connector and Postgres Client");
             String apiProperties = System.getenv(API_VALUES);
             
@@ -80,10 +81,6 @@ public class APIAgentLauncher extends JPSAgent {
             requestParams = jsonMessage;
         }
         return requestParams;
-    }
-
-    public boolean validateConfig() {
-        return System.getenv(API_VALUES)!=null;
     }
 
     public JSONObject initializeAgent(String apiProperties) {     
@@ -130,7 +127,7 @@ public class APIAgentLauncher extends JPSAgent {
             String message = (String) currentEntry.get("Message");
             timestamp = APIAgentLauncher.parseMessageStringToTimestamp(message);
             TrafficIncident curr = new TrafficIncident(incidentType, latitude, 
-                longitude, message, timestamp);
+                longitude, message, timestamp, true);
             this.ongoingTrafficIncidentSet.add(curr);
             // only update when the traffic incident not present
             if (!this.pastTrafficIncidentSet.contains(curr)) {
@@ -193,9 +190,9 @@ public class APIAgentLauncher extends JPSAgent {
 
     protected void insertValuesIntoPostgres(TrafficIncident trafficIncident) {
         Table<?> table = DSL.table(DSL.name("TrafficIncident"));
-        InsertValuesStepN<?> insertValueStep = (InsertValuesStepN<?>) context.insertInto(table, startTimeColumn, endTimeColumn, typeColumn, latitudeColumn, longitudeColumn, messageColumn);
+        InsertValuesStepN<?> insertValueStep = (InsertValuesStepN<?>) context.insertInto(table, startTimeColumn, endTimeColumn, typeColumn, latitudeColumn, longitudeColumn, messageColumn, statusColumn);
         insertValueStep = insertValueStep.values(trafficIncident.startTime, trafficIncident.endTime, trafficIncident.incidentType, 
-            trafficIncident.latitude, trafficIncident.longitude, trafficIncident.message);
+            trafficIncident.latitude, trafficIncident.longitude, trafficIncident.message, trafficIncident.status);
 
         insertValueStep.execute();
     }
@@ -215,15 +212,16 @@ public class APIAgentLauncher extends JPSAgent {
     }
 
     private void updateTrafficIncidentEndTime(TrafficIncident trafficIncident) {
-        String sql = "UPDATE \"TrafficIncident\" SET \"endTime\" = ? WHERE \"Type\" = ? and \"startTime\" = ? and \"Latitude\" = ? and \"Longitude\" = ?";
+        String sql = "UPDATE \"TrafficIncident\" SET \"endTime\" = ? AND \"status\" = ? WHERE \"Type\" = ? and \"startTime\" = ? and \"Latitude\" = ? and \"Longitude\" = ?";
         try {
             PreparedStatement statement = this.conn.prepareStatement(sql);
             statement.setLong(1, trafficIncident.endTime);
-            statement.setString(2, trafficIncident.incidentType);
-            statement.setLong(3, trafficIncident.startTime);
-            statement.setDouble(4, trafficIncident.latitude);
-            statement.setDouble(5, trafficIncident.longitude);
-
+            statement.setBoolean(2, trafficIncident.status);
+            statement.setString(3, trafficIncident.incidentType);
+            statement.setLong(4, trafficIncident.startTime);
+            statement.setDouble(5, trafficIncident.latitude);
+            statement.setDouble(6, trafficIncident.longitude);
+            LOGGER.debug(statement);
             int rowAffected = statement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(SQL_UPDATE_ERROR_MSG, e);

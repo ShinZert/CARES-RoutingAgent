@@ -43,6 +43,7 @@ public class APIAgentLauncher extends JPSAgent {
     public static final String CONNECTOR_ERROR_MSG = "Error when working with APIConnector.";
     public static final String POSTGRES_INITIALIZATION_ERROR_MSG = "Error when initializing the Postgres";
     public static final String SQL_UPDATE_ERROR_MSG = "Fail to update the record";
+    public static final String SQL_INITIALIZE_ERROR_MSG = "Fail to create table in Postgres database";
 
     public static final ZoneOffset offset= ZoneOffset.UTC;
     long timestamp = System.currentTimeMillis();
@@ -56,13 +57,14 @@ public class APIAgentLauncher extends JPSAgent {
     private Connection conn = null;
     private DSLContext context;
     private static final SQLDialect dialect = SQLDialect.POSTGRES;
-    private static final Field<Long> startTimeColumn = DSL.field(DSL.name("startTime"), Long.class);
-    private static final Field<Long> endTimeColumn = DSL.field(DSL.name("endTime"), Long.class);
-    private static final Field<String> typeColumn = DSL.field(DSL.name("Type"), String.class);
-    private static final Field<Double> latitudeColumn = DSL.field(DSL.name("Latitude"), double.class);
-    private static final Field<Double> longitudeColumn = DSL.field(DSL.name("Longitude"), double.class);
-    private static final Field<String> messageColumn = DSL.field(DSL.name("Message"), String.class);
-    private static final Field<Boolean> statusColumn = DSL.field(DSL.name("Status"), Boolean.class);
+    private static final String tableName = "\"TrafficIncident\"";
+    private static final Field<Long> startTimeColumn = DSL.field(DSL.name("starttime"), Long.class);
+    private static final Field<Long> endTimeColumn = DSL.field(DSL.name("endtime"), Long.class);
+    private static final Field<String> typeColumn = DSL.field(DSL.name("type"), String.class);
+    private static final Field<Double> latitudeColumn = DSL.field(DSL.name("latitude"), double.class);
+    private static final Field<Double> longitudeColumn = DSL.field(DSL.name("longitude"), double.class);
+    private static final Field<String> messageColumn = DSL.field(DSL.name("message"), String.class);
+    private static final Field<Boolean> statusColumn = DSL.field(DSL.name("status"), Boolean.class);
 
     // eg (sent in Postman) POST http://localhost:1016/traffic-incident-agent/retrieve
     @Override
@@ -115,6 +117,7 @@ public class APIAgentLauncher extends JPSAgent {
         // Get the property values and assign
         setRdbParameters();
         connect();
+        createSchemaIfNotExists();
 
         this.ongoingTrafficIncidentSet = retrieveOngoingIncidents();
         
@@ -123,7 +126,7 @@ public class APIAgentLauncher extends JPSAgent {
         LOGGER.info("Adding new traffic incidents to Postgres:");
         for(int i=0; i<jsArr.length(); i++) {
             JSONObject currentEntry = jsArr.getJSONObject(i);
-
+            // Note below the field name follows the API format by LTA data mall
             Double latitude = (Double) currentEntry.get("Latitude");
             Double longitude = (Double) currentEntry.get("Longitude");
             String incidentType = (String) currentEntry.get("Type");
@@ -191,21 +194,42 @@ public class APIAgentLauncher extends JPSAgent {
 		}
 	}
 
+    public void createSchemaIfNotExists() {
+        // note that column name will be automatically converted to lowercase
+        String createTableSql = "CREATE TABLE IF NOT EXISTS " + this.tableName + " ( starttime bigint NOT NULL, endtime bigint NOT NULL, type character varying NOT NULL, message character varying NOT NULL, latitude double precision NOT NULL, longitude double precision NOT NULL, status boolean DEFAULT false NOT NULL)";
+        String enablePostgisSQL = "CREATE EXTENSION IF NOT EXISTS postgis;";
+        String alterTableSql = "ALTER TABLE " + this.tableName + " ADD COLUMN IF NOT EXISTS location geography";
+        try {
+            PreparedStatement statement = this.conn.prepareStatement(createTableSql);
+            LOGGER.debug(statement);
+            statement.execute();
+            statement = this.conn.prepareStatement(enablePostgisSQL);
+            LOGGER.debug(statement);
+            statement.execute();
+            statement = this.conn.prepareStatement(alterTableSql);
+            LOGGER.debug(statement);
+            statement.execute();
+        } catch (SQLException e) {
+            LOGGER.error(SQL_INITIALIZE_ERROR_MSG, e);
+            throw new JPSRuntimeException(e.getMessage());
+        }
+    }
+
     public HashSet<TrafficIncident> retrieveOngoingIncidents() {
-        String sql = "SELECT * FROM \"TrafficIncident\" WHERE \"Status\" = \'TRUE\'";
+        String sql = "SELECT * FROM \"TrafficIncident\" WHERE \"status\" = \'TRUE\'";
         HashSet<TrafficIncident> ongoingTrafficIncidentSet = new HashSet<>();
         ResultSet rs;
         try {
             PreparedStatement statement = this.conn.prepareStatement(sql);
             rs = statement.executeQuery();
             while (rs.next()) {
-                String type = rs.getString("Type");
-                Long startTime = rs.getLong("startTime");
-                Long endTime = rs.getLong("endTime");
-                Double latitude = rs.getDouble("Latitude");
-                Double longitude = rs.getDouble("Longitude");
-                String message = rs.getString("Message");
-                Boolean status = rs.getBoolean("Status");
+                String type = rs.getString("type");
+                Long startTime = rs.getLong("starttime");
+                Long endTime = rs.getLong("endtime");
+                Double latitude = rs.getDouble("latitude");
+                Double longitude = rs.getDouble("longitude");
+                String message = rs.getString("message");
+                Boolean status = rs.getBoolean("status");
                 TrafficIncident curr = new TrafficIncident(type, latitude, longitude, message, startTime, status);
                 ongoingTrafficIncidentSet.add(curr);
             }
@@ -241,7 +265,7 @@ public class APIAgentLauncher extends JPSAgent {
     }
 
     private void updateTrafficIncidentEndTimeStatusPostgres(TrafficIncident trafficIncident) {
-        String sql = "UPDATE \"TrafficIncident\" SET \"endTime\" = ?, \"Status\" = ? WHERE \"Type\" = ? and \"startTime\" = ? and \"Latitude\" = ? and \"Longitude\" = ?";
+        String sql = "UPDATE \"TrafficIncident\" SET \"endtime\" = ?, \"status\" = ? WHERE \"type\" = ? and \"starttime\" = ? and \"latitude\" = ? and \"longitude\" = ?";
         try {
             PreparedStatement statement = this.conn.prepareStatement(sql);
             statement.setLong(1, trafficIncident.endTime);
@@ -267,7 +291,7 @@ public class APIAgentLauncher extends JPSAgent {
         // WSG4326 coordinates used in this case
         // SQL command below needs to run before calling this function
         // ALTER TABLE TrafficIncident ADD COLUMN location GEOMETRY(point, 4326);
-        String sql = "UPDATE \"TrafficIncident\" SET \"location\" = ST_SETSRID(ST_MakePoint(\"TrafficIncident\".\"Longitude\", \"TrafficIncident\".\"Latitude\"), 4326) WHERE \"location\" IS NULL";
+        String sql = "UPDATE \"TrafficIncident\" SET \"location\" = ST_SETSRID(ST_MakePoint(\"TrafficIncident\".\"longitude\", \"TrafficIncident\".\"latitude\"), 4326) WHERE \"location\" IS NULL";
         try {
             PreparedStatement statement = this.conn.prepareStatement(sql);
             statement.executeUpdate();

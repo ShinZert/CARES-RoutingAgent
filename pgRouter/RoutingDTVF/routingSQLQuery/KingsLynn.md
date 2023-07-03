@@ -148,6 +148,8 @@ JOIN ways AS r ON route.edge = r.id;
 ```
 
 ### SQL View
+Configure new SQL view in Geoserver as a new layer. 
+
 This is the SQL view query for nearest vertex in Geoserver.
 ```
 SELECT
@@ -165,6 +167,8 @@ WHERE
 GROUP BY v.id, v.the_geom
 ```
 
+Validataion regular expression `^[\d\.\+-eE]+$`. 
+
 This is the SQL view query for shortest path in Geoserver.
 ```
 SELECT
@@ -175,7 +179,9 @@ ST_Collect(e.the_geom) AS geom
 FROM pgr_dijkstra('SELECT id as id, source, target, cost_s_flood as cost, reverse_cost_s_flood   as reverse_cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 115, 116, 121, 123, 124, 125, 401)',%source%,%target%,false) AS r,ways AS e WHERE r.edge=e.id GROUP BY e.id
 ```
 
+Validataion regular expression `^[\d]+$`. 
 
+Modify the geojson endpoint in index.html
 
 ### Duplicate the column
 ```
@@ -479,6 +485,21 @@ VALUES (
 );
 
 ```
+
+### Adding hospital
+```
+
+INSERT INTO building_properties (id,building_IRI, propertyType, value, geom, closest_node)
+VALUES (
+    '6',
+    '<https://www.theworldavatar.com/kg/ontobuiltenv/Building_89b375af-1be1-4bdd-888d-3f17e9afde7c>',
+    '<https://www.theworldavatar.com/kg/ontobuiltenv/Hospital_685675f8-9d61-4020-96cf-9a2c8e3f2332>',
+    208233000,
+    ST_SetSRID(ST_MakePoint(0.4449964774757034,52.756232805460925), 4326), 7536
+);
+```
+
+
 
 ### Add source and target to building
 ```

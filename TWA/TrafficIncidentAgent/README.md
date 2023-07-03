@@ -1,6 +1,6 @@
 # Traffic Incident Agent
 
-This agent downloads real-time traffic-incident data from [http://datamall2.mytransport.sg/ltaodataservice/TrafficIncidents](http://datamall2.mytransport.sg/ltaodataservice/TrafficIncidents) and stores them in PostgreSQL.
+This agent downloads real-time traffic-incident data from [http://datamall2.mytransport.sg/ltaodataservice/TrafficIncidents](http://datamall2.mytransport.sg/ltaodataservice/TrafficIncidents), processes data to wanted format, and stores them in Postgre database in the stack.
 
 ## Building and running
 
@@ -29,10 +29,7 @@ docker/
 
 This agent is designed to work with a stack from CMCL. Refer to [this link](https://github.com/cambridge-cares/TheWorldAvatar/tree/main/Deploy/stacks/dynamic/stack-manager) to find out how to set up a stack. After running the command `./stack.sh build` and then `./stack.sh start <STACK NAME>` at the folder same as the link, you should be able to see a container named as `<STACK NAME>` as you specified earlier. Now you can proceed to build the image here and start it as a service by running the same two commands, but at the current folder.
 
-While you have the container running, you also need to create the database and relation in Postgis by stack. By opening the Adminer (PostgreSQL GUI) at http://localhost:3838/adminer/ui/?username=postgres&pgsql=.
-Enter `<STACK NAME>-postgis:5432` as the Server and the value from the postgis_password file as the Password. The Database slot can be left blank if you don't know what it should be. But in our case, our database should be named as `TrafficIncident` and the table should be named so as well. 
-The table should include `startTime:bigint`, `endTime:bigint`, `Type:character varing`, `Message:character varying`, `Latitude:double precision`, `Longitude:double precision`, `location: geography NULL`, `Status:Boolean`.
-Note that `location` starts with lower case and the data type needs to be enabled by calling `CREATE EXTENSION postgis;` in order to be available.
+While you have the container running, you do not need to create any database or table as it is already automated. The PostGIS extension is also automatically enabled. You can view the data in stack. By opening the Adminer (PostgreSQL GUI) at http://localhost:3838/adminer/ui/?username=postgres&pgsql=. Enter `<STACK NAME>-postgis:5432` as the Server and the value from the postgis_password file as the Password. The Database slot is the default `postgres` and the table is named as `TrafficIncident`. The table should include `starttime:bigint`, `endtime:bigint`, `type:character varing`, `message:character varying`, `latitude:double precision`, `longitude:double precision`, `location: geography NULL`, `status:Boolean`.
 
 After having the container running and setting up the table as described, you can send a `POST` query with url `http://localhost:1016/traffic-incident-agent/retrieve` to get the agent running and deposit values into Postgres. One of the recommended ways is to work with Postman and build a query from there.
 

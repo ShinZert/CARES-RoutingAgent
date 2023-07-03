@@ -3,18 +3,17 @@ package uk.ac.cam.cares.jps.agent.trafficincident;
 import uk.ac.cam.cares.jps.base.exception.JPSRuntimeException;
 import uk.ac.cam.cares.jps.base.agent.JPSAgent;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.*;
-import java.util.*;
+import java.time.OffsetDateTime;
+import java.time.Year;
+import java.time.ZoneOffset;
+import java.util.HashSet;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;

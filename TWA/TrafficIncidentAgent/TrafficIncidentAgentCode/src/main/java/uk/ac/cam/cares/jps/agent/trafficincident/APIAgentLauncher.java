@@ -198,7 +198,7 @@ public class APIAgentLauncher extends JPSAgent {
         // note that column name will be automatically converted to lowercase
         String createTableSql = "CREATE TABLE IF NOT EXISTS " + this.tableName + " ( starttime bigint NOT NULL, endtime bigint NOT NULL, type character varying NOT NULL, message character varying NOT NULL, latitude double precision NOT NULL, longitude double precision NOT NULL, status boolean DEFAULT false NOT NULL)";
         String enablePostgisSQL = "CREATE EXTENSION IF NOT EXISTS postgis;";
-        String alterTableSql = "ALTER TABLE " + this.tableName + " ADD COLUMN IF NOT EXISTS location geography";
+        String alterTableSql = "ALTER TABLE " + this.tableName + " ADD COLUMN IF NOT EXISTS location GEOMETRY(point, 4326)";
         try {
             PreparedStatement statement = this.conn.prepareStatement(createTableSql);
             LOGGER.debug(statement);

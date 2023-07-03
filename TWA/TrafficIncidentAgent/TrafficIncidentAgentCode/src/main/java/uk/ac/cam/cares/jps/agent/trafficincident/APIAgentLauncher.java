@@ -96,7 +96,6 @@ public class APIAgentLauncher extends JPSAgent {
      */
     public JSONObject initializeAgent(String apiProperties) {     
         JSONObject jsonMessage = new JSONObject();
-
         // retrieve readings from data API and connector
         APIConnector connector;
         try {
@@ -164,6 +163,7 @@ public class APIAgentLauncher extends JPSAgent {
             }
         }
         LOGGER.info("Above is/are ended traffic incidents.");
+        disconnect();
         return jsonMessage;
     }
 

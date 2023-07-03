@@ -13,7 +13,7 @@ services:
         condition: none
     environment:
       - STACK_NAME=${STACK_NAME}
-      - DATABASE=TrafficIncident
+      - DATABASE=postgres
       - GEOSERVER_WORKSPACE=dispersion
       - DISPERSION_LAYER=dispersion_layer
       - SIMULATION_DIR=/root/aermod/simulations

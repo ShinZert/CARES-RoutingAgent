@@ -18,17 +18,16 @@ import java.util.*;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.jooq.DSLContext;
 import org.jooq.Field;
-import org.jooq.InsertValuesStepN;
-import org.jooq.SQLDialect;
-import org.jooq.Table;
 import org.jooq.impl.DSL;
+import org.jooq.InsertValuesStepN;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.postgis.Point;
+import org.jooq.SQLDialect;
+import org.jooq.Table;
 
 @WebServlet(urlPatterns = {"/retrieve"})
 public class APIAgentLauncher extends JPSAgent {
@@ -86,6 +85,16 @@ public class APIAgentLauncher extends JPSAgent {
         return requestParams;
     }
 
+    /**
+     * Initializes the agent by:
+     *   - initialize APIconnector with @param apiProperties
+     *   - extract readings from the APIconnector initialized
+     *   - connect to Postgres and initialize table
+     *   - store extracted readings to Postgres
+     *   - convert latitude, longitude pair to Geometry point
+     *   - compare between current and (previously deemed) ongoing incidents
+     *       and mark ended incidents as complete
+     */
     public JSONObject initializeAgent(String apiProperties) {     
         JSONObject jsonMessage = new JSONObject();
 
@@ -194,6 +203,9 @@ public class APIAgentLauncher extends JPSAgent {
 		}
 	}
 
+    /**
+     * Creates schema of specified table name, enables the postgis extension and adds Geometry column
+     */
     public void createSchemaIfNotExists() {
         // note that column name will be automatically converted to lowercase
         String createTableSql = "CREATE TABLE IF NOT EXISTS " + this.tableName + " ( starttime bigint NOT NULL, endtime bigint NOT NULL, type character varying NOT NULL, message character varying NOT NULL, latitude double precision NOT NULL, longitude double precision NOT NULL, status boolean DEFAULT false NOT NULL)";
@@ -215,6 +227,10 @@ public class APIAgentLauncher extends JPSAgent {
         }
     }
 
+    /**
+     * Retrieves ongoing incidents from Postgres and @return a HashSet of these incidents
+     * Whether incidents are ongoing is decided by its "status" field in Postgres
+     */
     public HashSet<TrafficIncident> retrieveOngoingIncidents() {
         String sql = "SELECT * FROM \"TrafficIncident\" WHERE \"status\" = \'TRUE\'";
         HashSet<TrafficIncident> ongoingTrafficIncidentSet = new HashSet<>();
@@ -241,6 +257,9 @@ public class APIAgentLauncher extends JPSAgent {
         return ongoingTrafficIncidentSet;
     }
 
+    /**
+     * Inserts the given @param trafficIncident into Postgres
+     */
     protected void insertValuesIntoPostgres(TrafficIncident trafficIncident) {
         Table<?> table = DSL.table(DSL.name("TrafficIncident"));
         InsertValuesStepN<?> insertValueStep = (InsertValuesStepN<?>) context.insertInto(table, startTimeColumn, endTimeColumn, typeColumn, latitudeColumn, longitudeColumn, messageColumn, statusColumn);
@@ -250,6 +269,9 @@ public class APIAgentLauncher extends JPSAgent {
         insertValueStep.execute();
     }
 
+    /**
+     * Parses the @param message and returns the start time as specified
+     */
     private static long parseMessageStringToTimestamp(String message) {
         // eg: (15/6)14:25 Roadworks on ECP (towards City) after Fort Rd Exit. Avoid lane 1.
         int year = Year.now().getValue();
@@ -264,6 +286,9 @@ public class APIAgentLauncher extends JPSAgent {
         return result.toInstant().getEpochSecond();
     }
 
+    /**
+     * updates the end time and status of the given @param trafficIncident
+     */
     private void updateTrafficIncidentEndTimeStatusPostgres(TrafficIncident trafficIncident) {
         String sql = "UPDATE \"TrafficIncident\" SET \"endtime\" = ?, \"status\" = ? WHERE \"type\" = ? and \"starttime\" = ? and \"latitude\" = ? and \"longitude\" = ?";
         try {
@@ -289,8 +314,6 @@ public class APIAgentLauncher extends JPSAgent {
      */
     private void convertLongLatPairToGeom() {
         // WSG4326 coordinates used in this case
-        // SQL command below needs to run before calling this function
-        // ALTER TABLE TrafficIncident ADD COLUMN location GEOMETRY(point, 4326);
         String sql = "UPDATE \"TrafficIncident\" SET \"location\" = ST_SETSRID(ST_MakePoint(\"TrafficIncident\".\"longitude\", \"TrafficIncident\".\"latitude\"), 4326) WHERE \"location\" IS NULL";
         try {
             PreparedStatement statement = this.conn.prepareStatement(sql);

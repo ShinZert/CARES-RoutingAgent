@@ -11,7 +11,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aflood_polygon_single&outputFormat=application%2Fjson"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=status=%27t%27"
                 }
             ], 
             "layers": [

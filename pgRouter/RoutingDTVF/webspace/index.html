@@ -160,7 +160,7 @@
             var dataPromise = manager.loadDefinitions();
             dataPromise.then(() => start());
             dataPromise.then(() => getRouteStart())
-            dataPromise.then(() => addHospital())
+            // dataPromise.then(() => addHospital())
 
             /**
              * Starts the visualisation setup process.
@@ -208,7 +208,7 @@
 
             function addHospital(){
 
-                var markerCoordinates = [0.44596810988223834, 52.75684401611818];
+                var markerCoordinates = [103.77234153180912, 1.3029602602687156];
 
                     // Create a new marker instance
                     var marker = new mapboxgl.Marker({
@@ -235,7 +235,7 @@
                 var sourceMarker = new mapboxgl.Marker({
                         draggable: true
                     })
-                    .setLngLat([0.44503308060457725, 52.75554119773284])
+                    .setLngLat([103.77234153180912, 1.3029602602687156])
                     .addTo(MapHandler.MAP);
 
                 sourceMarker.on("dragend", function(e) {
@@ -248,7 +248,7 @@
                 var targetMarker = new mapboxgl.Marker({
                         draggable: true
                     })
-                    .setLngLat([0.43026936435893426, 52.76964201123162])
+                    .setLngLat([103.77234153180912, 1.3029602602687156])
                     .addTo(MapHandler.MAP);
 
                 targetMarker.on("dragend", function(e) {
@@ -260,7 +260,7 @@
 
                 // function to get nearest vertex to the passed point
                 function getVertex(selectedPoint) {
-                    var url = `http://127.0.0.1:8081/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:nearest_vertex&outputformat=application/json&viewparams=lon:${selectedPoint.lng};lat:${selectedPoint.lat};`;
+                    var url = `http://localhost:3838/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:nearest_vertex&outputformat=application/json&viewparams=lon:${selectedPoint.lng};lat:${selectedPoint.lat};`;
 
                     $.ajax({
                         url: url,
@@ -287,7 +287,7 @@
                 // // function to get the shortest path from the give source and target nodes
                 function getRoute() {
 
-                    var url = `http://127.0.0.1:8081/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:shortest_paths&outputformat=application/json&viewparams=source:${source};target:${target};`;
+                    var url = `http://localhost:3838/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:shortest_paths&outputformat=application/json&viewparams=source:${source};target:${target};`;
                     removeLayer();
                     // Retrieve the GeoJSON data from the URL
                     fetch(url)

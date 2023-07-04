@@ -119,14 +119,16 @@ UPDATE ways SET slope = ((target_elevation - source_elevation) / source_elevatio
 
 ### Creating Single Route Query
 This is a sample SQL query that given two coordinates, carry out a pgr_djikstra routing. 
+
+The query below is modified to work with the configuration in stack with pgRouting function. 
 ```
-SELECT  source_elevation, target_elevation, ST_Length(ST_Transform(the_geom,32632)), the_geom
+SELECT ST_COLLECT(the_geom)
 
 FROM pgr_dijkstra(
-    'SELECT id, source, target, ST_Length(the_geom) AS cost FROM ways',
+    'SELECT gid as id, source, target, ST_Length(the_geom) AS cost FROM routing_ways',
     (
         SELECT source
-        FROM ways
+        FROM routing_ways
         ORDER BY ST_Distance(
             the_geom,
             ST_SetSRID(ST_MakePoint(0.4027042483435537,52.75443837250586), 4326)
@@ -135,7 +137,7 @@ FROM pgr_dijkstra(
     ),
     (
         SELECT source
-        FROM ways
+        FROM routing_ways
         ORDER BY ST_Distance(
             the_geom,
             ST_SetSRID(ST_MakePoint(  0.4020457711052358,52.74661340785207), 4326)
@@ -144,7 +146,7 @@ FROM pgr_dijkstra(
     ),
     directed:=true
 ) AS route
-JOIN ways AS r ON route.edge = r.id;
+JOIN routing_ways AS r ON route.edge = r.gid;
 ```
 
 ### SQL View

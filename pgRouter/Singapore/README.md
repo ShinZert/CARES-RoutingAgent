@@ -24,14 +24,6 @@ Downloading cropped map from BBBike.org is currently the best option. If OSM map
 ### Prerequisite
 A valid Mapbox API token must be provided in your [index.html].
 
-```
-# To build the Image:
-docker-compose -f ./docker/docker-compose.yml build --force-rm
-
-# To generate a Container (i.e. run the Image):
-docker-compose -f ./docker/docker-compose.yml up -d --force-recreate
-```
-
 ### Setting up SQL View
 Configure new SQL view in Geoserver as a new layer.
 - Under `Layers` tab, select `Add layer from: YOUR-STORE`
@@ -54,27 +46,44 @@ WHERE
 GROUP BY v.id, v.the_geom
 ```
 
-- Specify any numbers for the default value 
+- Guess new parameters, specify any numbers for the default value.
 - Deselect Escape special SQL characters. 
 - Validataion regular expression `^[\d\.\+-eE]+$`
-- Geometry type: Point.
+- Geometry type: Point
+- Change SRS to EPSG:4326
+- Specify Bounding Boxes MinX:-180, MinY:-90, MaxX:180,MaxY:90, press `Compute from native bounds` for both fields 
 
 #### Shortest_paths
 ```
 SELECT
 min(r.seq) AS seq,
-e.id AS id,
+e.gid AS id,
 sum(e.cost) AS cost,
 ST_Collect(e.the_geom) AS geom 
-FROM pgr_dijkstra('SELECT id as id, source, target, cost_s as cost, reverse_cost_s   as reverse_cost FROM routing_ways WHERE routing_ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 115, 116, 121, 123, 124, 125, 401)',%source%,%target%,false) AS r,routing_ways AS e WHERE r.edge=e.id GROUP BY e.id
+FROM pgr_dijkstra('SELECT gid as id, source, target, cost_s as cost, reverse_cost_s   as reverse_cost FROM routing_ways WHERE routing_ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 115, 116, 121, 123, 124, 125, 401)',%source%,%target%,false) AS r,routing_ways AS e WHERE r.edge=e.gid GROUP BY e.gid
 ```
 
+- Guess new parameters, specify any numbers for the default value.
 - Specify any numbers for the default value 
 - Deselect Escape special SQL characters. 
 - Validataion regular expression `^[\d]+$`
 - Geometry type: Multi-Line String. 
+- Change SRS to EPSG:4326
+- Specify Bounding Boxes MinX:-180, MinY:-90, MaxX:180,MaxY:90, press `Compute from native bounds` for both fields 
 
 Both of the steps above, create SQL views as a layers. Based on the endpoints of this SQL view, modify the geojson endpoint in `index.html` as accordingly. 
+
+### Spinning up the DTVF
+```
+# To build the Image:
+docker-compose -f ./docker/docker-compose.yml build --force-rm
+
+# To generate a Container (i.e. run the Image):
+docker-compose -f ./docker/docker-compose.yml up -d --force-recreate
+```
+
+Do take note to use incognito mode to open the browser to prevent any caching. 
+
 
 <!-- Links -->
 [DTVF]: https://github.com/cambridge-cares/TheWorldAvatar/wiki/Digital-Twin-Visualisations

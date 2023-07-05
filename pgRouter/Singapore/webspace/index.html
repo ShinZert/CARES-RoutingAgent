@@ -1,7 +1,7 @@
 <html>
     <head>
         <!-- ===== CUSTOMISABLE ===== -->
-        <title>King's Lynn Flood Router</title>
+        <title>Singapore Digital Twin Visualization Framework</title>
         <!-- ===== CUSTOMISABLE ===== -->
 
         <!-- JS -->
@@ -176,10 +176,10 @@
                
                 // ===== CUSTOMISABLE =====
                 // Set the default content in the "General" tab of the side panel
-                manager.getPanelHandler().setTitle("<h1>King's Lynn Flood Router</h1>");
+                manager.getPanelHandler().setTitle("<h1>Singapore Digital Twin Visualization Framework</h1>");
                 manager.getPanelHandler().setContent(`
-                <p>This visualisation of King's Lynn, UK, is based on data instantiated in the World Avatar. <br><br>
-                    It combines flood data, elevation raster data, isochrone map from hospital, street network data, building data. 
+                <p>This visualization of Singapore is based on data instantiated in the World Avatar. <br><br>
+                    It combines road network data and building data. 
                     <br><br>
 
                     Use the layer controls to show/hide various layers. 
@@ -247,7 +247,7 @@
                 var sourceMarker = new mapboxgl.Marker({
                         draggable: true
                     })
-                    .setLngLat([0.44503308060457725, 52.75554119773284])
+                    .setLngLat([103.82095850,1.305797])
                     .addTo(MapHandler.MAP);
 
                 sourceMarker.on("dragend", function(e) {
@@ -260,7 +260,7 @@
                 var targetMarker = new mapboxgl.Marker({
                         draggable: true
                     })
-                    .setLngLat([0.43026936435893426, 52.76964201123162])
+                    .setLngLat([103.820958,1.30579750])
                     .addTo(MapHandler.MAP);
 
                 targetMarker.on("dragend", function(e) {
@@ -272,7 +272,7 @@
 
                 // function to get nearest vertex to the passed point
                 function getVertex(selectedPoint) {
-                    var url = `http://localhost:8081/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:nearest_vertex&outputformat=application/json&viewparams=lon:${selectedPoint.lng};lat:${selectedPoint.lat};`;
+                    var url = `http://localhost:3838/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore:nearest_vertex&outputformat=application/json&viewparams=lon:${selectedPoint.lng};lat:${selectedPoint.lat};`;
 
                     $.ajax({
                         url: url,
@@ -299,7 +299,7 @@
                 // // function to get the shortest path from the give source and target nodes
                 function getRoute() {
 
-                    var url = `http://localhost:8081/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:shortest_paths&outputformat=application/json&viewparams=source:${source};target:${target};`;
+                    var url = `http://localhost:3838/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore:shortest_paths&outputformat=application/json&viewparams=source:${source};target:${target};`;
                     removeLayer();
                     // Retrieve the GeoJSON data from the URL
                     fetch(url)

@@ -1,7 +1,7 @@
 <html>
     <head>
         <!-- ===== CUSTOMISABLE ===== -->
-        <title>Singapore's traffic incident visualization</title>
+        <title>King's Lynn Flood Router</title>
         <!-- ===== CUSTOMISABLE ===== -->
 
         <!-- JS -->
@@ -106,6 +106,11 @@
                     </div>
                     <div id="coordsContainer" style="width: 100%; height: 100%;"></div>
                 </div>
+
+ 
+
+
+
             </div>
         </div>
 
@@ -160,7 +165,6 @@
             var dataPromise = manager.loadDefinitions();
             dataPromise.then(() => start());
             dataPromise.then(() => getRouteStart())
-
             dataPromise.then(() => addHospital())
 
             /**
@@ -172,9 +176,8 @@
                
                 // ===== CUSTOMISABLE =====
                 // Set the default content in the "General" tab of the side panel
-                manager.getPanelHandler().setTitle("<h1>Singapore's Traffic Incident Visualizer</h1>");
+                manager.getPanelHandler().setTitle("<h1>King's Lynn Flood Router</h1>");
                 manager.getPanelHandler().setContent(`
-                <p>Content to be updated</p>
                 <p>This visualisation of King's Lynn, UK, is based on data instantiated in the World Avatar. <br><br>
                     It combines flood data, elevation raster data, isochrone map from hospital, street network data, building data. 
                     <br><br>
@@ -210,16 +213,23 @@
 
             function addHospital(){
 
-                var markerCoordinates = [103.77234153180912, 1.3029602602687156];
+                var markerCoordinates = [0.44596810988223834, 52.75684401611818];
 
                     // Create a new marker instance
                     var marker = new mapboxgl.Marker({
                         color: 'red',
-                        draggable: true
+                        draggable: false
                     })
                         .setLngLat(markerCoordinates)
                         .addTo(MapHandler.MAP);
-                    
+
+                    // Create the box container
+                    var boxContainer = document.createElement('div');
+                    boxContainer.className = 'box-container';
+                    boxContainer.innerHTML = '<h2>Mapbox JS Div Container Display</h2>' +
+                                            '<p>This is a box displayed as a JS-generated div container on top of the Mapbox map.</p>';
+                    document.body.appendChild(boxContainer);
+                
 
             }
 
@@ -237,7 +247,7 @@
                 var sourceMarker = new mapboxgl.Marker({
                         draggable: true
                     })
-                    .setLngLat([103.77234153180912, 1.3029602602687156])
+                    .setLngLat([0.44503308060457725, 52.75554119773284])
                     .addTo(MapHandler.MAP);
 
                 sourceMarker.on("dragend", function(e) {
@@ -250,7 +260,7 @@
                 var targetMarker = new mapboxgl.Marker({
                         draggable: true
                     })
-                    .setLngLat([103.77234153180912, 1.3029602602687156])
+                    .setLngLat([0.43026936435893426, 52.76964201123162])
                     .addTo(MapHandler.MAP);
 
                 targetMarker.on("dragend", function(e) {
@@ -262,20 +272,34 @@
 
                 // function to get nearest vertex to the passed point
                 function getVertex(selectedPoint) {
-                    var url = `http://localhost:3838/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:nearest_vertex&outputformat=application/json&viewparams=lon:${selectedPoint.lng};lat:${selectedPoint.lat};`;
+                    var url = `http://localhost:8081/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:nearest_vertex&outputformat=application/json&viewparams=lon:${selectedPoint.lng};lat:${selectedPoint.lat};`;
 
                     $.ajax({
                         url: url,
                         async: false,
                         success: function(data) {
+                            loadVertex(
+                                data,
+                                selectedPoint.toString() === sourceMarker.getLngLat().toString()
+                            );
                         }
                     });
+                }
+
+                // function to update the source and target nodes as returned from geoserver for later querying
+                function loadVertex(response, isSource) {
+                    var features = response.features;
+                    if (isSource) {
+                        source = features[0].properties.id;
+                    } else {
+                        target = features[0].properties.id;
+                    }
                 }
 
                 // // function to get the shortest path from the give source and target nodes
                 function getRoute() {
 
-                    var url = `http://localhost:3838/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:shortest_paths&outputformat=application/json&viewparams=source:${source};target:${target};`;
+                    var url = `http://localhost:8081/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:shortest_paths&outputformat=application/json&viewparams=source:${source};target:${target};`;
                     removeLayer();
                     // Retrieve the GeoJSON data from the URL
                     fetch(url)
@@ -283,8 +307,8 @@
                     .then(data => {
                         // Add the GeoJSON data as a source
                         MapHandler.MAP.addSource('my-data', {
-                            type: 'geojson',
-                            data: data
+                        type: 'geojson',
+                        data: data
                         });
 
                         // Add a layer using the GeoJSON source

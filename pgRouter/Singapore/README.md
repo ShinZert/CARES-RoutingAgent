@@ -75,6 +75,15 @@ FROM pgr_dijkstra('SELECT gid as id, source, target, cost_s as cost, reverse_cos
 
 Both of the steps above, create SQL views as a layers. Based on the endpoints of this SQL view, modify the geojson endpoint in [index.html] as accordingly. 
 
+### Road Display
+```
+SELECT w.name, w.length_m, c.tag_value AS road_type, w.oneway, w.maxspeed_forward, w.maxspeed_backward,  w.the_geom
+FROM routing_ways w
+JOIN configuration c ON w.tag_id = c.tag_id
+```
+
+Based on the endpoints of this SQL view, modify the geojson endpoint in [data.json] as accordingly. 
+
 ### Spinning up the DTVF
 ```
 # To build the Image:

@@ -11,7 +11,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3Aroaddisplay&outputFormat=application%2Fjson"
+                    "data": "http://localhost:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3Aroaddisplay&outputFormat=application%2Fjson"
                 }
             ], 
             "layers": [

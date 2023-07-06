@@ -51,7 +51,8 @@ GROUP BY v.id, v.the_geom
 - Validataion regular expression `^[\d\.\+-eE]+$`
 - Geometry type: Point
 - Change SRS to EPSG:4326
-- Specify Bounding Boxes MinX:-180, MinY:-90, MaxX:180,MaxY:90, press `Compute from native bounds` for both fields 
+- Specify Bounding Boxes MinX:-180, MinY:-90, MaxX:180,MaxY:90 for both fields.
+- Ensure Tile Image Formats: application/json;type=geojson is enabled under `Tile Caching` 
 
 #### Shortest_paths
 ```
@@ -69,9 +70,10 @@ FROM pgr_dijkstra('SELECT gid as id, source, target, cost_s as cost, reverse_cos
 - Validataion regular expression `^[\d]+$`
 - Geometry type: Multi-Line String. 
 - Change SRS to EPSG:4326
-- Specify Bounding Boxes MinX:-180, MinY:-90, MaxX:180,MaxY:90, press `Compute from native bounds` for both fields 
+- Specify Bounding Boxes MinX:-180, MinY:-90, MaxX:180,MaxY:90 for both fields.
+- Ensure Tile Image Formats: application/json;type=geojson is enabled under `Tile Caching` 
 
-Both of the steps above, create SQL views as a layers. Based on the endpoints of this SQL view, modify the geojson endpoint in `index.html` as accordingly. 
+Both of the steps above, create SQL views as a layers. Based on the endpoints of this SQL view, modify the geojson endpoint in [index.html] as accordingly. 
 
 ### Spinning up the DTVF
 ```

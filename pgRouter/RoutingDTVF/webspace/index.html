@@ -198,16 +198,12 @@
                 imageMaps.set('road_work', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/W21-1a.svg/470px-W21-1a.svg.png?20070514091027')
                 // to be updated
                 imageMaps.set('vehicle_breakdown', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/W21-1a.svg/470px-W21-1a.svg.png?20070514091027')
-                // to be updated
-                imageMaps.set('weather', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/W21-1a.svg/470px-W21-1a.svg.png?20070514091027')
-                // to be updated
-                imageMaps.set('road_block', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/W21-1a.svg/470px-W21-1a.svg.png?20070514091027')
+                imageMaps.set('traffic_weather', 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Breathe-weather-severe-alert.svg/768px-Breathe-weather-severe-alert.svg.png')
+                imageMaps.set('road_block', 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/UK_traffic_sign_7010.1a.svg/220px-UK_traffic_sign_7010.1a.svg.png?20180303070902')
                 imageMaps.set('road_obstacle', 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Malaysia_road_sign_WD23.svg/600px-Malaysia_road_sign_WD23.svg.png?20210505235926')
                 imageMaps.set('heavy_traffic', 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Singapore_road_sign_-_Warning_-_Congestion_expected.svg/321px-Singapore_road_sign_-_Warning_-_Congestion_expected.svg.png')
-                // to be updated
-                imageMaps.set('misc', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/W21-1a.svg/470px-W21-1a.svg.png?20070514091027')
-                // to be updated
-                imageMaps.set('diversion', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/W21-1a.svg/470px-W21-1a.svg.png?20070514091027')
+                imageMaps.set('misc', 'https://upload.wikimedia.org/wikipedia/commons/5/57/ABCQ.png?20180122171312')
+                imageMaps.set('diversion', 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Singapore_road_sign_-_Informatory_-_Directional_arrow_-_Both_ways.svg/1024px-Singapore_road_sign_-_Informatory_-_Directional_arrow_-_Both_ways.svg.png')
                 // to be updated
                 imageMaps.set('unattended_vehicle', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/W21-1a.svg/470px-W21-1a.svg.png?20070514091027')
                 
@@ -233,6 +229,7 @@
             }
 
             function loadImage(url, image_id) {
+                // MapHandler.MAP.addImage(image_id, url)
                 MapHandler.MAP.on('load', () => {
                     MapHandler.MAP.loadImage(
                         url,

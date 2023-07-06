@@ -106,7 +106,7 @@
                     "name": "Active Road Works",
                     "source": "traffic_incident_roadwork",
                     "type": "symbol",
-                    "order": 1,
+                    "order": 2,
                     "layout": {
                         "visibility": "visible",
                         "icon-image": "road_work",
@@ -120,7 +120,7 @@
                     "name": "Active Vehicle Breakdowns",
                     "source": "traffic_incident_vehiclebreakdown",
                     "type": "symbol",
-                    "order": 1,
+                    "order": 3,
                     "layout": {
                         "visibility": "visible",
                         "icon-image": "vehicle_breakdown",
@@ -134,10 +134,10 @@
                     "name": "Active Weather",
                     "source": "traffic_incident_weather",
                     "type": "symbol",
-                    "order": 1,
+                    "order": 4,
                     "layout": {
                         "visibility": "visible",
-                        "icon-image": "weather",
+                        "icon-image": "traffic_weather",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
                         "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
@@ -148,7 +148,7 @@
                     "name": "Active Road Obstacles",
                     "source": "traffic_incident_obstacle",
                     "type": "symbol",
-                    "order": 2,
+                    "order": 5,
                     "layout": {
                         "visibility": "visible",
                         "icon-image": "road_obstacle",
@@ -162,7 +162,7 @@
                     "name": "Active Road Blocks",
                     "source": "traffic_incident_roadblock",
                     "type": "symbol",
-                    "order": 2,
+                    "order": 6,
                     "layout": {
                         "visibility": "visible",
                         "icon-image": "road_block",
@@ -176,7 +176,7 @@
                     "name": "Active heavy traffic",
                     "source": "traffic_incident_heavytraffic",
                     "type": "symbol",
-                    "order": 2,
+                    "order": 7,
                     "layout": {
                         "visibility": "visible",
                         "icon-image": "heavy_traffic",
@@ -190,7 +190,7 @@
                     "name": "Active Misc.",
                     "source": "traffic_incident_misc",
                     "type": "symbol",
-                    "order": 2,
+                    "order": 8,
                     "layout": {
                         "visibility": "visible",
                         "icon-image": "misc",
@@ -204,7 +204,7 @@
                     "name": "Active Diversion",
                     "source": "traffic_incident_diversion",
                     "type": "symbol",
-                    "order": 2,
+                    "order": 9,
                     "layout": {
                         "visibility": "visible",
                         "icon-image": "diversion",
@@ -218,7 +218,7 @@
                     "name": "Active Unattended Vehicle",
                     "source": "traffic_incident_unattendedvehicle",
                     "type": "symbol",
-                    "order": 2,
+                    "order": 10,
                     "layout": {
                         "visibility": "visible",
                         "icon-image": "unattended_vehicle",

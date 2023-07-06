@@ -95,7 +95,7 @@
                     "order": 1,
                     "layout": {
                         "visibility": "visible",
-                        "icon-image": "accident",
+                        "icon-image": "traffic-accident",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
                         "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
@@ -109,7 +109,7 @@
                     "order": 2,
                     "layout": {
                         "visibility": "visible",
-                        "icon-image": "road_work",
+                        "icon-image": "traffic-road-work",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
                         "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
@@ -123,7 +123,7 @@
                     "order": 3,
                     "layout": {
                         "visibility": "visible",
-                        "icon-image": "vehicle_breakdown",
+                        "icon-image": "traffic-vehicle-breakdown",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
                         "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
@@ -137,7 +137,7 @@
                     "order": 4,
                     "layout": {
                         "visibility": "visible",
-                        "icon-image": "traffic_weather",
+                        "icon-image": "traffic-weather",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
                         "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
@@ -151,7 +151,7 @@
                     "order": 5,
                     "layout": {
                         "visibility": "visible",
-                        "icon-image": "road_obstacle",
+                        "icon-image": "traffic-obstacle",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
                         "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
@@ -165,7 +165,7 @@
                     "order": 6,
                     "layout": {
                         "visibility": "visible",
-                        "icon-image": "road_block",
+                        "icon-image": "traffic-road-block",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
                         "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
@@ -179,7 +179,7 @@
                     "order": 7,
                     "layout": {
                         "visibility": "visible",
-                        "icon-image": "heavy_traffic",
+                        "icon-image": "traffic-heavy-traffic",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
                         "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
@@ -228,36 +228,6 @@
                     }
                 }
 
-            ]
-        },
-        {
-            "name": "TestImageDisplay",
-            "stack": "http://localhost:3838",
-            "sources": [
-                {
-                    "id": "test_accident",  
-                    "type": "geojson",
-                    "cluster": false,
-                    "clusterMaxZoom": 14,
-                    "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Accident%27"
-                }
-            ],
-            "layers": [
-                {
-                    "id": "accidents",
-                    "name": "Active Accidents",
-                    "source": "test_accident",
-                    "type": "symbol",
-                    "order": 1,
-                    "layout": {
-                        "visibility": "visible",
-                        "icon-image": "incident_demo",
-                        "icon-allow-overlap": true,
-                        "icon-ignore-placement": true,
-                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
-                    }
-                }
             ]
         }
     ]

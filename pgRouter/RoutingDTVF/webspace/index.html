@@ -191,18 +191,30 @@
 
                 // Save general tab state as default
                 manager.getPanelHandler().storeDefault();
+                
 
-                MapHandler.MAP.on('load', () => {
-                    MapHandler.MAP.loadImage(
-                        'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/W21-1a.svg/470px-W21-1a.svg.png?20070514091027',
-                        (error, image) => {
-                            if (error) throw error;
-                            
-                            // Add the image to the map style.
-                            MapHandler.MAP.addImage('road_work', image);
-                        }
-                    );
-                });
+                imageMaps = new Map();
+                imageMaps.set('accident', 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Singapore_road_sign_-_Warning_-_Accident_area.svg/401px-Singapore_road_sign_-_Warning_-_Accident_area.svg.png?20180625184038')
+                imageMaps.set('road_work', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/W21-1a.svg/470px-W21-1a.svg.png?20070514091027')
+                // to be updated
+                imageMaps.set('vehicle_breakdown', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/W21-1a.svg/470px-W21-1a.svg.png?20070514091027')
+                // to be updated
+                imageMaps.set('weather', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/W21-1a.svg/470px-W21-1a.svg.png?20070514091027')
+                // to be updated
+                imageMaps.set('road_block', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/W21-1a.svg/470px-W21-1a.svg.png?20070514091027')
+                imageMaps.set('road_obstacle', 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Malaysia_road_sign_WD23.svg/600px-Malaysia_road_sign_WD23.svg.png?20210505235926')
+                imageMaps.set('heavy_traffic', 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Singapore_road_sign_-_Warning_-_Congestion_expected.svg/321px-Singapore_road_sign_-_Warning_-_Congestion_expected.svg.png')
+                // to be updated
+                imageMaps.set('misc', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/W21-1a.svg/470px-W21-1a.svg.png?20070514091027')
+                // to be updated
+                imageMaps.set('diversion', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/W21-1a.svg/470px-W21-1a.svg.png?20070514091027')
+                // to be updated
+                imageMaps.set('unattended_vehicle', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/W21-1a.svg/470px-W21-1a.svg.png?20070514091027')
+                
+
+                for ([image_id, url] of imageMaps) {
+                    loadImage(url, image_id)
+                }
 
                 // Once the underlying style has loaded...
                 MapHandler.MAP.on("style.load", function() {
@@ -220,56 +232,19 @@
                 
             }
 
-            // function drawIcons() {
-            //     // var coordinate = [103.77234153180912, 1.3029602602687156];
-            //     const map = new mapboxgl.Map({
-            //         container: 'map', // container ID
-            //         style: 'mapbox://styles/mapbox/streets-v12', // style URL
-            //         center: [103.77234153180912, 1.3029602602687156], // starting position [lng, lat]
-            //         zoom: 9 // starting zoom
-            //     });
-            //     // var icon = new mapboxgl.addImage("vehicle_breakdown").addTo(MapHandler.MAP);
-            //     map.on('load', () => {
-            //         map.loadImage(
-            //             'https://www.kindpng.com/imgv/oxxwi_transparent-construction-sign-clipart-work-road-sign-png/',
-            //             (error, image) => {
-            //                 if (error) throw error;
+            function loadImage(url, image_id) {
+                MapHandler.MAP.on('load', () => {
+                    MapHandler.MAP.loadImage(
+                        url,
+                        (error, image) => {
+                            if (error) throw error;
                             
-            //                 // Add the image to the map style.
-            //                 map.addImage('cat', image);
-                            
-            //                 // Add a data source containing one point feature.
-            //                 map.addSource('point', {
-            //                     'type': 'geojson',
-            //                     'data': {
-            //                         'type': 'FeatureCollection',
-            //                         'features': [
-            //                             {
-            //                             'type': 'Feature',
-            //                             'geometry': {
-            //                                 'type': 'Point',
-            //                                 'coordinates': [103.77234153180912, 1.3029602602687156]
-            //                             }
-            //                             }
-            //                         ]
-            //                     }
-            //                 });
-                            
-            //                 // Add a layer to use the image to represent the data.
-            //                 map.addLayer({
-            //                     'id': 'points',
-            //                     'type': 'symbol',
-            //                     'source': 'point', // reference the data source
-            //                     'layout': {
-            //                         'icon-image': 'cat', // reference the image
-            //                         'icon-size': 0.25
-            //                     }
-            //                 });
-            //             }
-            //         );
-            //     });
-                
-            // }
+                            // Add the image to the map style.
+                            MapHandler.MAP.addImage(image_id, image);
+                        }
+                    );
+                });
+            }
 
             function addHospital(){
 

@@ -1,7 +1,4 @@
 # CREATE EXTENSION postgis_raster
-
-
-
 osm2pgrouting --f kingslynnbig.osm --conf mapconfig.xml --dbname kingslynn --username postgres --password postgres --clean
 
 # Import Raster - DEM
@@ -9,6 +6,13 @@ raster2pgsql -c -C -e -s 4326 -f rast -F -I -M -t 100x100 kingslynnbig.tif publi
 
 # Import Raster  - FLOOD (NEVER MERGE TIF TILES TOGETHER)
 raster2pgsql -c -C -e -s OSGB36 -f rast -F -I -M -t 100x100 h_79200_*.tif public.flood_raster | psql -U postgres -h 172.23.128.1 -d kingslynn
+
+
+# Import Raster - Population
+raster2pgsql -c -C -e -s 4326 -f rast -F -I -M -t 100x100 OpenPopGridClipped.tif public.population_raster | psql -U postgres -d kingslynn
+
+raster2pgsql -c -C -e -s 4326 -f rast -F -I -M -t 100x100 OpenPopGrid_2014.asc public.population | psql -U postgres -d kingslynn
+
 
 INSERT INTO flood_polygon (geom)
 SELECT ST_ConvexHull(ST_Clip(rast, 1, ST_Envelope(rast), true))

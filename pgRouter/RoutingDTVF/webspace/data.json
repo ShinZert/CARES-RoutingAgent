@@ -41,7 +41,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_results&outputFormat=application%2Fjson&CQL_FILTER=minute='2'"
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_flooded&outputFormat=application%2Fjson&CQL_FILTER=minute='2'"
                 },
                 {
                     "id": "isochrone_2",  
@@ -49,7 +49,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_results&outputFormat=application%2Fjson&CQL_FILTER=minute='4'"
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_flooded&outputFormat=application%2Fjson&CQL_FILTER=minute='4'"
                 },
                 {
                     "id": "isochrone_3",  
@@ -57,7 +57,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_results&outputFormat=application%2Fjson&CQL_FILTER=minute='6'"
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_flooded&outputFormat=application%2Fjson&CQL_FILTER=minute='6'"
                 },
                 {
                     "id": "isochrone_4",  
@@ -65,7 +65,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_results&outputFormat=application%2Fjson&CQL_FILTER=minute='8'"
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_flooded&outputFormat=application%2Fjson&CQL_FILTER=minute='8'"
                 },
                 {
                     "id": "isochrone_5",  
@@ -73,7 +73,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_results&outputFormat=application%2Fjson&CQL_FILTER=minute='10'"
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_flooded&outputFormat=application%2Fjson&CQL_FILTER=minute='10'"
                 }
                 
             ], 
@@ -197,7 +197,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_results_unflooded&outputFormat=application%2Fjson&CQL_FILTER=minute='2'"
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_unflooded&outputFormat=application%2Fjson&CQL_FILTER=minute='2'"
                 },
                 {
                     "id": "isochrone_unflooded_2",  
@@ -205,7 +205,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_results_unflooded&outputFormat=application%2Fjson&CQL_FILTER=minute='4'"
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_unflooded&outputFormat=application%2Fjson&CQL_FILTER=minute='4'"
                 },
                 {
                     "id": "isochrone_unflooded_3",  
@@ -213,7 +213,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_results_unflooded&outputFormat=application%2Fjson&CQL_FILTER=minute='6'"
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_unflooded&outputFormat=application%2Fjson&CQL_FILTER=minute='6'"
                 },
                 {
                     "id": "isochrone_unflooded_4",  
@@ -221,7 +221,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_results_unflooded&outputFormat=application%2Fjson&CQL_FILTER=minute='8'"
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_unflooded&outputFormat=application%2Fjson&CQL_FILTER=minute='8'"
                 },
                 {
                     "id": "isochrone_unflooded_5",  
@@ -229,7 +229,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_results_unflooded&outputFormat=application%2Fjson&CQL_FILTER=minute='10'"
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_unflooded&outputFormat=application%2Fjson&CQL_FILTER=minute='10'"
                 }
                 
             ], 
@@ -244,7 +244,7 @@
                         "visibility": "visible"
                     },
                     "paint": {
-                        "fill-color": "#6A0AC9",             
+                        "fill-color": "#c90a0a",             
                         "fill-outline-color": "#000000",
                         "fill-opacity": 0.20
                     }
@@ -259,7 +259,7 @@
                         "visibility": "visible"
                     },
                     "paint": {
-                        "fill-color": "#FF00F7",             
+                        "fill-color": "#ff8800",             
                         "fill-outline-color": "#000000",
                         "fill-opacity": 0.20
                     }
@@ -274,7 +274,7 @@
                         "visibility": "visible"
                     },
                     "paint": {
-                        "fill-color": "#EB44C1",             
+                        "fill-color": "#ebc244",             
                         "fill-outline-color": "#000000",
                         "fill-opacity": 0.20
                     }
@@ -289,7 +289,7 @@
                         "visibility": "visible"
                     },
                     "paint": {
-                        "fill-color": "#BF93CD",             
+                        "fill-color": "#add8e6",             
                         "fill-outline-color": "#000000",
                         "fill-opacity": 0.20
                     }
@@ -304,7 +304,7 @@
                         "visibility": "visible"
                     },
                     "paint": {
-                        "fill-color": "#93BDCD",             
+                        "fill-color": "#808080",             
                         "fill-outline-color": "#000000",
                         "fill-opacity": 0.20
                     }
@@ -535,6 +535,38 @@
                         "circle-opacity": 0.15,
                         "circle-color": "#000000",
                         "circle-stroke-width": 0
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Road",
+            "stack": "http://localhost:8081",
+            "sources": [
+                {
+                    "id": "road",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aroaddisplay&outputFormat=application%2Fjson"
+                }
+            ], 
+            "layers": [
+                {
+                    "id": "road_layer",
+                    "name": "Road",
+                    "source": "road",
+                    "type": "line",
+                    "order": 50,
+                    "layout": {
+                        "visibility": "visible"
+                    },
+                    "paint": {
+                        "line-color": "#D8E3FF",
+                        "line-width": 2,
+                        "line-opacity":0.5
+
                     }
                 }
             ]

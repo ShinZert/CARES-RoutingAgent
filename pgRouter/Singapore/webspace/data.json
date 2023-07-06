@@ -1,0 +1,37 @@
+{
+    "name": "King's Lynn",
+    "groups": [
+        {
+            "name": "Road",
+            "stack": "http://localhost:8081",
+            "sources": [
+                {
+                    "id": "road",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3Aroaddisplay&outputFormat=application%2Fjson"
+                }
+            ], 
+            "layers": [
+                {
+                    "id": "road_layer",
+                    "name": "Road",
+                    "source": "road",
+                    "type": "line",
+                    "order": 50,
+                    "layout": {
+                        "visibility": "visible"
+                    },
+                    "paint": {
+                        "line-color": "#D8E3FF",
+                        "line-width": 2,
+                        "line-opacity":0.5
+
+                    }
+                }
+            ]
+        }
+    ]
+}

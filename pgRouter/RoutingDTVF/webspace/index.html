@@ -106,6 +106,11 @@
                     </div>
                     <div id="coordsContainer" style="width: 100%; height: 100%;"></div>
                 </div>
+
+ 
+
+
+
             </div>
         </div>
 
@@ -217,7 +222,14 @@
                     })
                         .setLngLat(markerCoordinates)
                         .addTo(MapHandler.MAP);
-                    
+
+                    // Create the box container
+                    var boxContainer = document.createElement('div');
+                    boxContainer.className = 'box-container';
+                    boxContainer.innerHTML = '<h2>Mapbox JS Div Container Display</h2>' +
+                                            '<p>This is a box displayed as a JS-generated div container on top of the Mapbox map.</p>';
+                    document.body.appendChild(boxContainer);
+                
 
             }
 
@@ -260,7 +272,7 @@
 
                 // function to get nearest vertex to the passed point
                 function getVertex(selectedPoint) {
-                    var url = `http://127.0.0.1:8081/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:nearest_vertex&outputformat=application/json&viewparams=lon:${selectedPoint.lng};lat:${selectedPoint.lat};`;
+                    var url = `http://localhost:8081/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:nearest_vertex&outputformat=application/json&viewparams=lon:${selectedPoint.lng};lat:${selectedPoint.lat};`;
 
                     $.ajax({
                         url: url,
@@ -287,7 +299,7 @@
                 // // function to get the shortest path from the give source and target nodes
                 function getRoute() {
 
-                    var url = `http://127.0.0.1:8081/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:shortest_paths&outputformat=application/json&viewparams=source:${source};target:${target};`;
+                    var url = `http://localhost:8081/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=routing:shortest_paths&outputformat=application/json&viewparams=source:${source};target:${target};`;
                     removeLayer();
                     // Retrieve the GeoJSON data from the URL
                     fetch(url)

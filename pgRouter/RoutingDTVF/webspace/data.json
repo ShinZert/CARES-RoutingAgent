@@ -98,7 +98,7 @@
                         "icon-image": "traffic-accident",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
-                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.16]
                     }
                 },
                 {
@@ -182,7 +182,7 @@
                         "icon-image": "traffic-heavy-traffic",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
-                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.075]
                     }
                 },
                 {

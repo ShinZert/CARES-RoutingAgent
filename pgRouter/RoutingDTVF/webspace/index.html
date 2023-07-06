@@ -1,7 +1,7 @@
 <html>
     <head>
         <!-- ===== CUSTOMISABLE ===== -->
-        <title>King's Lynn Flood Router</title>
+        <title>Singapore's traffic incident visualization</title>
         <!-- ===== CUSTOMISABLE ===== -->
 
         <!-- JS -->
@@ -160,7 +160,8 @@
             var dataPromise = manager.loadDefinitions();
             dataPromise.then(() => start());
             dataPromise.then(() => getRouteStart())
-            // dataPromise.then(() => addHospital())
+
+            dataPromise.then(() => addHospital())
 
             /**
              * Starts the visualisation setup process.
@@ -171,8 +172,9 @@
                
                 // ===== CUSTOMISABLE =====
                 // Set the default content in the "General" tab of the side panel
-                manager.getPanelHandler().setTitle("<h1>King's Lynn Flood Router</h1>");
+                manager.getPanelHandler().setTitle("<h1>Singapore's Traffic Incident Visualizer</h1>");
                 manager.getPanelHandler().setContent(`
+                <p>Content to be updated</p>
                 <p>This visualisation of King's Lynn, UK, is based on data instantiated in the World Avatar. <br><br>
                     It combines flood data, elevation raster data, isochrone map from hospital, street network data, building data. 
                     <br><br>
@@ -190,6 +192,18 @@
                 // Save general tab state as default
                 manager.getPanelHandler().storeDefault();
 
+                MapHandler.MAP.on('load', () => {
+                    MapHandler.MAP.loadImage(
+                        'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/W21-1a.svg/470px-W21-1a.svg.png?20070514091027',
+                        (error, image) => {
+                            if (error) throw error;
+                            
+                            // Add the image to the map style.
+                            MapHandler.MAP.addImage('road_work', image);
+                        }
+                    );
+                });
+
                 // Once the underlying style has loaded...
                 MapHandler.MAP.on("style.load", function() {
                     // Load registered images and linked files
@@ -206,6 +220,57 @@
                 
             }
 
+            // function drawIcons() {
+            //     // var coordinate = [103.77234153180912, 1.3029602602687156];
+            //     const map = new mapboxgl.Map({
+            //         container: 'map', // container ID
+            //         style: 'mapbox://styles/mapbox/streets-v12', // style URL
+            //         center: [103.77234153180912, 1.3029602602687156], // starting position [lng, lat]
+            //         zoom: 9 // starting zoom
+            //     });
+            //     // var icon = new mapboxgl.addImage("vehicle_breakdown").addTo(MapHandler.MAP);
+            //     map.on('load', () => {
+            //         map.loadImage(
+            //             'https://www.kindpng.com/imgv/oxxwi_transparent-construction-sign-clipart-work-road-sign-png/',
+            //             (error, image) => {
+            //                 if (error) throw error;
+                            
+            //                 // Add the image to the map style.
+            //                 map.addImage('cat', image);
+                            
+            //                 // Add a data source containing one point feature.
+            //                 map.addSource('point', {
+            //                     'type': 'geojson',
+            //                     'data': {
+            //                         'type': 'FeatureCollection',
+            //                         'features': [
+            //                             {
+            //                             'type': 'Feature',
+            //                             'geometry': {
+            //                                 'type': 'Point',
+            //                                 'coordinates': [103.77234153180912, 1.3029602602687156]
+            //                             }
+            //                             }
+            //                         ]
+            //                     }
+            //                 });
+                            
+            //                 // Add a layer to use the image to represent the data.
+            //                 map.addLayer({
+            //                     'id': 'points',
+            //                     'type': 'symbol',
+            //                     'source': 'point', // reference the data source
+            //                     'layout': {
+            //                         'icon-image': 'cat', // reference the image
+            //                         'icon-size': 0.25
+            //                     }
+            //                 });
+            //             }
+            //         );
+            //     });
+                
+            // }
+
             function addHospital(){
 
                 var markerCoordinates = [103.77234153180912, 1.3029602602687156];
@@ -213,7 +278,7 @@
                     // Create a new marker instance
                     var marker = new mapboxgl.Marker({
                         color: 'red',
-                        draggable: false
+                        draggable: true
                     })
                         .setLngLat(markerCoordinates)
                         .addTo(MapHandler.MAP);
@@ -266,22 +331,8 @@
                         url: url,
                         async: false,
                         success: function(data) {
-                            loadVertex(
-                                data,
-                                selectedPoint.toString() === sourceMarker.getLngLat().toString()
-                            );
                         }
                     });
-                }
-
-                // function to update the source and target nodes as returned from geoserver for later querying
-                function loadVertex(response, isSource) {
-                    var features = response.features;
-                    if (isSource) {
-                        source = features[0].properties.id;
-                    } else {
-                        target = features[0].properties.id;
-                    }
                 }
 
                 // // function to get the shortest path from the give source and target nodes
@@ -295,8 +346,8 @@
                     .then(data => {
                         // Add the GeoJSON data as a source
                         MapHandler.MAP.addSource('my-data', {
-                        type: 'geojson',
-                        data: data
+                            type: 'geojson',
+                            data: data
                         });
 
                         // Add a layer using the GeoJSON source

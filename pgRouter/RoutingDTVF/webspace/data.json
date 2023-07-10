@@ -126,7 +126,7 @@
                         "icon-image": "traffic-vehicle-breakdown",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
-                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.08]
                     }
                 },
                 {
@@ -154,7 +154,7 @@
                         "icon-image": "traffic-obstacle",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
-                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.08]
                     }
                 },
                 {
@@ -168,7 +168,7 @@
                         "icon-image": "traffic-road-block",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
-                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.03]
                     }
                 },
                 {

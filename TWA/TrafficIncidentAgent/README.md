@@ -29,7 +29,7 @@ docker/
 
 ## IMPORTANT
 
-Due to compatibility issues, the `./stack.sh` and `./docker/entrypoint.sh` **must** be using `LF` instead of `CRLF` in order to run the agent properly. Otherwise, you may encounter the issue of `exec ./entrypoint.sh not found` when running on Windows.
+Due to compatibility issues, the `./stack.sh` and `./docker/entrypoint.sh` **must** be using `LF` instead of `CRLF` in order to run the agent properly. Otherwise, you may encounter the issue of `exec ./entrypoint.sh not found`.
 
 ## Build and running
 

@@ -98,7 +98,7 @@
                         "icon-image": "traffic-accident",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
-                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.16]
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.11]
                     }
                 },
                 {
@@ -126,7 +126,7 @@
                         "icon-image": "traffic-vehicle-breakdown",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
-                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.08]
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.16]
                     }
                 },
                 {
@@ -154,7 +154,7 @@
                         "icon-image": "traffic-obstacle",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
-                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.08]
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.4]
                     }
                 },
                 {
@@ -327,7 +327,7 @@
                         "icon-image": "traffic-accident",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
-                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.16]
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.11]
                     }
                 },
                 {
@@ -355,7 +355,7 @@
                         "icon-image": "traffic-vehicle-breakdown",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
-                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.08]
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.16]
                     }
                 },
                 {
@@ -383,7 +383,7 @@
                         "icon-image": "traffic-obstacle",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
-                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.08]
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.4]
                     }
                 },
                 {

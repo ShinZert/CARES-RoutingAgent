@@ -193,10 +193,10 @@
                     "order": 8,
                     "layout": {
                         "visibility": "visible",
-                        "icon-image": "misc",
+                        "icon-image": "traffic-misc",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
-                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.4]
                     }
                 },
                 {
@@ -207,10 +207,10 @@
                     "order": 9,
                     "layout": {
                         "visibility": "visible",
-                        "icon-image": "diversion",
+                        "icon-image": "traffic-diversion",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
-                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.05]
                     }
                 },
                 {
@@ -221,7 +221,7 @@
                     "order": 10,
                     "layout": {
                         "visibility": "visible",
-                        "icon-image": "unattended_vehicle",
+                        "icon-image": "traffic-unattended-vehicle",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
                         "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
@@ -422,10 +422,10 @@
                     "order": 8,
                     "layout": {
                         "visibility": "visible",
-                        "icon-image": "misc",
+                        "icon-image": "traffic-misc",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
-                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.4]
                     }
                 },
                 {
@@ -436,10 +436,10 @@
                     "order": 9,
                     "layout": {
                         "visibility": "visible",
-                        "icon-image": "diversion",
+                        "icon-image": "traffic-diversion",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
-                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.05]
                     }
                 },
                 {
@@ -450,7 +450,7 @@
                     "order": 10,
                     "layout": {
                         "visibility": "visible",
-                        "icon-image": "unattended_vehicle",
+                        "icon-image": "traffic-unattended-vehicle",
                         "icon-allow-overlap": true,
                         "icon-ignore-placement": true,
                         "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]

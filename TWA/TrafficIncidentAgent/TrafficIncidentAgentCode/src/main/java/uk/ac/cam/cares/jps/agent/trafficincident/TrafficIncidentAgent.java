@@ -63,7 +63,6 @@ public class TrafficIncidentAgent extends TimerTask {
     private static final Field<String> messageColumn = DSL.field(DSL.name("message"), String.class);
     private static final Field<Boolean> statusColumn = DSL.field(DSL.name("status"), Boolean.class);
 
-    // eg (sent in Postman) POST http://localhost:1016/traffic-incident-agent/retrieve
     @Override
     public void run() {
         JSONObject jsonMessage = new JSONObject();

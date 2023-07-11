@@ -55,6 +55,7 @@ public class TrafficIncidentAgent extends TimerTask {
     private DSLContext context;
     private static final SQLDialect dialect = SQLDialect.POSTGRES;
     private static final String tableName = "traffic_incident";
+    private static final Field<String> iriColumn = DSL.field(DSL.name("iri"), String.class);
     private static final Field<Long> startTimeColumn = DSL.field(DSL.name("start_time"), Long.class);
     private static final Field<Long> endTimeColumn = DSL.field(DSL.name("end_time"), Long.class);
     private static final Field<String> typeColumn = DSL.field(DSL.name("type"), String.class);
@@ -199,7 +200,7 @@ public class TrafficIncidentAgent extends TimerTask {
      */
     public void createSchemaIfNotExists() {
         // note that column name will be automatically converted to lowercase
-        String createTableSql = "CREATE TABLE IF NOT EXISTS " + this.tableName + " ( starttime bigint NOT NULL, endtime bigint NOT NULL, type character varying NOT NULL, message character varying NOT NULL, latitude double precision NOT NULL, longitude double precision NOT NULL, status boolean DEFAULT false NOT NULL)";
+        String createTableSql = "CREATE TABLE IF NOT EXISTS " + this.tableName + " ( iri character varying NOT NULL PRIMARY KEY, start_time bigint NOT NULL, end_time bigint NOT NULL, type character varying NOT NULL, message character varying NOT NULL, latitude double precision NOT NULL, longitude double precision NOT NULL, status boolean DEFAULT false NOT NULL)";
         String enablePostgisSQL = "CREATE EXTENSION IF NOT EXISTS postgis;";
         String alterTableSql = "ALTER TABLE " + this.tableName + " ADD COLUMN IF NOT EXISTS geom GEOMETRY(point, 4326)";
         try {
@@ -230,6 +231,7 @@ public class TrafficIncidentAgent extends TimerTask {
             PreparedStatement statement = this.conn.prepareStatement(sql);
             rs = statement.executeQuery();
             while (rs.next()) {
+                String iri = rs.getString("iri");
                 String type = rs.getString("type");
                 Long startTime = rs.getLong("start_time");
                 Long endTime = rs.getLong("end_time");
@@ -237,7 +239,7 @@ public class TrafficIncidentAgent extends TimerTask {
                 Double longitude = rs.getDouble("longitude");
                 String message = rs.getString("message");
                 Boolean status = rs.getBoolean("status");
-                TrafficIncident curr = new TrafficIncident(type, latitude, longitude, message, startTime, status);
+                TrafficIncident curr = new TrafficIncident(iri, type, latitude, longitude, message, startTime, status);
                 ongoingTrafficIncidentSet.add(curr);
             }
         } catch (SQLException e) {
@@ -253,8 +255,8 @@ public class TrafficIncidentAgent extends TimerTask {
      */
     protected void insertValuesIntoPostgres(TrafficIncident trafficIncident) {
         Table<?> table = DSL.table(DSL.name("traffic_incident"));
-        InsertValuesStepN<?> insertValueStep = (InsertValuesStepN<?>) context.insertInto(table, startTimeColumn, endTimeColumn, typeColumn, latitudeColumn, longitudeColumn, messageColumn, statusColumn);
-        insertValueStep = insertValueStep.values(trafficIncident.startTime, trafficIncident.endTime, trafficIncident.incidentType, 
+        InsertValuesStepN<?> insertValueStep = (InsertValuesStepN<?>) context.insertInto(table, iriColumn, startTimeColumn, endTimeColumn, typeColumn, latitudeColumn, longitudeColumn, messageColumn, statusColumn);
+        insertValueStep = insertValueStep.values(trafficIncident.iri, trafficIncident.startTime, trafficIncident.endTime, trafficIncident.incidentType, 
             trafficIncident.latitude, trafficIncident.longitude, trafficIncident.message, trafficIncident.status);
 
         insertValueStep.execute();

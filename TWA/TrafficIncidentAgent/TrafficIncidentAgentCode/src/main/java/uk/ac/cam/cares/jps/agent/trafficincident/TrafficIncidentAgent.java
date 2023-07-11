@@ -54,9 +54,9 @@ public class TrafficIncidentAgent extends TimerTask {
     private Connection conn = null;
     private DSLContext context;
     private static final SQLDialect dialect = SQLDialect.POSTGRES;
-    private static final String tableName = "\"TrafficIncident\"";
-    private static final Field<Long> startTimeColumn = DSL.field(DSL.name("starttime"), Long.class);
-    private static final Field<Long> endTimeColumn = DSL.field(DSL.name("endtime"), Long.class);
+    private static final String tableName = "traffic_incident";
+    private static final Field<Long> startTimeColumn = DSL.field(DSL.name("start_time"), Long.class);
+    private static final Field<Long> endTimeColumn = DSL.field(DSL.name("end_time"), Long.class);
     private static final Field<String> typeColumn = DSL.field(DSL.name("type"), String.class);
     private static final Field<Double> latitudeColumn = DSL.field(DSL.name("latitude"), double.class);
     private static final Field<Double> longitudeColumn = DSL.field(DSL.name("longitude"), double.class);
@@ -224,7 +224,7 @@ public class TrafficIncidentAgent extends TimerTask {
      * Whether incidents are ongoing is decided by its "status" field in Postgres
      */
     public HashSet<TrafficIncident> retrieveOngoingIncidents() {
-        String sql = "SELECT * FROM \"TrafficIncident\" WHERE \"status\" = \'TRUE\'";
+        String sql = "SELECT * FROM traffic_incident WHERE \"status\" = \'t\'";
         HashSet<TrafficIncident> ongoingTrafficIncidentSet = new HashSet<>();
         ResultSet rs;
         try {
@@ -232,8 +232,8 @@ public class TrafficIncidentAgent extends TimerTask {
             rs = statement.executeQuery();
             while (rs.next()) {
                 String type = rs.getString("type");
-                Long startTime = rs.getLong("starttime");
-                Long endTime = rs.getLong("endtime");
+                Long startTime = rs.getLong("start_time");
+                Long endTime = rs.getLong("end_time");
                 Double latitude = rs.getDouble("latitude");
                 Double longitude = rs.getDouble("longitude");
                 String message = rs.getString("message");
@@ -253,7 +253,7 @@ public class TrafficIncidentAgent extends TimerTask {
      * Inserts the given @param trafficIncident into Postgres
      */
     protected void insertValuesIntoPostgres(TrafficIncident trafficIncident) {
-        Table<?> table = DSL.table(DSL.name("TrafficIncident"));
+        Table<?> table = DSL.table(DSL.name("traffic_incident"));
         InsertValuesStepN<?> insertValueStep = (InsertValuesStepN<?>) context.insertInto(table, startTimeColumn, endTimeColumn, typeColumn, latitudeColumn, longitudeColumn, messageColumn, statusColumn);
         insertValueStep = insertValueStep.values(trafficIncident.startTime, trafficIncident.endTime, trafficIncident.incidentType, 
             trafficIncident.latitude, trafficIncident.longitude, trafficIncident.message, trafficIncident.status);

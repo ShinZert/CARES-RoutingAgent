@@ -281,7 +281,7 @@ public class TrafficIncidentAgent extends TimerTask {
      * updates the end time and status of the given @param trafficIncident
      */
     private void updateTrafficIncidentEndTimeStatusPostgres(TrafficIncident trafficIncident) {
-        String sql = "UPDATE \"TrafficIncident\" SET \"endtime\" = ?, \"status\" = ? WHERE \"type\" = ? and \"starttime\" = ? and \"latitude\" = ? and \"longitude\" = ?";
+        String sql = "UPDATE traffic_incident SET end_time = ?, status = ? WHERE type = ? and start_time = ? and latitude = ? and longitude = ?";
         try {
             PreparedStatement statement = this.conn.prepareStatement(sql);
             statement.setLong(1, trafficIncident.endTime);

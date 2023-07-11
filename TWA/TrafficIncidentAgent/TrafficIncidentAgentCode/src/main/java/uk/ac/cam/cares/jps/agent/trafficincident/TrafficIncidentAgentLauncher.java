@@ -16,6 +16,7 @@ public class TrafficIncidentAgentLauncher extends JPSAgent {
         JSONObject jsonMessage = new JSONObject();
         Timer timer = new Timer();
         TimerTask task = new TrafficIncidentAgent();
+        // perform data extraction for every two minutes
         timer.schedule(task, 0, 1000*60*2);
         return jsonMessage;
     }

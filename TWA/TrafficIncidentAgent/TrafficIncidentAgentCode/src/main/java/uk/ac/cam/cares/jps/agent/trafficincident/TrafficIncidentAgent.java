@@ -202,7 +202,7 @@ public class TrafficIncidentAgent extends TimerTask {
         // note that column name will be automatically converted to lowercase
         String createTableSql = "CREATE TABLE IF NOT EXISTS " + this.tableName + " ( starttime bigint NOT NULL, endtime bigint NOT NULL, type character varying NOT NULL, message character varying NOT NULL, latitude double precision NOT NULL, longitude double precision NOT NULL, status boolean DEFAULT false NOT NULL)";
         String enablePostgisSQL = "CREATE EXTENSION IF NOT EXISTS postgis;";
-        String alterTableSql = "ALTER TABLE " + this.tableName + " ADD COLUMN IF NOT EXISTS location GEOMETRY(point, 4326)";
+        String alterTableSql = "ALTER TABLE " + this.tableName + " ADD COLUMN IF NOT EXISTS geom GEOMETRY(point, 4326)";
         try {
             PreparedStatement statement = this.conn.prepareStatement(createTableSql);
             LOGGER.debug(statement);
@@ -302,11 +302,11 @@ public class TrafficIncidentAgent extends TimerTask {
     }
 
     /**
-     * Adds location field for all records in TrafficIncident table without location based on longitude latitude column
+     * Adds geom field for all records in TrafficIncident table without geom based on longitude latitude column
      */
     private void convertLongLatPairToGeom() {
         // WSG4326 coordinates used in this case
-        String sql = "UPDATE \"TrafficIncident\" SET \"location\" = ST_SETSRID(ST_MakePoint(\"TrafficIncident\".\"longitude\", \"TrafficIncident\".\"latitude\"), 4326) WHERE \"location\" IS NULL";
+        String sql = "UPDATE traffic_incident SET geom = ST_SETSRID(ST_MakePoint(traffic_incident.longitude, traffic_incident.latitude), 4326) WHERE geom IS NULL";
         try {
             PreparedStatement statement = this.conn.prepareStatement(sql);
             statement.executeUpdate();

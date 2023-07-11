@@ -148,7 +148,6 @@ public class TrafficIncidentAgent extends TimerTask {
         LOGGER.info("Checking whether any traffic incident has ended ...");
         for (TrafficIncident ti : this.ongoingTrafficIncidentSet) {
             if (!this.newTrafficIncidentSet.contains(ti)) {
-                // TODO: decide when we mark the end time of the event
                 ti.setEndTime(this.timestamp);
                 ti.setStatus(false);
                 LOGGER.info("Updating endtime for " + ti.toString());

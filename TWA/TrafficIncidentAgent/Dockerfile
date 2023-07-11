@@ -32,7 +32,7 @@ ENV TRAFFICINCIDENT_API_PROPERTIES="/root/api.properties"
 
 # #==================================================================================================
 # Copy the compiled jar from the builder
-COPY --from=builder /root/TrafficIncidentAgentCode/output/traffic-incident-agent##1.3.0.war $CATALINA_HOME/webapps/
+COPY --from=builder /root/TrafficIncidentAgentCode/output/traffic-incident-agent##1.1.0.war $CATALINA_HOME/webapps/
 COPY ./docker/entrypoint.sh entrypoint.sh
 
 # # Port for Java debugging

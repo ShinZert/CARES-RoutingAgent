@@ -11,7 +11,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Accident%27%20AND%20status=%27t%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Accident%27%20AND%20status=%27t%27"
                 },
                 {
                     "id": "traffic_incident_active_roadwork",  
@@ -19,7 +19,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Roadwork%27%20AND%20status=%27t%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Roadwork%27%20AND%20status=%27t%27"
                 },
                 {
                     "id": "traffic_incident_active_vehiclebreakdown",  
@@ -27,7 +27,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Vehicle%20breakdown%27%20AND%20status=%27t%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Vehicle%20breakdown%27%20AND%20status=%27t%27"
                 },
                 {
                     "id": "traffic_incident_active_weather",  
@@ -35,7 +35,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Weather%27%20AND%20status=%27t%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Weather%27%20AND%20status=%27t%27"
                 },
                 {
                     "id": "traffic_incident_active_obstacle",  
@@ -43,7 +43,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Obstacle%27%20AND%20status=%27t%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Obstacle%27%20AND%20status=%27t%27"
                 },
                 {
                     "id": "traffic_incident_active_roadblock",  
@@ -51,7 +51,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Road%20Block%27%20AND%20status=%27t%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Road%20Block%27%20AND%20status=%27t%27"
                 },
                 {
                     "id": "traffic_incident_active_heavytraffic",  
@@ -59,7 +59,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Heavy%20Traffic%27%20AND%20status=%27t%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Heavy%20Traffic%27%20AND%20status=%27t%27"
                 },
                 {
                     "id": "traffic_incident_active_misc",  
@@ -67,7 +67,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Misc.%27%20AND%20status=%27t%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Misc.%27%20AND%20status=%27t%27"
                 },
                 {
                     "id": "traffic_incident_active_diversion",  
@@ -75,7 +75,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Diversion%27%20AND%20status=%27t%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Diversion%27%20AND%20status=%27t%27"
                 },
                 {
                     "id": "traffic_incident_active_unattendedvehicle",  
@@ -83,7 +83,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Unattended%20Vehicle%27%20AND%20status=%27t%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Unattended%20Vehicle%27%20AND%20status=%27t%27"
                 }
             ], 
             "layers": [
@@ -240,7 +240,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Accident%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Accident%27"
                 },
                 {
                     "id": "traffic_incident_all_roadwork",  
@@ -248,7 +248,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Roadwork%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Roadwork%27"
                 },
                 {
                     "id": "traffic_incident_all_vehiclebreakdown",  
@@ -256,7 +256,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Vehicle%20breakdown%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Vehicle%20breakdown%27"
                 },
                 {
                     "id": "traffic_incident_all_weather",  
@@ -264,7 +264,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Weather%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Weather%27"
                 },
                 {
                     "id": "traffic_incident_all_obstacle",  
@@ -272,7 +272,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Obstacle%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Obstacle%27"
                 },
                 {
                     "id": "traffic_incident_all_roadblock",  
@@ -280,7 +280,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Road%20Block%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Road%20Block%27"
                 },
                 {
                     "id": "traffic_incident_all_heavytraffic",  
@@ -288,7 +288,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Heavy%20Traffic%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Heavy%20Traffic%27"
                 },
                 {
                     "id": "traffic_incident_all_misc",  
@@ -296,7 +296,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Misc.%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Misc.%27"
                 },
                 {
                     "id": "traffic_incident_all_diversion",  
@@ -304,7 +304,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Diversion%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Diversion%27"
                 },
                 {
                     "id": "traffic_incident_all_unattendedvehicle",  
@@ -312,7 +312,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Unattended%20Vehicle%27"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Unattended%20Vehicle%27"
                 }
             ], 
             "layers": [

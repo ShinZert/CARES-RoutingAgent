@@ -158,18 +158,18 @@ SELECT
   v.id,
   v.the_geom
 FROM
-  ways_vertices_pgr AS v,
-  ways AS e
+  routing_ways_vertices_pgr AS v,
+  routing_ways AS e
 WHERE
   v.id = (SELECT
             id
-          FROM ways_vertices_pgr
+          FROM routing_ways_vertices_pgr
           ORDER BY the_geom <-> ST_SetSRID(ST_MakePoint(%lon%, %lat%), 4326) LIMIT 1)
   AND (e.source = v.id OR e.target = v.id)
 GROUP BY v.id, v.the_geom
 ```
 
-Validataion regular expression `^[\d\.\+-eE]+$`. 
+Validataion regular expression `^[\d\.\+-eE]+$`. Geometry type: Point.
 
 This is the SQL view query for shortest path in Geoserver.
 ```
@@ -181,7 +181,7 @@ ST_Collect(e.the_geom) AS geom
 FROM pgr_dijkstra('SELECT id as id, source, target, cost_s_flood as cost, reverse_cost_s_flood   as reverse_cost FROM ways WHERE ways.tag_id IN (100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 115, 116, 121, 123, 124, 125, 401)',%source%,%target%,false) AS r,ways AS e WHERE r.edge=e.id GROUP BY e.id
 ```
 
-Validataion regular expression `^[\d]+$`. 
+Validataion regular expression `^[\d]+$`. Geometry Type: Multi-Line String. 
 
 Modify the geojson endpoint in index.html
 

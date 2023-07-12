@@ -1,542 +1,462 @@
 {
-    "name": "King's Lynn",
+    "name": "Singapore",
     "groups": [
         {
-            "name": "Flood",
-            "stack": "http://localhost:8081",
+            "name": "Active Traffic Incidents",
+            "stack": "http://localhost:3838",
             "sources": [
                 {
-                    "id": "flood_active",  
+                    "id": "traffic_incident_active_accident",  
                     "type": "geojson",
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aflood_polygon_single&outputFormat=application%2Fjson"
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Accident%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_roadwork",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Roadwork%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_vehiclebreakdown",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Vehicle%20breakdown%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_weather",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Weather%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_obstacle",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Obstacle%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_roadblock",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Road%20Block%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_heavytraffic",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Heavy%20Traffic%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_misc",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Misc.%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_diversion",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Diversion%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_unattendedvehicle",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Unattended%20Vehicle%27%20AND%20status=%27t%27"
                 }
             ], 
             "layers": [
                 {
-                    "id": "flood",
-                    "name": "Active flood",
-                    "source": "flood_active",
-                    "type": "fill",
-                    "order": 1,
-                    "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "fill-color": "#0000FF",
-                        "fill-opacity": 0.4
-                    }
-                }
-            ]
-        },
-        {
-            "name": "Isochrone",
-            "stack": "http://localhost:8081",
-            "sources": [
-                {
-                    "id": "isochrone_1",  
-                    "type": "geojson",
-                    "cluster": false,
-                    "clusterMaxZoom": 14,
-                    "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_flooded&outputFormat=application%2Fjson&CQL_FILTER=minute='2'"
-                },
-                {
-                    "id": "isochrone_2",  
-                    "type": "geojson",
-                    "cluster": false,
-                    "clusterMaxZoom": 14,
-                    "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_flooded&outputFormat=application%2Fjson&CQL_FILTER=minute='4'"
-                },
-                {
-                    "id": "isochrone_3",  
-                    "type": "geojson",
-                    "cluster": false,
-                    "clusterMaxZoom": 14,
-                    "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_flooded&outputFormat=application%2Fjson&CQL_FILTER=minute='6'"
-                },
-                {
-                    "id": "isochrone_4",  
-                    "type": "geojson",
-                    "cluster": false,
-                    "clusterMaxZoom": 14,
-                    "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_flooded&outputFormat=application%2Fjson&CQL_FILTER=minute='8'"
-                },
-                {
-                    "id": "isochrone_5",  
-                    "type": "geojson",
-                    "cluster": false,
-                    "clusterMaxZoom": 14,
-                    "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_flooded&outputFormat=application%2Fjson&CQL_FILTER=minute='10'"
-                }
-                
-            ], 
-            "layers": [
-                {
-                    "id": "isochrone_1_layer",
-                    "name": "2 minutes",
-                    "source": "isochrone_1",
-                    "type": "fill",
-                    "order": 5,
-                    "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "fill-color": "#c90a0a",             
-                        "fill-outline-color": "#FF0000",
-                        "fill-opacity": 0.20
-                    }
-                },
-                {
-                    "id": "isochrone_2_layer",
-                    "name": "4 minutes",
-                    "source": "isochrone_2",
-                    "type": "fill",
-                    "order": 4,
-                    "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "fill-color": "#ff8800",             
-                        "fill-outline-color": "#000000",
-                        "fill-opacity": 0.20
-                    }
-                },
-                {
-                    "id": "isochrone_3_layer",
-                    "name": "6 minutes",
-                    "source": "isochrone_3",
-                    "type": "fill",
-                    "order": 3,
-                    "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "fill-color": "#ebc244",             
-                        "fill-outline-color": "#000000",
-                        "fill-opacity": 0.20
-                    }
-                },                
-                {
-                    "id": "isochrone_4_layer",
-                    "name": "8 minutes",
-                    "source": "isochrone_4",
-                    "type": "fill",
-                    "order": 2,
-                    "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "fill-color": "#add8e6",             
-                        "fill-outline-color": "#000000",
-                        "fill-opacity": 0.20
-                    }
-                },
-                {
-                    "id": "isochrone_5_layer",
-                    "name": "10 minutes",
-                    "source": "isochrone_5",
-                    "type": "fill",
-                    "order": 1,
-                    "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "fill-color": "#808080",             
-                        "fill-outline-color": "#000000",
-                        "fill-opacity": 0.20
-                    }
-                }
-            ]
-        },
-        {
-            "name": "Unreachable Area",
-            "stack": "http://localhost:8081",
-            "sources": [
-                {
-                    "id": "Unreachable",  
-                    "type": "geojson",
-                    "cluster": false,
-                    "clusterMaxZoom": 14,
-                    "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aunreachable&outputFormat=application%2Fjson"
-                }
-                
-            ], 
-            "layers": [
-                {
-                    "id": "Unreachable_layer",
-                    "name": "Unreachable",
-                    "source": "Unreachable",
-                    "type": "fill",
-                    "order": 5,
-                    "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "fill-color": "#FF2626",             
-                        "fill-outline-color": "#000000",
-                        "fill-opacity": 0.60
-                    }
-                }
-            ]
-        },
-        {
-            "name": "Isochrone_unflooded",
-            "stack": "http://localhost:8081",
-            "sources": [
-                {
-                    "id": "isochrone_unflooded_1",  
-                    "type": "geojson",
-                    "cluster": false,
-                    "clusterMaxZoom": 14,
-                    "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_unflooded&outputFormat=application%2Fjson&CQL_FILTER=minute='2'"
-                },
-                {
-                    "id": "isochrone_unflooded_2",  
-                    "type": "geojson",
-                    "cluster": false,
-                    "clusterMaxZoom": 14,
-                    "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_unflooded&outputFormat=application%2Fjson&CQL_FILTER=minute='4'"
-                },
-                {
-                    "id": "isochrone_unflooded_3",  
-                    "type": "geojson",
-                    "cluster": false,
-                    "clusterMaxZoom": 14,
-                    "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_unflooded&outputFormat=application%2Fjson&CQL_FILTER=minute='6'"
-                },
-                {
-                    "id": "isochrone_unflooded_4",  
-                    "type": "geojson",
-                    "cluster": false,
-                    "clusterMaxZoom": 14,
-                    "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_unflooded&outputFormat=application%2Fjson&CQL_FILTER=minute='8'"
-                },
-                {
-                    "id": "isochrone_unflooded_5",  
-                    "type": "geojson",
-                    "cluster": false,
-                    "clusterMaxZoom": 14,
-                    "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Aisochrone_unflooded&outputFormat=application%2Fjson&CQL_FILTER=minute='10'"
-                }
-                
-            ], 
-            "layers": [
-                {
-                    "id": "isochrone_unflooded_1_layer",
-                    "name": "2 minutes",
-                    "source": "isochrone_unflooded_1",
-                    "type": "fill",
-                    "order": 5,
-                    "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "fill-color": "#c90a0a",             
-                        "fill-outline-color": "#000000",
-                        "fill-opacity": 0.20
-                    }
-                },
-                {
-                    "id": "isochrone_unflooded_2_layer",
-                    "name": "4 minutes",
-                    "source": "isochrone_unflooded_2",
-                    "type": "fill",
-                    "order": 4,
-                    "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "fill-color": "#ff8800",             
-                        "fill-outline-color": "#000000",
-                        "fill-opacity": 0.20
-                    }
-                },
-                {
-                    "id": "isochrone_unflooded_3_layer",
-                    "name": "6 minutes",
-                    "source": "isochrone_unflooded_3",
-                    "type": "fill",
-                    "order": 3,
-                    "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "fill-color": "#ebc244",             
-                        "fill-outline-color": "#000000",
-                        "fill-opacity": 0.20
-                    }
-                },                
-                {
-                    "id": "isochrone_unflooded_4_layer",
-                    "name": "8 minutes",
-                    "source": "isochrone_unflooded_4",
-                    "type": "fill",
-                    "order": 2,
-                    "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "fill-color": "#add8e6",             
-                        "fill-outline-color": "#000000",
-                        "fill-opacity": 0.20
-                    }
-                },
-                {
-                    "id": "isochrone_unflooded_5_layer",
-                    "name": "10 minutes",
-                    "source": "isochrone_unflooded_5",
-                    "type": "fill",
-                    "order": 1,
-                    "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "fill-color": "#808080",             
-                        "fill-outline-color": "#000000",
-                        "fill-opacity": 0.20
-                    }
-                }
-            ]
-        },
-        {
-            "name": "Travelling Salesman Problem",
-            "stack": "http://localhost:8081",
-            "sources": [
-                {
-                    "id": "tsp",  
-                    "type": "geojson",
-                    "cluster": false,
-                    "clusterMaxZoom": 14,
-                    "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Atsp&outputFormat=application%2Fjson"
-                },
-                {
-                    "id": "tspNodes",  
-                    "type": "geojson",
-                    "cluster": false,
-                    "clusterMaxZoom": 14,
-                    "clusterRadius": 100,
-                    "data": "http://localhost:8081/geoserver/routing/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=routing%3Atsp_nodes_kingslynn&maxFeatures=50&outputFormat=application%2Fjson"
-                }
-            ], 
-            "layers": [
-                {
-                    "id": "tsp_layer",
-                    "name": "TSP Route",
-                    "source": "tsp",
-                    "type": "line",
-                    "order": 50,
-                    "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "line-color": "#FF0000",
-                        "line-width": 3
-                    }
-                },
-                {
-                    "id": "tspNodeLayer",
-                    "name": "Richest House in King's Lynn",
-                    "source": "tspNodes",
+                    "id": "active_accidents",
+                    "name": "Active Accidents",
+                    "source": "traffic_incident_active_accident",
                     "type": "symbol",
-                    "order": 50,
+                    "order": 1,
                     "layout": {
-                        "icon-image": "marker",
-                        "icon-size": 0.035,
-                        "text-field": ["get", "seq"], 
-                        "text-size": 20,
-                        "text-anchor": "center"
-
-                    },
-                    "paint":{
-                        "text-color":"#808080"
+                        "visibility": "visible",
+                        "icon-image": "traffic-accident",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.055]
+                    }
+                },
+                {
+                    "id": "active_road_works",
+                    "name": "Active Road Works",
+                    "source": "traffic_incident_active_roadwork",
+                    "type": "symbol",
+                    "order": 2,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-road-work",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                    }
+                },
+                {
+                    "id": "active_vehicle_breakdowns",
+                    "name": "Active Vehicle Breakdowns",
+                    "source": "traffic_incident_active_vehiclebreakdown",
+                    "type": "symbol",
+                    "order": 3,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-vehicle-breakdown",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.16]
+                    }
+                },
+                {
+                    "id": "active_weathers",
+                    "name": "Active Weather",
+                    "source": "traffic_incident_active_weather",
+                    "type": "symbol",
+                    "order": 4,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-weather",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                    }
+                },
+                {
+                    "id": "active_road_obstacle",
+                    "name": "Active Road Obstacles",
+                    "source": "traffic_incident_active_obstacle",
+                    "type": "symbol",
+                    "order": 5,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-obstacle",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.4]
+                    }
+                },
+                {
+                    "id": "active_road_block",
+                    "name": "Active Road Blocks",
+                    "source": "traffic_incident_active_roadblock",
+                    "type": "symbol",
+                    "order": 6,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-road-block",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.03]
+                    }
+                },
+                {
+                    "id": "active_heavy_traffic",
+                    "name": "Active heavy traffic",
+                    "source": "traffic_incident_active_heavytraffic",
+                    "type": "symbol",
+                    "order": 7,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-heavy-traffic",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.075]
+                    }
+                },
+                {
+                    "id": "active_misc.",
+                    "name": "Active Misc.",
+                    "source": "traffic_incident_active_misc",
+                    "type": "symbol",
+                    "order": 8,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-misc",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.4]
+                    }
+                },
+                {
+                    "id": "active_diversion",
+                    "name": "Active Diversion",
+                    "source": "traffic_incident_active_diversion",
+                    "type": "symbol",
+                    "order": 9,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-diversion",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.05]
+                    }
+                },
+                {
+                    "id": "active_unattended_vehicle",
+                    "name": "Active Unattended Vehicle",
+                    "source": "traffic_incident_active_unattendedvehicle",
+                    "type": "symbol",
+                    "order": 10,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-unattended-vehicle",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
                     }
                 }
+
             ]
         },
         {
-            "name": "Buildings",
-            "stack": "http://165.232.172.16:3838",
+            "name": "All Traffic Incidents (including past and present)",
+            "stack": "http://localhost:3838",
             "sources": [
                 {
-                    "id": "area-of-interest",
+                    "id": "traffic_incident_all_accident",  
                     "type": "geojson",
-                    "data": "data/aoi.geojson", 
-                    "generateId": true
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Accident%27"
                 },
                 {
-                    "id": "ocgml_buildings",
+                    "id": "traffic_incident_all_roadwork",  
                     "type": "geojson",
-                    "data": "data/buildings/os_bha_buildings.geojson"
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Roadwork%27"
                 },
                 {
-                    "id": "obe_buildings",  
-                    "type": "vector",
-                    "tiles": [
-                        "http://165.232.172.16:3838/geoserver/ows?service=WMS&version=1.1.0&request=GetMap&layers=kingslynn:buildings&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=application/vnd.mapbox-vector-tile"
-                    ]
+                    "id": "traffic_incident_all_vehiclebreakdown",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Vehicle%20breakdown%27"
                 },
                 {
-                    "id": "building_sales",  
-                    "type": "vector",
-                    "tiles": [
-                        "http://165.232.172.16:3838/geoserver/ows?service=WMS&version=1.1.0&request=GetMap&layers=kingslynn:transactions&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=application/vnd.mapbox-vector-tile"
-                    ]
+                    "id": "traffic_incident_all_weather",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Weather%27"
                 },
                 {
-                    "id": "building_values",  
-                    "type": "vector",
-                    "tiles": [
-                        "http://165.232.172.16:3838/geoserver/ows?service=WMS&version=1.1.0&request=GetMap&layers=kingslynn:marketvalues&bbox={bbox-epsg-3857}&width=256&height=256&srs=EPSG:3857&format=application/vnd.mapbox-vector-tile"
-                    ]
+                    "id": "traffic_incident_all_obstacle",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Obstacle%27"
+                },
+                {
+                    "id": "traffic_incident_all_roadblock",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Road%20Block%27"
+                },
+                {
+                    "id": "traffic_incident_all_heavytraffic",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Heavy%20Traffic%27"
+                },
+                {
+                    "id": "traffic_incident_all_misc",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Misc.%27"
+                },
+                {
+                    "id": "traffic_incident_all_diversion",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Diversion%27"
+                },
+                {
+                    "id": "traffic_incident_all_unattendedvehicle",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://localhost:3838/geoserver/the_world_avatar/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar%3Atraffic_incident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Unattended%20Vehicle%27"
                 }
             ], 
             "layers": [
                 {
-                    "id": "buildings-layer-value",
-                    "name": "Property Value Estimates",
-                    "source": "building_values",
-                    "source-layer": "marketvalues",
-                    "type": "fill-extrusion",
-                    "minzoom": 8, 
-                    "order": 23,
+                    "id": "all_accidents",
+                    "name": "All Accidents",
+                    "source": "traffic_incident_all_accident",
+                    "type": "symbol",
+                    "order": 1,
                     "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "fill-extrusion-color": [
-                            "case", 
-                            ["==", ["get", "price"], null], "#000000", [
-                            "interpolate", ["linear"],
-                            ["number", ["get", "price"]],
-                            50000, "#0769AD",
-                            1200000, "#AD0202"
-                        ]],
-                        "fill-extrusion-opacity": 0.8,
-                        "fill-extrusion-base": 0,
-                        "fill-extrusion-height": [
-                            "case",
-                            ["has", "building height"],
-                            ["*", 1.4, ["to-number", ["get", "building height"]]],
-                            8
-                        ]
+                        "visibility": "visible",
+                        "icon-image": "traffic-accident",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.055]
                     }
                 },
                 {
-                    "id": "buildings-layer-sales",
-                    "name": "Actual Property Sales",
-                    "source": "building_sales",
-                    "source-layer": "transactions",
-                    "type": "fill-extrusion",
-                    "minzoom": 8, 
-                    "order": 22,
+                    "id": "all_road_works",
+                    "name": "All Road Works",
+                    "source": "traffic_incident_all_roadwork",
+                    "type": "symbol",
+                    "order": 2,
                     "layout": {
-                        "visibility": "none"
-                    },
-                    "paint": {
-                        "fill-extrusion-color": [
-                            "case", 
-                            ["==", ["get", "price"], null], "#000000", [
-                            "interpolate", ["linear"],
-                            ["number", ["get", "price"]],
-                            50000, "#0769AD",
-                            1200000, "#AD0202"
-                        ]],
-                        "fill-extrusion-opacity": 0.8,
-                        "fill-extrusion-base": 0,
-                        "fill-extrusion-height": [
-                            "case",
-                            ["has", "building height"],
-                            ["*", 1.4, ["to-number", ["get", "building height"]]],
-                            8
-                        ]
+                        "visibility": "visible",
+                        "icon-image": "traffic-road-work",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
                     }
                 },
                 {
-                    "id": "obe_buildings-layer-usage",
-                    "name": "Buildings with usage information",
-                    "source": "obe_buildings",
-                    "source-layer": "buildings",
-                    "type": "fill-extrusion",
-                    "minzoom": 8, 
-                    "order": 21,
+                    "id": "all_vehicle_breakdowns",
+                    "name": "All Vehicle Breakdowns",
+                    "source": "traffic_incident_all_vehiclebreakdown",
+                    "type": "symbol",
+                    "order": 3,
                     "layout": {
-                        "visibility": "none"
-                    },
-                    "paint": {
-                        "fill-extrusion-color": [
-                            "match",
-                            ["get", "primary_usage_category"],
-                            "https://www.theworldavatar.com/kg/ontobuiltenv/Domestic", "#808080",
-                            "https://www.theworldavatar.com/kg/ontobuiltenv/EmergencyServices", "#D62728",
-                            "https://www.theworldavatar.com/kg/ontobuiltenv/MedicalCare", "#FF7F0E",
-                            "https://www.theworldavatar.com/kg/ontobuiltenv/Education", "#2CA02C",
-                            "https://www.theworldavatar.com/kg/ontobuiltenv/Non-Domestic", "#1F77B4",
-                            "#808080"
-                          ],
-                        "fill-extrusion-opacity": 0.8,
-                        "fill-extrusion-base": 0,
-                        "fill-extrusion-height": [
-                            "case",
-                            ["has", "building height"],
-                            ["*", 1.4, ["to-number", ["get", "building height"]]],
-                            8
-                        ]
+                        "visibility": "visible",
+                        "icon-image": "traffic-vehicle-breakdown",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.16]
                     }
                 },
                 {
-                    "id": "ocgml_buildings-layer",
-                    "name": "OS BHA Buildings (i.e. buildings without EPC information)",
-                    "source": "ocgml_buildings",
-                    "type": "fill-extrusion",
-                    "minzoom": 8, 
-                    "order": 20,
+                    "id": "all_weathers",
+                    "name": "All Weather",
+                    "source": "traffic_incident_all_weather",
+                    "type": "symbol",
+                    "order": 4,
                     "layout": {
-                        "visibility": "none"
-                    },
-                    "paint": {
-                        "fill-extrusion-color": "#303030",
-                        "fill-extrusion-opacity": 0.4,
-                        "fill-extrusion-base": 0,
-                        "fill-extrusion-height": [
-                            "case",
-                            ["has", "fill-extrusion-height"],
-                            ["to-number", ["get", "fill-extrusion-height"]],
-                            8
-                        ]
+                        "visibility": "visible",
+                        "icon-image": "traffic-weather",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
                     }
                 },
                 {
-                    "id": "aoi-layer",
-                    "name": "This layer is the area of interest, i.e. greater King's Lynn area", 
-                    "source": "area-of-interest",
-                    "type": "circle",
-                    "treeable": false,
-                    "maxzoom": 10,
-                    "order": 0,
+                    "id": "all_road_obstacle",
+                    "name": "All Road Obstacles",
+                    "source": "traffic_incident_all_obstacle",
+                    "type": "symbol",
+                    "order": 5,
                     "layout": {
-                        "visibility": "visible"
-                    },
-                    "paint": {
-                        "circle-radius": ["interpolate", ["linear"], ["zoom"], 4, 25, 8, 100],
-                        "circle-opacity": 0.15,
-                        "circle-color": "#000000",
-                        "circle-stroke-width": 0
+                        "visibility": "visible",
+                        "icon-image": "traffic-obstacle",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.4]
+                    }
+                },
+                {
+                    "id": "all_road_block",
+                    "name": "All Road Blocks",
+                    "source": "traffic_incident_all_roadblock",
+                    "type": "symbol",
+                    "order": 6,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-road-block",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.03]
+                    }
+                },
+                {
+                    "id": "all_heavy_traffic",
+                    "name": "All heavy traffic",
+                    "source": "traffic_incident_all_heavytraffic",
+                    "type": "symbol",
+                    "order": 7,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-heavy-traffic",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.075]
+                    }
+                },
+                {
+                    "id": "all_misc.",
+                    "name": "All Misc.",
+                    "source": "traffic_incident_all_misc",
+                    "type": "symbol",
+                    "order": 8,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-misc",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.4]
+                    }
+                },
+                {
+                    "id": "all_diversion",
+                    "name": "All Diversion",
+                    "source": "traffic_incident_all_diversion",
+                    "type": "symbol",
+                    "order": 9,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-diversion",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.05]
+                    }
+                },
+                {
+                    "id": "all_unattended_vehicle",
+                    "name": "All Unattended Vehicle",
+                    "source": "traffic_incident_all_unattendedvehicle",
+                    "type": "symbol",
+                    "order": 10,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-unattended-vehicle",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
                     }
                 }
+
             ]
         },
         {

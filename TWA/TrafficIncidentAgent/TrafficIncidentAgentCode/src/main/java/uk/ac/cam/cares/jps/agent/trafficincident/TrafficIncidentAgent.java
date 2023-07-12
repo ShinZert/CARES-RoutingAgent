@@ -41,6 +41,7 @@ public class TrafficIncidentAgent extends TimerTask {
     public static final String POSTGRES_INITIALIZATION_ERROR_MSG = "Error when initializing the Postgres";
     public static final String SQL_UPDATE_ERROR_MSG = "Fail to update the record";
     public static final String SQL_INITIALIZE_ERROR_MSG = "Fail to create table in Postgres database";
+    public static final String SQL_CTEATE_VIEW_ERROR_MSG = "Fail to create view in Postgres database";
 
     public static final ZoneOffset offset= ZoneOffset.UTC;
     long timestamp = System.currentTimeMillis();
@@ -156,6 +157,7 @@ public class TrafficIncidentAgent extends TimerTask {
             }
         }
         LOGGER.info("Above is/are ended traffic incidents.");
+        this.createOrReplaceView();
         disconnect();
         return jsonMessage;
     }
@@ -313,6 +315,23 @@ public class TrafficIncidentAgent extends TimerTask {
             statement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(SQL_UPDATE_ERROR_MSG, e);
+            throw new JPSRuntimeException(e.getMessage());
+        }
+    }
+
+    /**
+     * Creates view for routing purpose
+     */
+    public void createOrReplaceView() {
+        String create_tice_view_sqlString = "CREATE OR REPLACE VIEW traffic_incident_closest_edge AS SELECT ti.status, ( SELECT edge_id FROM pgr_findCloseEdges($$SELECT gid AS id, the_geom as geom FROM public.routing_ways$$, (SELECT ti.geom), 0.5, partial => false) LIMIT 1 ) AS closest_edge FROM traffic_incident ti;";
+        String create_tic_view_sqlString = "CREATE OR REPLACE VIEW traffic_incident_cost AS SELECT rw.gid AS id, rw.source, rw.target, CASE WHEN (tice.closest_edge IS NOT NULL AND tice.status = 't') THEN -abs(rw.cost) ELSE rw.cost END AS cost, CASE WHEN (tice.closest_edge IS NOT NULL AND tice.status = 't') THEN -abs(rw.reverse_cost) ELSE rw.reverse_cost END AS reverse_cost FROM routing_ways rw LEFT JOIN traffic_incident_closest_edge tice ON rw.gid = tice.closest_edge";
+        try {
+            PreparedStatement statement = this.conn.prepareStatement(create_tice_view_sqlString);
+            statement.execute();
+            statement = this.conn.prepareStatement(create_tic_view_sqlString);
+            statement.execute();
+        } catch (SQLException e) {
+            LOGGER.error(SQL_CTEATE_VIEW_ERROR_MSG, e);
             throw new JPSRuntimeException(e.getMessage());
         }
     }

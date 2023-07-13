@@ -19,7 +19,7 @@ import org.jooq.SQLDialect;
 import org.jooq.Table;
 
 public class TrafficIncidentPostgresAgent {
-    private final Logger LOGGER = LogManager.getLogger(TrafficIncidentAgent.class);
+    private final Logger LOGGER = LogManager.getLogger(TrafficIncidentPostgresAgent.class);
 
     public static final String SQL_UPDATE_ERROR_MSG = "Fail to update the record";
     public static final String SQL_INITIALIZE_ERROR_MSG = "Fail to create table in Postgres database";
@@ -75,13 +75,13 @@ public class TrafficIncidentPostgresAgent {
         String alterTableSql = "ALTER TABLE " + this.tableName + " ADD COLUMN IF NOT EXISTS geom GEOMETRY(point, 4326)";
         try {
             PreparedStatement statement = this.conn.prepareStatement(createTableSql);
-            LOGGER.debug(statement);
+            // LOGGER.debug(statement);
             statement.execute();
             statement = this.conn.prepareStatement(enablePostgisSQL);
-            LOGGER.debug(statement);
+            // LOGGER.debug(statement);
             statement.execute();
             statement = this.conn.prepareStatement(alterTableSql);
-            LOGGER.debug(statement);
+            // LOGGER.debug(statement);
             statement.execute();
         } catch (SQLException e) {
             LOGGER.error(SQL_INITIALIZE_ERROR_MSG, e);
@@ -145,7 +145,7 @@ public class TrafficIncidentPostgresAgent {
             statement.setLong(4, trafficIncident.startTime);
             statement.setDouble(5, trafficIncident.latitude);
             statement.setDouble(6, trafficIncident.longitude);
-            LOGGER.debug(statement);
+            // LOGGER.debug(statement);
             int rowAffected = statement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(SQL_UPDATE_ERROR_MSG, e);

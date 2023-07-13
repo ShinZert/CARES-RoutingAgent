@@ -2,29 +2,19 @@ package uk.ac.cam.cares.jps.agent.trafficincident;
 
 import uk.ac.cam.cares.jps.base.exception.JPSRuntimeException;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.time.OffsetDateTime;
-import java.time.Year;
-import java.time.ZoneOffset;
 import java.util.HashSet;
-import java.util.TimerTask;
 
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.impl.DSL;
 import org.jooq.InsertValuesStepN;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.jooq.SQLDialect;
 import org.jooq.Table;
 

@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
 
+// curl <IP_ADDRESS>/traffic-incident-agent/start
 @WebServlet(urlPatterns = {"/start"})
 public class TrafficIncidentAgentLauncher extends JPSAgent {
     @Override

@@ -1,5 +1,7 @@
 package uk.ac.cam.cares.jps.agent.trafficincident;
 
+import uk.ac.cam.cares.jps.base.exception.JPSRuntimeException;
+
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -10,15 +12,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
-import uk.ac.cam.cares.jps.base.exception.JPSRuntimeException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
-
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Properties;
 
-import javax.print.attribute.standard.JobHoldUntil;
 
 public class APIConnector {
     private String API_URL;

@@ -26,7 +26,7 @@ public class APIConnector {
     private String accountKey;
 
     public static final String ERROR_MSG = "APIConnector failed while retrieving readings.";
-    public static final Logger logger = LogManager.getLogger(TrafficIncidentAgent.class);
+    public static final Logger LOGGER = LogManager.getLogger(APIConnector.class);
 
     public APIConnector(String URL, String date, String key) {
         this.API_URL = URL;
@@ -65,8 +65,8 @@ public class APIConnector {
         try {
             return retrieveData();
         } catch (IOException e) {
-            logger.error(ERROR_MSG);
-            throw new JPSRuntimeException(ERROR_MSG, e);
+            LOGGER.error(ERROR_MSG);
+            return new JSONObject();
         }
     }
 

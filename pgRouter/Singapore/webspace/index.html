@@ -13,7 +13,8 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" ></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.0/chartjs-adapter-moment.js"></script>
-        <script src="https://kg.cmclinnovations.com/cdn/dtvf/3.3.4/dtvf.min.js" charset="UTF-8"></script>
+        <!-- <script src="https://kg.cmclinnovations.com/cdn/dtvf/3.3.4/dtvf.min.js" charset="UTF-8"></script> -->
+        <script src="./dtvf.min.js" charset="UTF-8"></script>
 
 
         <!-- ===== CUSTOMISABLE ===== -->
@@ -23,7 +24,8 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/gh/hummingbird-dev/hummingbird-treeview@v3.0.4/hummingbird-treeview.min.css" rel="stylesheet">
         <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet">
-        <link href="https://kg.cmclinnovations.com/cdn/dtvf/3.3.4/dtvf.min.css" rel="stylesheet" />
+        <!-- <link href="https://kg.cmclinnovations.com/cdn/dtvf/3.3.4/dtvf.min.css" rel="stylesheet" /> -->
+        <link href="./dtvf.min.css" rel="stylesheet" />
 
         <!-- ===== CUSTOMISABLE ===== -->
         <!-- CSS files to provide styling specifically for this visualisation instance can go here. -->
@@ -247,7 +249,7 @@
                 var sourceMarker = new mapboxgl.Marker({
                         draggable: true
                     })
-                    .setLngLat([103.82095850,1.305797])
+                    .setLngLat([103.77447911565685,1.3035325319741924])
                     .addTo(MapHandler.MAP);
 
                 sourceMarker.on("dragend", function(e) {
@@ -260,7 +262,7 @@
                 var targetMarker = new mapboxgl.Marker({
                         draggable: true
                     })
-                    .setLngLat([103.820958,1.30579750])
+                    .setLngLat([103.77772313487918,1.3294418157489385])
                     .addTo(MapHandler.MAP);
 
                 targetMarker.on("dragend", function(e) {
@@ -272,7 +274,7 @@
 
                 // function to get nearest vertex to the passed point
                 function getVertex(selectedPoint) {
-                    var url = `http://localhost:3838/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore:nearest_vertex&outputformat=application/json&viewparams=lon:${selectedPoint.lng};lat:${selectedPoint.lat};`;
+                    var url = `http://174.138.31.224:3838/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore:routing_ways_vertices_pgr&outputformat=application/json&viewparams=lon:${selectedPoint.lng};lat:${selectedPoint.lat};`;
 
                     $.ajax({
                         url: url,
@@ -299,7 +301,7 @@
                 // // function to get the shortest path from the give source and target nodes
                 function getRoute() {
 
-                    var url = `http://localhost:3838/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore:shortest_paths&outputformat=application/json&viewparams=source:${source};target:${target};`;
+                    var url = `http://174.138.31.224:3838/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore:routing_pointsofinterest&outputformat=application/json&viewparams=source:${source};target:${target};`;
                     removeLayer();
                     // Retrieve the GeoJSON data from the URL
                     fetch(url)

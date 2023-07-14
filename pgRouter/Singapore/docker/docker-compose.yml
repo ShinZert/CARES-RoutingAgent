@@ -8,6 +8,6 @@ services:
     image: ghcr.io/cambridge-cares/dtvf-base-image:latest
     container_name: "singapore-dtvf"
     ports:
-      - "80:80"
+      - "9090:80"
     volumes:
       - ../webspace:/var/www/html

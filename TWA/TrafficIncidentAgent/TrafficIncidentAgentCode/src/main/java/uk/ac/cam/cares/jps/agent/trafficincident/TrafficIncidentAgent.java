@@ -99,9 +99,9 @@ public class TrafficIncidentAgent extends TimerTask {
             Double longitude = (Double) currentEntry.get("Longitude");
             String incidentType = (String) currentEntry.get("Type");
             String message = (String) currentEntry.get("Message");
-            timestamp = TrafficIncidentAgent.parseMessageStringToTimestamp(message);
+            Long ts = TrafficIncidentAgent.parseMessageStringToTimestamp(message);
             TrafficIncident curr = new TrafficIncident(incidentType, latitude, 
-                longitude, message, timestamp, true);
+                longitude, message, ts, true);
             this.newTrafficIncidentSet.add(curr);
             // only update when the traffic incident not present
             if (!this.ongoingTrafficIncidentSet.contains(curr)) {

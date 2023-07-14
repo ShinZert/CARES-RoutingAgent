@@ -1,6 +1,6 @@
 # Traffic Incident Agent
 
-This agent downloads real-time traffic-incident data from [http://datamall2.mytransport.sg/ltaodataservice/TrafficIncidents](http://datamall2.mytransport.sg/ltaodataservice/TrafficIncidents), processes data to wanted format, and stores them in Postgre database in the stack.
+This agent downloads almost-real-time traffic-incident data from [http://datamall2.mytransport.sg/ltaodataservice/TrafficIncidents](http://datamall2.mytransport.sg/ltaodataservice/TrafficIncidents), processes data to wanted format, and stores them in Postgre database in the stack.
 
 ## Set up
 
@@ -16,7 +16,7 @@ credentials/
 
 `repo_username.txt` should contain your GitHub username, and `repo_password.txt` contains your GitHub [personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token), which must have a 'scope' that [allows you to publish and install packages](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#authenticating-to-github-packages).
 
-In the same folder, you will also need to have an `api_key.txt` which can be obtained by registering from [Land Transport Data Mall](https://datamall.lta.gov.sg/content/datamall/en/request-for-api.html). Remember to copy the API key to the `config/api.properties` to ensure the data can be correctly retrieved and remember not to publish your key on GitHub.
+In the same folder, you will also need to have an `api_key.txt` which can be obtained by registering from [Land Transport Data Mall](https://datamall.lta.gov.sg/content/datamall/en/request-for-api.html). The `api_key.txt` file is not directly used, but remember to copy the API key to the `config/api.properties` to ensure the data can be correctly retrieved. The `api_key` is ended with `==` and do not get it confused with Account Key.
 
 You also need to have a copy of your credentials in single-word text files located like below:
 
@@ -29,14 +29,16 @@ docker/
 
 ## IMPORTANT
 
-Due to compatibility issues, the `./stack.sh` and `./docker/entrypoint.sh` must be using `LF` instead of `CRLF` in order to run the agent properly. Otherwise, you may encounter the issue of `exec ./entrypoint.sh not found`.
+Due to compatibility issues, the `./stack.sh` and `./docker/entrypoint.sh` **must** be using `LF` instead of `CRLF` in order to run the agent properly. Otherwise, you may encounter the issue of `exec ./entrypoint.sh not found`.
 
 ## Build and running
 
-This agent is designed to work with a stack from CMCL. Refer to [this link](https://github.com/cambridge-cares/TheWorldAvatar/tree/main/Deploy/stacks/dynamic/stack-manager) to find out how to set up a stack. After running the command `./stack.sh build` and then `./stack.sh start <STACK NAME>` at the folder same as the link, you should be able to see a container named as `<STACK NAME>` as you specified earlier. Now you can proceed to build the image here and start it as a service by running the same two commands, but at the current folder.
+This agent is designed to work with a stack from CMCL. Refer to [this link](https://github.com/cambridge-cares/TheWorldAvatar/tree/main/Deploy/stacks/dynamic/stack-manager) to find out how to set up a stack.
 
-While you have the container running, you do not need to create any database or table as it is already automated. The PostGIS extension is also automatically enabled. You can view the data in stack. By opening the Adminer (PostgreSQL GUI) at http://localhost:3838/adminer/ui/?username=postgres&pgsql=. Enter `<STACK NAME>-postgis:5432` as the Server and the value from the postgis_password file as the Password. The Database slot is the default `postgres` and the table is named as `TrafficIncident`. The table should include `starttime:bigint`, `endtime:bigint`, `type:character varing`, `message:character varying`, `latitude:double precision`, `longitude:double precision`, `location: geography NULL`, `status:Boolean`.
+After running the command `./stack.sh build` and then `./stack.sh start <STACK NAME>` at the folder same as the link, you should be able to see a container named as `<STACK NAME>` as you specified earlier. Now you can proceed to build the image here and start it as a service by running the same two commands, but at the current folder.
 
-After having the container running and setting up the table as described, you can run `curl -X POST http://localhost:1016/traffic-incident-agent/retrieve` which would achieve the same effect. Or you can send a `POST` query with url `http://localhost:1016/traffic-incident-agent/retrieve` to get the agent running and deposit values into Postgres.One of the recommended ways is to work with Postman and build a query from there.
+While you have the container running, you do not need to create any database or table as it is already automated. The PostGIS extension is also automatically enabled. You can view the data in stack. By opening the Adminer (PostgreSQL GUI) at http://localhost:3838/adminer/ui/?username=postgres&pgsql=. Enter `<STACK NAME>-postgis:5432` as the Server and the value from the postgis_password file as the Password. The Database slot is the default `postgres` and the table is named as `traffic_incident`. The table should include `iri:character varying`, `start_time:bigint`, `end_time:bigint`, `type:character varing`, `message:character varying`, `latitude:double precision`, `longitude:double precision`, `location: geography NULL`, `status:Boolean`.
 
-The modeling of the Traffic Incidents is achieved by maintaining a time interval to track the start and end time of the incident. When the incident first appears, the end time field will be left as 0 and only gets updated when the incident is not appearing in the newly queried result. Hence, the accuracy of data needs to be maintained via having regular call of the query.
+After having the container running and setting up the table as described, you can run `curl http://localhost:1016/traffic-incident-agent/start` in order to activate the agent. The agent will then extract traffic incident data and store it into Postgres every two minutes. Or you can use Postman to send a query with url `http://localhost:1016/traffic-incident-agent/start` to achieve the same effect.
+
+When the incident no longer appears in the new incidents extracted, it will be marked as complete (status false) in Postgres and its endtime updated to the time when it no longer appears.

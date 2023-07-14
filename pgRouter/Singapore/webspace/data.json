@@ -1,9 +1,9 @@
 {
-    "name": "King's Lynn",
+    "name": "Singapore",
     "groups": [
         {
             "name": "Road",
-            "stack": "http://localhost:8081",
+            "stack": "http://174.138.31.224:8081",
             "sources": [
                 {
                     "id": "road",  
@@ -11,7 +11,7 @@
                     "cluster": false,
                     "clusterMaxZoom": 14,
                     "clusterRadius": 100,
-                    "data": "http://localhost:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3Aroaddisplay&outputFormat=application%2Fjson"
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3Arouting_ways&outputFormat=application%2Fjson"
                 }
             ], 
             "layers": [
@@ -20,7 +20,7 @@
                     "name": "Road",
                     "source": "road",
                     "type": "line",
-                    "order": 50,
+                    "order": 100,
                     "layout": {
                         "visibility": "visible"
                     },
@@ -31,6 +31,463 @@
 
                     }
                 }
+            ]
+        },{
+            "name": "Active Traffic Incidents",
+            "stack": "http://174.138.31.224:3838",
+            "sources": [
+                {
+                    "id": "traffic_incident_active_accident",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Accident%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_roadwork",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Roadwork%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_vehiclebreakdown",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Vehicle%20breakdown%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_weather",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Weather%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_obstacle",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Obstacle%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_roadblock",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Road%20Block%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_heavytraffic",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Heavy%20Traffic%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_misc",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Misc.%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_diversion",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Diversion%27%20AND%20status=%27t%27"
+                },
+                {
+                    "id": "traffic_incident_active_unattendedvehicle",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Unattended%20Vehicle%27%20AND%20status=%27t%27"
+                }
+            ], 
+            "layers": [
+                {
+                    "id": "active_accidents",
+                    "name": "Active Accidents",
+                    "source": "traffic_incident_active_accident",
+                    "type": "symbol",
+                    "order": 2,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-accident",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.11]
+                    }
+                },
+                {
+                    "id": "active_road_works",
+                    "name": "Active Road Works",
+                    "source": "traffic_incident_active_roadwork",
+                    "type": "symbol",
+                    "order": 3,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-road-work",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                    }
+                },
+                {
+                    "id": "active_vehicle_breakdowns",
+                    "name": "Active Vehicle Breakdowns",
+                    "source": "traffic_incident_active_vehiclebreakdown",
+                    "type": "symbol",
+                    "order": 3,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-vehicle-breakdown",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.16]
+                    }
+                },
+                {
+                    "id": "active_weathers",
+                    "name": "Active Weather",
+                    "source": "traffic_incident_active_weather",
+                    "type": "symbol",
+                    "order": 4,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-weather",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                    }
+                },
+                {
+                    "id": "active_road_obstacle",
+                    "name": "Active Road Obstacles",
+                    "source": "traffic_incident_active_obstacle",
+                    "type": "symbol",
+                    "order": 5,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-obstacle",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.4]
+                    }
+                },
+                {
+                    "id": "active_road_block",
+                    "name": "Active Road Blocks",
+                    "source": "traffic_incident_active_roadblock",
+                    "type": "symbol",
+                    "order": 6,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-road-block",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.03]
+                    }
+                },
+                {
+                    "id": "active_heavy_traffic",
+                    "name": "Active heavy traffic",
+                    "source": "traffic_incident_active_heavytraffic",
+                    "type": "symbol",
+                    "order": 7,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-heavy-traffic",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.075]
+                    }
+                },
+                {
+                    "id": "active_misc.",
+                    "name": "Active Misc.",
+                    "source": "traffic_incident_active_misc",
+                    "type": "symbol",
+                    "order": 8,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "misc",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                    }
+                },
+                {
+                    "id": "active_diversion",
+                    "name": "Active Diversion",
+                    "source": "traffic_incident_active_diversion",
+                    "type": "symbol",
+                    "order": 9,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "diversion",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                    }
+                },
+                {
+                    "id": "active_unattended_vehicle",
+                    "name": "Active Unattended Vehicle",
+                    "source": "traffic_incident_active_unattendedvehicle",
+                    "type": "symbol",
+                    "order": 10,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "unattended_vehicle",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                    }
+                }
+
+            ]
+        },
+        {
+            "name": "All Traffic Incidents (including past and present)",
+            "stack": "http://174.138.31.224:3838",
+            "sources": [
+                {
+                    "id": "traffic_incident_all_accident",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Accident%27"
+                },
+                {
+                    "id": "traffic_incident_all_roadwork",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Roadwork%27"
+                },
+                {
+                    "id": "traffic_incident_all_vehiclebreakdown",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Vehicle%20breakdown%27"
+                },
+                {
+                    "id": "traffic_incident_all_weather",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Weather%27"
+                },
+                {
+                    "id": "traffic_incident_all_obstacle",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Obstacle%27"
+                },
+                {
+                    "id": "traffic_incident_all_roadblock",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Road%20Block%27"
+                },
+                {
+                    "id": "traffic_incident_all_heavytraffic",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Heavy%20Traffic%27"
+                },
+                {
+                    "id": "traffic_incident_all_misc",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Misc.%27"
+                },
+                {
+                    "id": "traffic_incident_all_diversion",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Diversion%27"
+                },
+                {
+                    "id": "traffic_incident_all_unattendedvehicle",  
+                    "type": "geojson",
+                    "cluster": false,
+                    "clusterMaxZoom": 14,
+                    "clusterRadius": 100,
+                    "data": "http://174.138.31.224:3838/geoserver/singapore/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore%3ATrafficIncident&outputFormat=application%2Fjson&CQL_FILTER=type=%27Unattended%20Vehicle%27"
+                }
+            ], 
+            "layers": [
+                {
+                    "id": "all_accidents",
+                    "name": "All Accidents",
+                    "source": "traffic_incident_all_accident",
+                    "type": "symbol",
+                    "order": 1,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-accident",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.11]
+                    }
+                },
+                {
+                    "id": "all_road_works",
+                    "name": "All Road Works",
+                    "source": "traffic_incident_all_roadwork",
+                    "type": "symbol",
+                    "order": 2,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-road-work",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                    }
+                },
+                {
+                    "id": "all_vehicle_breakdowns",
+                    "name": "All Vehicle Breakdowns",
+                    "source": "traffic_incident_all_vehiclebreakdown",
+                    "type": "symbol",
+                    "order": 3,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-vehicle-breakdown",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.16]
+                    }
+                },
+                {
+                    "id": "all_weathers",
+                    "name": "All Weather",
+                    "source": "traffic_incident_all_weather",
+                    "type": "symbol",
+                    "order": 4,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-weather",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                    }
+                },
+                {
+                    "id": "all_road_obstacle",
+                    "name": "All Road Obstacles",
+                    "source": "traffic_incident_all_obstacle",
+                    "type": "symbol",
+                    "order": 5,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-obstacle",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.4]
+                    }
+                },
+                {
+                    "id": "all_road_block",
+                    "name": "All Road Blocks",
+                    "source": "traffic_incident_all_roadblock",
+                    "type": "symbol",
+                    "order": 6,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-road-block",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.03]
+                    }
+                },
+                {
+                    "id": "all_heavy_traffic",
+                    "name": "All heavy traffic",
+                    "source": "traffic_incident_all_heavytraffic",
+                    "type": "symbol",
+                    "order": 7,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "traffic-heavy-traffic",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.075]
+                    }
+                },
+                {
+                    "id": "all_misc.",
+                    "name": "All Misc.",
+                    "source": "traffic_incident_all_misc",
+                    "type": "symbol",
+                    "order": 8,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "misc",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                    }
+                },
+                {
+                    "id": "all_diversion",
+                    "name": "All Diversion",
+                    "source": "traffic_incident_all_diversion",
+                    "type": "symbol",
+                    "order": 9,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "diversion",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                    }
+                },
+                {
+                    "id": "all_unattended_vehicle",
+                    "name": "All Unattended Vehicle",
+                    "source": "traffic_incident_all_unattendedvehicle",
+                    "type": "symbol",
+                    "order": 10,
+                    "layout": {
+                        "visibility": "visible",
+                        "icon-image": "unattended_vehicle",
+                        "icon-allow-overlap": true,
+                        "icon-ignore-placement": true,
+                        "icon-size": ["interpolate", ["linear"], ["zoom"], 12, 0.1]
+                    }
+                }
+
             ]
         }
     ]

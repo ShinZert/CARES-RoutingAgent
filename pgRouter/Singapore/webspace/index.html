@@ -272,7 +272,7 @@
 
                 // function to get nearest vertex to the passed point
                 function getVertex(selectedPoint) {
-                    var url = `http://localhost:3838/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore:nearest_vertex&outputformat=application/json&viewparams=lon:${selectedPoint.lng};lat:${selectedPoint.lat};`;
+                    var url = `http://localhost:3838/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar:nearest_vertex&outputformat=application/json&viewparams=lon:${selectedPoint.lng};lat:${selectedPoint.lat};`;
 
                     $.ajax({
                         url: url,
@@ -299,7 +299,7 @@
                 // // function to get the shortest path from the give source and target nodes
                 function getRoute() {
 
-                    var url = `http://localhost:3838/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=singapore:shortest_paths&outputformat=application/json&viewparams=source:${source};target:${target};`;
+                    var url = `http://localhost:3838/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=the_world_avatar:shortest_paths&outputformat=application/json&viewparams=source:${source};target:${target};`;
                     removeLayer();
                     // Retrieve the GeoJSON data from the URL
                     fetch(url)

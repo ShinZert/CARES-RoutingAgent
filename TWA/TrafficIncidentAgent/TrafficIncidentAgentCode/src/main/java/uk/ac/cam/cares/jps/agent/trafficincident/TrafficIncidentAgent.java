@@ -3,11 +3,13 @@ package uk.ac.cam.cares.jps.agent.trafficincident;
 import uk.ac.cam.cares.jps.base.exception.JPSRuntimeException;
 
 import java.io.IOException;
+import java.lang.Runnable;
+import java.lang.InterruptedException;
 import java.time.OffsetDateTime;
 import java.time.Year;
 import java.time.ZoneOffset;
 import java.util.HashSet;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +19,7 @@ import org.jooq.Field;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class TrafficIncidentAgent extends TimerTask {
+public class TrafficIncidentAgent implements Runnable {
     private final Logger LOGGER = LogManager.getLogger(TrafficIncidentAgent.class);
 
     public static final String API_VALUES = "TRAFFICINCIDENT_API_PROPERTIES";
@@ -70,13 +72,22 @@ public class TrafficIncidentAgent extends TimerTask {
         jsonMessage.accumulate("Result","API Connector object Initialized");
 
         JSONObject readings;
-        try {
-            // timestamp records current time to get data from API
-            this.timestamp = System.currentTimeMillis();
-            readings = connector.getReadings();
-        } catch(Exception e) {
-            LOGGER.error(GET_READINGS_ERROR_MSG);
-            throw new JPSRuntimeException(e.getMessage());
+        // when APIConnector fails, sleep for 10s and retry again
+        while (true) {
+            try {
+                // timestamp records current time to get data from API
+                this.timestamp = System.currentTimeMillis();
+                readings = connector.getReadings();
+                break;
+            } catch(Exception e) {
+                LOGGER.error(GET_READINGS_ERROR_MSG);
+                try {
+                    TimeUnit.SECONDS.sleep(10);
+                } catch (InterruptedException err) {
+                    continue;
+                }
+                continue;
+            }
         }
 
         LOGGER.info(String.format("Retrieved %d incident readings", readings.getJSONArray("value").length()));
@@ -99,9 +110,9 @@ public class TrafficIncidentAgent extends TimerTask {
             Double longitude = (Double) currentEntry.get("Longitude");
             String incidentType = (String) currentEntry.get("Type");
             String message = (String) currentEntry.get("Message");
-            timestamp = TrafficIncidentAgent.parseMessageStringToTimestamp(message);
+            Long ts = TrafficIncidentAgent.parseMessageStringToTimestamp(message);
             TrafficIncident curr = new TrafficIncident(incidentType, latitude, 
-                longitude, message, timestamp, true);
+                longitude, message, ts, true);
             this.newTrafficIncidentSet.add(curr);
             // only update when the traffic incident not present
             if (!this.ongoingTrafficIncidentSet.contains(curr)) {

@@ -2,8 +2,9 @@ package uk.ac.cam.cares.jps.agent.trafficincident;
 
 import uk.ac.cam.cares.jps.base.agent.JPSAgent;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,10 +16,12 @@ public class TrafficIncidentAgentLauncher extends JPSAgent {
     @Override
     public JSONObject processRequestParameters(JSONObject requestParams, HttpServletRequest request) {
         JSONObject jsonMessage = new JSONObject();
-        Timer timer = new Timer();
-        TimerTask task = new TrafficIncidentAgent();
+
+        ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(2);
+
         // perform data extraction for every two minutes
-        timer.schedule(task, 0, 1000*60*2);
+        scheduledThreadPool.scheduleAtFixedRate(new TrafficIncidentAgent(), 0, 2, TimeUnit.MINUTES);
+    
         return jsonMessage;
     }
 }

@@ -23,7 +23,7 @@ public class TrafficIncidentAgent implements Runnable {
     private final Logger LOGGER = LogManager.getLogger(TrafficIncidentAgent.class);
 
     public static final String API_VALUES = "TRAFFICINCIDENT_API_PROPERTIES";
-    public static final String GET_READINGS_ERROR_MSG = "Error when getting reading.";
+    public static final String GET_READINGS_ERROR_MSG = "Error when getting reading. Retry after 10 seconds ...";
     public static final String CONNECTOR_ERROR_MSG = "Error when working with APIConnector.";
     
     public static final ZoneOffset offset= ZoneOffset.UTC;

@@ -74,12 +74,12 @@ public class TrafficIncidentAgent implements Runnable {
         JSONObject readings;
         // when APIConnector fails, sleep for 10s and retry again
         while (true) {
-            try {
-                // timestamp records current time to get data from API
-                this.timestamp = System.currentTimeMillis();
-                readings = connector.getReadings();
-                break;
-            } catch(Exception e) {
+            
+            // timestamp records current time to get data from API
+            this.timestamp = System.currentTimeMillis();
+            readings = connector.getReadings();
+            
+            if (readings == null) {
                 LOGGER.error(GET_READINGS_ERROR_MSG);
                 try {
                     TimeUnit.SECONDS.sleep(10);
@@ -87,6 +87,8 @@ public class TrafficIncidentAgent implements Runnable {
                     continue;
                 }
                 continue;
+            } else {
+                break;
             }
         }
 

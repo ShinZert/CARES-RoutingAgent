@@ -27,7 +27,7 @@ public class TrafficIncidentAgent implements Runnable {
     public static final String CONNECTOR_ERROR_MSG = "Error when working with APIConnector.";
     
     public static final ZoneOffset offset= ZoneOffset.UTC;
-    long timestamp = System.currentTimeMillis();
+    OffsetDateTime timestamp = OffsetDateTime.now(TrafficIncidentAgent.offset).toInstant().getEpochSecond();
     private HashSet<TrafficIncident> ongoingTrafficIncidentSet = new HashSet<>();
     private HashSet<TrafficIncident> newTrafficIncidentSet = new HashSet<>();
 
@@ -76,7 +76,7 @@ public class TrafficIncidentAgent implements Runnable {
         while (true) {
             
             // timestamp records current time to get data from API
-            this.timestamp = System.currentTimeMillis();
+            this.timestamp = OffsetDateTime.now(TrafficIncidentAgent.offset).toInstant().getEpochSecond();
             readings = connector.getReadings();
             
             if (readings == null) {

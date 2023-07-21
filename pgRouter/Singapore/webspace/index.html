@@ -247,7 +247,8 @@
 
                 // draggable marker for starting point
                 var sourceMarker = new mapboxgl.Marker({
-                        draggable: true
+                        draggable: true,
+                        color: "#FFFFFF"
                     })
                     .setLngLat([103.77447911565685,1.3035325319741924])
                     .addTo(MapHandler.MAP);
@@ -260,7 +261,8 @@
 
                 // draggable marker for destination point
                 var targetMarker = new mapboxgl.Marker({
-                        draggable: true
+                        draggable: true,
+                        color: "#00BFFF"
                     })
                     .setLngLat([103.77772313487918,1.3294418157489385])
                     .addTo(MapHandler.MAP);

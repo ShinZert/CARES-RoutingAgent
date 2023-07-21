@@ -66,7 +66,7 @@ public class APIConnector {
             return retrieveData();
         } catch (IOException e) {
             LOGGER.error(ERROR_MSG);
-            return new JSONObject();
+            return null;
         }
     }
 

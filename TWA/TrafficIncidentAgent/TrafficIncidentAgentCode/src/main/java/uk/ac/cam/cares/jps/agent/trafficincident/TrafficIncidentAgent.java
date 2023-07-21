@@ -3,11 +3,13 @@ package uk.ac.cam.cares.jps.agent.trafficincident;
 import uk.ac.cam.cares.jps.base.exception.JPSRuntimeException;
 
 import java.io.IOException;
+import java.lang.Runnable;
+import java.lang.InterruptedException;
 import java.time.OffsetDateTime;
 import java.time.Year;
 import java.time.ZoneOffset;
 import java.util.HashSet;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +19,11 @@ import org.jooq.Field;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class TrafficIncidentAgent extends TimerTask {
+public class TrafficIncidentAgent implements Runnable {
     private final Logger LOGGER = LogManager.getLogger(TrafficIncidentAgent.class);
 
     public static final String API_VALUES = "TRAFFICINCIDENT_API_PROPERTIES";
-    public static final String GET_READINGS_ERROR_MSG = "Error when getting reading.";
+    public static final String GET_READINGS_ERROR_MSG = "Error when getting reading. Retry after 10 seconds ...";
     public static final String CONNECTOR_ERROR_MSG = "Error when working with APIConnector.";
     
     public static final ZoneOffset offset= ZoneOffset.UTC;
@@ -70,13 +72,24 @@ public class TrafficIncidentAgent extends TimerTask {
         jsonMessage.accumulate("Result","API Connector object Initialized");
 
         JSONObject readings;
-        try {
+        // when APIConnector fails, sleep for 10s and retry again
+        while (true) {
+            
             // timestamp records current time to get data from API
             this.timestamp = System.currentTimeMillis();
             readings = connector.getReadings();
-        } catch(Exception e) {
-            LOGGER.error(GET_READINGS_ERROR_MSG);
-            throw new JPSRuntimeException(e.getMessage());
+            
+            if (readings == null) {
+                LOGGER.error(GET_READINGS_ERROR_MSG);
+                try {
+                    TimeUnit.SECONDS.sleep(10);
+                } catch (InterruptedException err) {
+                    continue;
+                }
+                continue;
+            } else {
+                break;
+            }
         }
 
         LOGGER.info(String.format("Retrieved %d incident readings", readings.getJSONArray("value").length()));

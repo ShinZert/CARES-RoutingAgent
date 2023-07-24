@@ -2,6 +2,12 @@ package uk.ac.cam.cares.jps.agent.trafficincident;
 
 import uk.ac.cam.cares.jps.base.exception.JPSRuntimeException;
 
+import com.cmclinnovations.stack.clients.geoserver.GeoServerClient;
+import com.cmclinnovations.stack.clients.geoserver.GeoServerVectorSettings;
+import com.cmclinnovations.stack.clients.geoserver.UpdatedGSVirtualTableEncoder;
+import com.cmclinnovations.stack.clients.core.RESTEndpointConfig;
+import com.cmclinnovations.stack.clients.docker.ContainerClient;
+
 import java.io.IOException;
 import java.lang.Runnable;
 import java.lang.InterruptedException;
@@ -164,5 +170,33 @@ public class TrafficIncidentAgent implements Runnable {
         int minute = Integer.parseInt(timeRawString.split(":")[1]);
         OffsetDateTime result = OffsetDateTime.of(year, month, day, hour, minute, 0, 0, TrafficIncidentAgent.offset);
         return result.toInstant().getEpochSecond();
+    }
+
+    public void createPostGISLayer() {
+        LOGGER.debug("CREATING POSTGIS LAYER ...");
+        RESTEndpointConfig geoserverEndpointConfig = (new ContainerClient()).readEndpointConfig("geoserver", RESTEndpointConfig.class);
+        LOGGER.debug(geoserverEndpointConfig.getUserName());
+        LOGGER.debug(geoserverEndpointConfig.getUrl());
+        
+        // next line is where the program halts
+        GeoServerClient geoServerClient = GeoServerClient.getInstance();
+        LOGGER.debug("geo server client created");
+        GeoServerVectorSettings geoServerVectorSettings = new GeoServerVectorSettings();
+
+        UpdatedGSVirtualTableEncoder virtualTable = new UpdatedGSVirtualTableEncoder();
+        LOGGER.debug("virtual table constructed");
+
+        // TODO
+        // virtualTable.setSQL("SELECT * FROM traffic_incident");
+        virtualTable.setEscapeSql(true);
+        virtualTable.setName("traffic_incident");
+        virtualTable.addVirtualTableGeometry("wkb_geometry", "Point", "4326");
+        LOGGER.info(virtualTable.getName());
+        geoServerVectorSettings.setVirtualTable(virtualTable);
+        LOGGER.debug("initialize completely");
+
+        String traffic_incidentLayerName = "test_geoserver_automation";
+        geoServerClient.createPostGISLayer(EnvConfig.GEOSERVER_WORKSPACE, EnvConfig.DATABASE, traffic_incidentLayerName, new GeoServerVectorSettings());
+        LOGGER.debug("Done running PostGIS layer");
     }
 }

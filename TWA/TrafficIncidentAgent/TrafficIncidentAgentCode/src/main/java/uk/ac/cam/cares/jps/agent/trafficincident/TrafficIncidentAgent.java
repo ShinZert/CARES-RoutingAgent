@@ -5,8 +5,10 @@ import uk.ac.cam.cares.jps.base.exception.JPSRuntimeException;
 import java.io.IOException;
 import java.lang.Runnable;
 import java.lang.InterruptedException;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.Year;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
@@ -26,7 +28,7 @@ public class TrafficIncidentAgent implements Runnable {
     public static final String GET_READINGS_ERROR_MSG = "Error when getting reading. Retry after 10 seconds ...";
     public static final String CONNECTOR_ERROR_MSG = "Error when working with APIConnector.";
     
-    public static final ZoneOffset offset= ZoneOffset.UTC;
+    public static final ZoneOffset offset = ZoneId.of("UTC+8").getRules().getOffset(Instant.now());
     long timestamp = OffsetDateTime.now(TrafficIncidentAgent.offset).toInstant().getEpochSecond();
     private HashSet<TrafficIncident> ongoingTrafficIncidentSet = new HashSet<>();
     private HashSet<TrafficIncident> newTrafficIncidentSet = new HashSet<>();
@@ -162,7 +164,8 @@ public class TrafficIncidentAgent implements Runnable {
         int day = Integer.parseInt(dateRawString.split("/")[0].substring(1));
         int hour = Integer.parseInt(timeRawString.split(":")[0]);
         int minute = Integer.parseInt(timeRawString.split(":")[1]);
-        OffsetDateTime result = OffsetDateTime.of(year, month, day, hour, minute, 0, 0, TrafficIncidentAgent.offset);
+        // the parsed time is already in SGT and no need to offset
+        OffsetDateTime result = OffsetDateTime.of(year, month, day, hour, minute, 0, 0, ZoneOffset.UTC);
         return result.toInstant().getEpochSecond();
     }
 }

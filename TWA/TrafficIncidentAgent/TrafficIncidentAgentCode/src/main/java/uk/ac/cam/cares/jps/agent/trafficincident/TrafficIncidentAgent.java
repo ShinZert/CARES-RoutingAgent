@@ -125,9 +125,12 @@ public class TrafficIncidentAgent implements Runnable {
                 LOGGER.info(curr);
             }
         }
+
         this.postgresAgent.convertLongLatPairToGeom();
         LOGGER.info("Above is/are newly occurred traffic incidents.");
-        
+
+        this.postgresAgent.removeOutOfBoundTrafficIncidents();
+
         LOGGER.info("Checking whether any traffic incident has ended ...");
         for (TrafficIncident ti : this.ongoingTrafficIncidentSet) {
             if (!this.newTrafficIncidentSet.contains(ti)) {

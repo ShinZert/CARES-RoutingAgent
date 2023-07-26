@@ -24,6 +24,7 @@ public class TrafficIncidentPostgresAgent {
     public static final String SQL_UPDATE_ERROR_MSG = "Fail to update the record";
     public static final String SQL_INITIALIZE_ERROR_MSG = "Fail to create table in Postgres database";
     public static final String SQL_CTEATE_VIEW_ERROR_MSG = "Fail to create view in Postgres database";
+    public static final String SQL_DELETE_ERROR_MSG = "Fail to delete records outside the bounding box of Singapore. Please try again.";
 
 
     private String rdbUrl = null; 
@@ -150,6 +151,21 @@ public class TrafficIncidentPostgresAgent {
         } catch (SQLException e) {
             LOGGER.error(SQL_UPDATE_ERROR_MSG, e);
             throw new JPSRuntimeException(e.getMessage());
+        }
+    }
+
+    /**
+     * removes traffic incidents that are not within Singapore's bounding box
+     */
+    public void removeOutOfBoundTrafficIncidents() {
+        // bounding box is within 1.2067 - 1.4734 for latitude and 103.6021 - 104.0924 for longitude
+        String sql = "DELETE FROM traffic_incident WHERE latitude < 1.2067 OR latitude > 1.4734 OR longitude < 103.6021 OR longitude > 104.0924";
+        try {
+            PreparedStatement statement = this.conn.prepareStatement(sql);
+            statement.execute();
+            LOGGER.debug("Remove traffic incidents out of the bounding box of Singapore.");
+        } catch (SQLException e) {
+            LOGGER.error(SQL_DELETE_ERROR_MSG, e);
         }
     }
 
